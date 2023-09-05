@@ -1,0 +1,4 @@
+INPUT_SIZE = (90, 90)
+LABEL_SIZE = (6, 6)
+INPUT_CHANNEL = 3
+DATA_DIR = "data"
