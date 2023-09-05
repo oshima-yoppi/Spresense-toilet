@@ -9,7 +9,9 @@ from keras.layers import (
     UpSampling2D,
     Conv2D,
     MaxPooling2D,
+    AveragePooling2D,
     Flatten,
+    Concatenate,
 )
 from tensorflow.keras.optimizers import Adam
 from keras.applications.vgg16 import VGG16, preprocess_input
@@ -43,6 +45,8 @@ for dir in ["train", "test", "valid"]:
         with h5py.File(os.path.join(DATA_DIR, dir, str(i) + ".h5"), "r") as f:
             img = f["img"][:]
             label = f["label"][:]
+        if np.all(label == 0):
+            continue  # kuso detaset taisaku
         if dir == "train":
             x_train.append(img)
             y_train.append(label)
@@ -52,7 +56,7 @@ for dir in ["train", "test", "valid"]:
         elif dir == "valid":
             x_valid.append(img)
             y_valid.append(label)
-
+print(f"x_train: {len(x_train)}, x_test: {len(x_test)}, x_valid: {len(x_valid)}")
 x_train = np.array(x_train) / 127.5 - 1
 y_train = np.array(y_train)
 x_test = np.array(x_test) / 127.5 - 1
@@ -71,26 +75,41 @@ mobilenet.summary()
 complessed_mobilenet = Model(
     inputs=mobilenet.input, outputs=mobilenet.get_layer("block_6_expand_relu").output
 )
-complessed_mobilenet = Conv2D(
-    filters=52,
-    kernel_size=1,
-    strides=1,
-    padding="same",
-    activation="relu",
-)(complessed_mobilenet.output)
-complessed_mobilenet = Conv2D(
-    filters=16,
-    kernel_size=1,
-    strides=1,
-    padding="same",
-    activation="relu",
-)(complessed_mobilenet)
-complessed_mobilenet = Conv2D(
-    filters=1, kernel_size=1, strides=1, padding="same", activation="sigmoid"
-)(complessed_mobilenet)
-
+for layer in complessed_mobilenet.layers:
+    layer.trainable = False
+custom_model = tf.keras.models.Sequential(
+    [
+        complessed_mobilenet,
+        Conv2D(
+            filters=52,
+            kernel_size=1,
+            strides=1,
+            padding="same",
+            activation="relu",
+        ),
+        # batchnorma
+        tf.keras.layers.BatchNormalization(),
+        Conv2D(
+            filters=16,
+            kernel_size=1,
+            strides=1,
+            padding="same",
+            activation="relu",
+        ),
+        tf.keras.layers.BatchNormalization(),
+        Conv2D(
+            filters=1,
+            kernel_size=1,
+            strides=1,
+            padding="same",
+            activation="sigmoid",
+        ),
+        MaxPooling2D(pool_size=(2, 2)),  # max >> average
+    ]
+)
+# combilned_output = Concatenate()([complessed_mobilenet.output, output_layers.output])
 # 新しいモデルのサマリーを表示
-custom_model = Model(inputs=mobilenet.input, outputs=complessed_mobilenet)
+# custom_model = Model(inputs=mobilenet.input, outputs=combilned_output)
 custom_model.summary()
 total_params = custom_model.count_params()
 print("Total params: ", total_params)
@@ -103,7 +122,7 @@ def IoU(targets, inputs, smooth=1e-6):
     targets = tf.cast(targets, dtype=tf.float32)
     # inputs = K.softmax(inputs, axis=-1)
     inputs = tf.expand_dims(inputs, axis=-1)
-    inputs = MaxPooling2D(pool_size=(2, 2))(inputs)
+    # inputs = MaxPooling2D(pool_size=(2, 2))(inputs)
     inputs = K.flatten(inputs)
     targets = K.flatten(targets)
     intersection = tf.reduce_sum(inputs * targets)
@@ -113,7 +132,7 @@ def IoU(targets, inputs, smooth=1e-6):
     return iou
 
 
-def weighted_focal_Loss(targets, inputs, beta=0.5, smooth=1e-6):
+def weighted_focal_Loss(targets, inputs, beta=0.7, smooth=1e-6):
     # targets = targets.astye('float')
     # flatten label and prediction tensors
     # tf_show(inputs[0])
@@ -121,7 +140,7 @@ def weighted_focal_Loss(targets, inputs, beta=0.5, smooth=1e-6):
     targets = tf.cast(targets, dtype=tf.float32)
     # inputs = K.softmax(inputs, axis=-1)
     inputs = tf.expand_dims(inputs, axis=-1)
-    inputs = MaxPooling2D(pool_size=(2, 2))(inputs)
+    # inputs = MaxPooling2D(pool_size=(2, 2))(inputs)
     inputs = K.flatten(inputs)
     targets = K.flatten(targets)
     intersection = tf.reduce_sum(inputs * targets)
@@ -138,7 +157,7 @@ def DiceLoss(targets, inputs, smooth=1e-6):
     targets = tf.cast(targets, dtype=tf.float32)
     # print(inputs.shape, targets.shape)
     inputs = tf.expand_dims(inputs, axis=-1)
-    inputs = MaxPooling2D(pool_size=(2, 2))(inputs)
+    # inputs = MaxPooling2D(pool_size=(2, 2))(inputs)
     # inputs = K.softmax(inputs, axis=-1)
     inputs = K.flatten(inputs)
     targets = K.flatten(targets)
@@ -153,8 +172,8 @@ def DiceLoss(targets, inputs, smooth=1e-6):
 # %%
 
 custom_model.compile(
-    loss=weighted_focal_Loss,
-    optimizer=Adam(lr=0.01),
+    loss=DiceLoss,
+    optimizer=Adam(lr=0.010),
     metrics=[IoU],
 )
 custom_model.fit(
@@ -166,6 +185,28 @@ custom_model.fit(
 )
 
 # %%
-print(np.max(x_train[0]))
+# check model
+for input, target in zip(x_test, y_test):
+    input = np.expand_dims(input, axis=0)
+    target = np.expand_dims(target, axis=0)
+    pred = custom_model.predict(input)
+    print(input.shape, target.shape, pred.shape)
+    plt.subplot(1, 3, 1)
+    plt.title("input")
+    plt.imshow(input[0])
+    plt.subplot(1, 3, 2)
+    plt.imshow(target[0])
+    plt.title("target")
+    plt.subplot(1, 3, 3)
+    plt.imshow(pred[0])
+    plt.title("pred")
+    plt.show()
+# %%
+# save model
+conveter = tf.lite.TFLiteConverter.from_keras_model(custom_model)
+tflite_model = conveter.convert()
+float_model_size = len(tflite_model) / 1024 / 1024
+print(f"float model size: {float_model_size} MB")
+open("model.tflite", "wb").write(tflite_model)
 
 # %%
