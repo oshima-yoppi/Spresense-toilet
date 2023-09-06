@@ -1,5 +1,5 @@
 {
-    "spresense.serial.port": "COM6",
+    "spresense.serial.port": "COM6", // ここは各自設定
     "arduino.ignoreBoards": [
 
     ],
