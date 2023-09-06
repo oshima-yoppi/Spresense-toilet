@@ -3,6 +3,7 @@
     "arduino.ignoreBoards": [
 
     ],
+    "arduino.path": "C:/Users/erasm/AppData/Local/Programs/Arduino IDE",
     "arduino.additionalUrls": [
         "https://github.com/sonydevworld/spresense-arduino-compatible/releases/download/generic/package_spresense_index.json",
     ],
@@ -19,7 +20,7 @@
     "arduino.useArduinoCli": true,
     "C_Cpp.intelliSenseEngine": "Tag Parser",
     "C_Cpp.default.includePath": [
-        // "C:\\Users\\oosim\\Documents\\Arduino\\libraries"
+        // "C://Users//oosim//Documents//Arduino//libraries"
         "{workspaceFolder}/src/Spresense/libraries"
     ]
 }

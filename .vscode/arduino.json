@@ -1,5 +1,7 @@
 {
-    "port": "COM6",
+    "port": "COM3",
     "configuration": "Core=Main,Memory=768,Debug=Disabled,UploadSpeed=115200",
     "board": "SPRESENSE:spresense:spresense",
+    "output": "../src/Spresense/output",
+    "sketch": "src\\Spresense\\main\\main.ino"
 }

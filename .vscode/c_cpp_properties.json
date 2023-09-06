@@ -3,34 +3,34 @@
     "configurations": [
         {
             "name": "Arduino",
-            "compilerPath": "C:\\Users\\oosim\\AppData\\Local\\Arduino15\\packages\\SPRESENSE\\tools\\gcc-arm-none-eabi\\9.2.1\\windows\\bin\\arm-none-eabi-g++",
+            "compilerPath": "C:\\Users\\erasm\\AppData\\Local\\Arduino15\\packages\\SPRESENSE\\tools\\gcc-arm-none-eabi\\9.2.1\\windows\\bin\\arm-none-eabi-g++",
             "compilerArgs": [
                 "-w"
             ],
             "intelliSenseMode": "gcc-x64",
             "includePath": [
-                "C:\\Users\\oosim\\AppData\\Local\\Arduino15\\packages\\SPRESENSE\\tools\\spresense-sdk\\3.1.0\\spresense\\release\\nuttx\\include\\libcxx",
-                "C:\\Users\\oosim\\AppData\\Local\\Arduino15\\packages\\SPRESENSE\\tools\\spresense-sdk\\3.1.0\\spresense\\release\\nuttx\\include",
-                "C:\\Users\\oosim\\AppData\\Local\\Arduino15\\packages\\SPRESENSE\\tools\\spresense-sdk\\3.1.0\\spresense\\release\\nuttx\\arch",
-                "C:\\Users\\oosim\\AppData\\Local\\Arduino15\\packages\\SPRESENSE\\tools\\spresense-sdk\\3.1.0\\spresense\\release\\nuttx\\arch\\chip",
-                "C:\\Users\\oosim\\AppData\\Local\\Arduino15\\packages\\SPRESENSE\\tools\\spresense-sdk\\3.1.0\\spresense\\release\\sdk\\include",
-                "C:\\Users\\oosim\\AppData\\Local\\Arduino15\\packages\\SPRESENSE\\tools\\spresense-sdk\\3.1.0\\spresense\\release\\sdk\\modules\\include",
-                "C:\\Users\\oosim\\AppData\\Local\\Arduino15\\packages\\SPRESENSE\\tools\\spresense-sdk\\3.1.0\\spresense\\release\\sdk\\apps\\include",
-                "C:\\Users\\oosim\\AppData\\Local\\Arduino15\\packages\\SPRESENSE\\tools\\spresense-sdk\\3.1.0\\spresense\\release\\sdk\\system\\include",
-                "C:\\Users\\oosim\\AppData\\Local\\Arduino15\\packages\\SPRESENSE\\tools\\spresense-sdk\\3.1.0\\spresense\\release\\sdk\\externals\\include",
-                "C:\\Users\\oosim\\AppData\\Local\\Arduino15\\packages\\SPRESENSE\\tools\\spresense-sdk\\3.1.0\\spresense\\release\\sdk\\externals\\include\\cmsis",
-                "C:\\Users\\oosim\\AppData\\Local\\Arduino15\\packages\\SPRESENSE\\hardware\\spresense\\3.1.0\\variants\\spresense",
-                "C:\\Users\\oosim\\AppData\\Local\\Arduino15\\packages\\SPRESENSE\\hardware\\spresense\\3.1.0\\cores\\spresense",
-                "C:\\Users\\oosim\\AppData\\Local\\Arduino15\\packages\\SPRESENSE\\hardware\\spresense\\3.1.0\\variants\\spresense",
-                "c:\\users\\oosim\\appdata\\local\\arduino15\\packages\\spresense\\tools\\gcc-arm-none-eabi\\9.2.1\\windows\\arm-none-eabi\\include\\c++\\9.2.1",
-                "c:\\users\\oosim\\appdata\\local\\arduino15\\packages\\spresense\\tools\\gcc-arm-none-eabi\\9.2.1\\windows\\arm-none-eabi\\include\\c++\\9.2.1\\arm-none-eabi",
-                "c:\\users\\oosim\\appdata\\local\\arduino15\\packages\\spresense\\tools\\gcc-arm-none-eabi\\9.2.1\\windows\\arm-none-eabi\\include\\c++\\9.2.1\\backward",
-                "c:\\users\\oosim\\appdata\\local\\arduino15\\packages\\spresense\\tools\\gcc-arm-none-eabi\\9.2.1\\windows\\lib\\gcc\\arm-none-eabi\\9.2.1\\include",
-                "c:\\users\\oosim\\appdata\\local\\arduino15\\packages\\spresense\\tools\\gcc-arm-none-eabi\\9.2.1\\windows\\lib\\gcc\\arm-none-eabi\\9.2.1\\include-fixed",
-                "c:\\users\\oosim\\appdata\\local\\arduino15\\packages\\spresense\\tools\\gcc-arm-none-eabi\\9.2.1\\windows\\arm-none-eabi\\include"
+                "C:\\Users\\erasm\\AppData\\Local\\Arduino15\\packages\\SPRESENSE\\tools\\spresense-sdk\\3.1.0\\spresense\\release\\nuttx\\include\\libcxx",
+                "C:\\Users\\erasm\\AppData\\Local\\Arduino15\\packages\\SPRESENSE\\tools\\spresense-sdk\\3.1.0\\spresense\\release\\nuttx\\include",
+                "C:\\Users\\erasm\\AppData\\Local\\Arduino15\\packages\\SPRESENSE\\tools\\spresense-sdk\\3.1.0\\spresense\\release\\nuttx\\arch",
+                "C:\\Users\\erasm\\AppData\\Local\\Arduino15\\packages\\SPRESENSE\\tools\\spresense-sdk\\3.1.0\\spresense\\release\\nuttx\\arch\\chip",
+                "C:\\Users\\erasm\\AppData\\Local\\Arduino15\\packages\\SPRESENSE\\tools\\spresense-sdk\\3.1.0\\spresense\\release\\sdk\\include",
+                "C:\\Users\\erasm\\AppData\\Local\\Arduino15\\packages\\SPRESENSE\\tools\\spresense-sdk\\3.1.0\\spresense\\release\\sdk\\modules\\include",
+                "C:\\Users\\erasm\\AppData\\Local\\Arduino15\\packages\\SPRESENSE\\tools\\spresense-sdk\\3.1.0\\spresense\\release\\sdk\\apps\\include",
+                "C:\\Users\\erasm\\AppData\\Local\\Arduino15\\packages\\SPRESENSE\\tools\\spresense-sdk\\3.1.0\\spresense\\release\\sdk\\system\\include",
+                "C:\\Users\\erasm\\AppData\\Local\\Arduino15\\packages\\SPRESENSE\\tools\\spresense-sdk\\3.1.0\\spresense\\release\\sdk\\externals\\include",
+                "C:\\Users\\erasm\\AppData\\Local\\Arduino15\\packages\\SPRESENSE\\tools\\spresense-sdk\\3.1.0\\spresense\\release\\sdk\\externals\\include\\cmsis",
+                "C:\\Users\\erasm\\AppData\\Local\\Arduino15\\packages\\SPRESENSE\\hardware\\spresense\\3.1.0\\variants\\spresense",
+                "C:\\Users\\erasm\\AppData\\Local\\Arduino15\\packages\\SPRESENSE\\hardware\\spresense\\3.1.0\\cores\\spresense",
+                "C:\\Users\\erasm\\AppData\\Local\\Arduino15\\packages\\SPRESENSE\\hardware\\spresense\\3.1.0\\variants\\spresense",
+                "c:\\users\\erasm\\appdata\\local\\arduino15\\packages\\spresense\\tools\\gcc-arm-none-eabi\\9.2.1\\windows\\arm-none-eabi\\include\\c++\\9.2.1",
+                "c:\\users\\erasm\\appdata\\local\\arduino15\\packages\\spresense\\tools\\gcc-arm-none-eabi\\9.2.1\\windows\\arm-none-eabi\\include\\c++\\9.2.1\\arm-none-eabi",
+                "c:\\users\\erasm\\appdata\\local\\arduino15\\packages\\spresense\\tools\\gcc-arm-none-eabi\\9.2.1\\windows\\arm-none-eabi\\include\\c++\\9.2.1\\backward",
+                "c:\\users\\erasm\\appdata\\local\\arduino15\\packages\\spresense\\tools\\gcc-arm-none-eabi\\9.2.1\\windows\\lib\\gcc\\arm-none-eabi\\9.2.1\\include",
+                "c:\\users\\erasm\\appdata\\local\\arduino15\\packages\\spresense\\tools\\gcc-arm-none-eabi\\9.2.1\\windows\\lib\\gcc\\arm-none-eabi\\9.2.1\\include-fixed",
+                "c:\\users\\erasm\\appdata\\local\\arduino15\\packages\\spresense\\tools\\gcc-arm-none-eabi\\9.2.1\\windows\\arm-none-eabi\\include"
             ],
             "forcedInclude": [
-                "C:\\Users\\oosim\\AppData\\Local\\Arduino15\\packages\\SPRESENSE\\hardware\\spresense\\3.1.0\\cores\\spresense\\Arduino.h"
+                "C:\\Users\\erasm\\AppData\\Local\\Arduino15\\packages\\SPRESENSE\\hardware\\spresense\\3.1.0\\cores\\spresense\\Arduino.h"
             ],
             "cStandard": "c11",
             "cppStandard": "c++11",
