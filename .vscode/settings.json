@@ -12,6 +12,7 @@
     "arduino.clearOutputOnBuild": false,
     "arduino.defaultBaudRate": 115200,
     "arduino.disableIntelliSenseAutoGen": false,
+    "arduino.commandPath": "Arduino IDE.exe",
     "arduino.disableTestingOpen": false,
     "arduino.enableUSBDetection": true,
     "arduino.logLevel": "info",

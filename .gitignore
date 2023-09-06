@@ -1,4 +1,4 @@
 src/AI/rawdata
 src/AI/data
 src/AI/gomi
-.vscode/arduino.json
+.vscode/*
