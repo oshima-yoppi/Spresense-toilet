@@ -1,0 +1,26 @@
+{
+    "spresense.serial.port": "COM6",
+    "arduino.ignoreBoards": [
+
+    ],
+    "arduino.additionalUrls": [
+        "https://github.com/sonydevworld/spresense-arduino-compatible/releases/download/generic/package_spresense_index.json",
+        "https://raw.githubusercontent.com/YoshinoTaro/spresense-arduino-tensorflow/main/package_spresense_tensorflow_index.json"
+    ],
+    "arduino.analyzeOnOpen": true,
+    "arduino.analyzeOnSettingChange": true,
+    "arduino.clearOutputOnBuild": false,
+    "arduino.defaultBaudRate": 115200,
+    "arduino.disableIntelliSenseAutoGen": false,
+    "arduino.disableTestingOpen": false,
+    "arduino.enableUSBDetection": true,
+    "arduino.logLevel": "info",
+    "arduino.openPDEFiletype": false,
+    "arduino.skipHeaderProvider": false,
+    "arduino.useArduinoCli": true,
+    "C_Cpp.intelliSenseEngine": "Tag Parser",
+    "C_Cpp.default.includePath": [
+        // "C:\\Users\\oosim\\Documents\\Arduino\\libraries"
+        "{workspaceFolder}/src/Spresense/libraries"
+    ]
+}
