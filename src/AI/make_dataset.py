@@ -39,7 +39,7 @@ for dir in ["train", "test", "valid"]:
             _, y, x, w, h = map(float, sentense.split())
             label[int(x * LABEL_SIZE[0]), int(y * LABEL_SIZE[1])] = 1
         img = cv2.resize(img, INPUT_SIZE)
-        label = cv2.resize(label, LABEL_SIZE)
+        # label = cv2.resize(label, LABEL_SIZE)
 
         save_filename = str(i) + ".h5"
         save_path = os.path.join(NEW_DATA_DIR, dir, save_filename)

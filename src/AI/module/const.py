@@ -1,4 +1,4 @@
 INPUT_SIZE = (96, 96)
 LABEL_SIZE = (6, 6)
 INPUT_CHANNEL = 3
-DATA_DIR = "data"
+DATA_DIR = "data4"

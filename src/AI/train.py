@@ -19,7 +19,9 @@ from keras.preprocessing.image import ImageDataGenerator
 from keras.callbacks import CSVLogger
 from keras.models import Model
 from tensorflow.keras.applications import MobileNet, MobileNetV2
-import tensorflow_model_optimization as tfmot
+from tensorflow import keras
+
+# import tensorflow_model_optimization as tfmot
 from keras import backend as K
 from tqdm import tqdm
 import os
@@ -27,6 +29,7 @@ import sys
 import numpy as np
 import h5py
 import matplotlib.pyplot as plt
+import cv2
 from module.const import *
 
 
@@ -57,12 +60,47 @@ for dir in ["train", "test", "valid"]:
             x_valid.append(img)
             y_valid.append(label)
 print(f"x_train: {len(x_train)}, x_test: {len(x_test)}, x_valid: {len(x_valid)}")
-x_train = np.array(x_train) / 127.5 - 1
+x_train = np.array(x_train) / 255
 y_train = np.array(y_train)
-x_test = np.array(x_test) / 127.5 - 1
+x_test = np.array(x_test) / 255
 y_test = np.array(y_test)
-x_valid = np.array(x_valid) / 127.5 - 1
+x_valid = np.array(x_valid) / 255
 y_valid = np.array(y_valid)
+
+
+# %%
+def plot_augmentation_image(train_sample, params):
+    # 同じ画像を16個複製する
+    train_samples = np.repeat(
+        train_sample.reshape((1, *train_sample.shape)), 16, axis=0
+    )
+    print(train_samples.shape)
+    print(np.max(train_samples), np.min(train_samples))
+    # 16個に対してparamsで与えられた変換を実施
+    data_generator = keras.preprocessing.image.ImageDataGenerator(**params)
+    generator = data_generator.flow(train_samples, batch_size=16)
+
+    # 変換後のデータを取得
+    batch_x = generator.next()
+
+    # 変換後はfloat32となっているため、uint8に変換
+    batch_x = batch_x.astype(np.uint8)
+
+    # 描画処理
+    plt.figure(figsize=(10, 10))
+    for i in range(16):
+        plt.subplot(4, 4, i + 1)
+        plt.imshow(batch_x[i], vmin=0, vmax=1)
+        plt.tick_params(labelbottom="off")
+        plt.tick_params(labelleft="off")
+
+
+train_sample = x_train[0]
+plt.imshow(train_sample)
+plt.show()
+print(train_sample.shape)
+params = {"rotation_range": 45}
+plot_augmentation_image(train_sample, params)
 
 # %%
 # モデルの定義
@@ -81,21 +119,21 @@ custom_model = tf.keras.models.Sequential(
     [
         complessed_mobilenet,
         Conv2D(
-            filters=52,
-            kernel_size=1,
-            strides=1,
-            padding="same",
-            activation="relu",
-        ),
-        # batchnorma
-        tf.keras.layers.BatchNormalization(),
-        Conv2D(
             filters=16,
             kernel_size=1,
             strides=1,
             padding="same",
             activation="relu",
         ),
+        # batchnorma
+        # tf.keras.layers.BatchNormalization(),
+        # Conv2D(
+        #     filters=16,
+        #     kernel_size=1,
+        #     strides=1,
+        #     padding="same",
+        #     activation="relu",
+        # ),
         tf.keras.layers.BatchNormalization(),
         Conv2D(
             filters=1,
@@ -173,13 +211,13 @@ def DiceLoss(targets, inputs, smooth=1e-6):
 
 custom_model.compile(
     loss=DiceLoss,
-    optimizer=Adam(lr=0.010),
+    optimizer=Adam(lr=0.001),
     metrics=[IoU],
 )
 custom_model.fit(
     x_train,
     y_train,
-    batch_size=32,
+    batch_size=16,
     epochs=100,
     validation_data=(x_valid, y_valid),
 )
@@ -193,7 +231,7 @@ for input, target in zip(x_test, y_test):
     print(input.shape, target.shape, pred.shape)
     plt.subplot(1, 3, 1)
     plt.title("input")
-    plt.imshow(input[0])
+    plt.imshow(input[0][..., ::-1])
     plt.subplot(1, 3, 2)
     plt.imshow(target[0])
     plt.title("target")
@@ -202,7 +240,36 @@ for input, target in zip(x_test, y_test):
     plt.title("pred")
     plt.show()
 # %%
+imgs = os.listdir("imgs")
+# print(imgs)
+# imgs.pop(0)
+for img in imgs:
+    img = cv2.imread(os.path.join("imgs", img))
+    img = cv2.resize(img, (96, 96), interpolation=cv2.INTER_LINEAR)
+    img = np.array([img]) / 255
+    print(img.shape)
+    pred = custom_model.predict(img)
+    plt.subplot(1, 2, 1)
+    plt.imshow(img[0][..., ::-1])
+    plt.subplot(1, 2, 2)
+    plt.imshow(pred[0])
+    plt.show()
+# %%
+imgs = os.listdir("imgs")
+for img in imgs:
+    img = cv2.imread(os.path.join("imgs", img))
+    plt.subplot(1, 2, 1)
+    plt.imshow(img[..., ::-1])
+    img = cv2.resize(img, (96, 96), interpolation=cv2.INTER_LINEAR)
+    img = np.array([img])
+    # img = np.array(img)
+    print(img.shape)
+    plt.subplot(1, 2, 2)
+    plt.imshow(img[0][..., ::-1])
+    plt.show()
+# %%
 # save model
+custom_model.save("full_model.h5")
 conveter = tf.lite.TFLiteConverter.from_keras_model(custom_model)
 tflite_model = conveter.convert()
 float_model_size = len(tflite_model) / 1024 / 1024
