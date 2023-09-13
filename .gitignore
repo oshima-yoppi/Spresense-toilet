@@ -5,3 +5,4 @@ src/AI/gomi
 *.h5
 *.jpg
 *.xml
+*.txt

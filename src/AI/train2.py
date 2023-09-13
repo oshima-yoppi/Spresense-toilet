@@ -32,6 +32,7 @@ import matplotlib.pyplot as plt
 import cv2
 from module.const import *
 from module import func
+import random
 
 # %%
 # データセット
@@ -41,48 +42,46 @@ x_test = []
 y_test = []
 x_valid = []
 y_valid = []
+ignore = False  # falseの方が精度が高い
+
+trans_lst = []
+center = (INPUT_SIZE[0] / 2, INPUT_SIZE[1] / 2)
+scale = 1.0
+for i in [theta for theta in range(0, 360, 30)]:
+    trans_lst.append(cv2.getRotationMatrix2D(center, i, scale))
+
+    # for dir in ["train", "valid"]:
+dataset = []
+for path in os.listdir(DATA_DIR):
+    path = os.path.join(DATA_DIR, path)
+    with h5py.File(path, "r") as f:
+        img = f["img"][:]
+        label = f["label"][:]
+    dataset.append((img, label))
+random_idx = list(range(0, len(dataset)))
+random.shuffle(random_idx)
+# print(random_idx)
+for i, idx in enumerate(tqdm(random_idx)):
+    img, label = dataset[idx]
+    if i < len(random_idx) * 0.9:
+        for trans in trans_lst:
+            img_trans = cv2.warpAffine(img, trans, INPUT_SIZE)
+            label_trans = cv2.warpAffine(label, trans, INPUT_SIZE)
+            img_trans = func.augment_brightness(img_trans)
+            x_train.append(img_trans)
+            y_train.append(func.label_change(label_trans, ignore_haji=ignore))
+            img_trans = np.fliplr(img_trans)
+            img_trans = func.augment_brightness(img_trans)
+            x_train.append(img_trans)
+            y_train.append(
+                func.label_change(np.fliplr(label_trans), ignore_haji=ignore)
+            )
+
+    else:
+        x_valid.append(img)
+        y_valid.append(func.label_change(label, ignore_haji=ignore))
 
 
-for dir in ["train", "valid"]:
-    dataset = []
-    for path in os.listdir(os.path.join(DATA_DIR, dir)):
-        path = os.path.join(DATA_DIR, dir, path)
-        with h5py.File(path, "r") as f:
-            img = f["img"][:]
-            label = f["label"][:]
-        # if np.all(label == 0):
-        #     continue  # kuso detaset taisaku
-        if dir == "train":
-            if label.sum() >= 4:
-                # print("aaaaaaaaaa")
-                continue
-            # print(type(img), type(label))
-            # k = np.random.randint(4)
-            # img_rot = np.rot90(img, k=k)
-            # # print(img.shape, img_rot.shape)
-            # label = np.rot90(label, k=k)
-            # x_train.append(img_rot)
-            # y_train.append(label_change(label))
-            # x_train.append(img)
-            # y_train.append(label_change(label))
-
-            for k in range(4):
-                img_rot = np.rot90(img, k=k)
-                # print(img.shape, img_rot.shape)
-                label = np.rot90(label, k=k)
-                x_train.append(img_rot)
-                y_train.append(func.label_change(label))
-                # print(label.shape, label_change(label).shape)
-                break
-
-        elif dir == "test":
-            x_test.append(img)
-            # y_test.append(label)
-            y_test.append(func.label_change(label))
-        elif dir == "valid":
-            x_valid.append(img)
-            # y_valid.append(label)
-            y_valid.append(func.label_change(label))
 print(f"x_train: {len(x_train)}, x_test: {len(x_test)}, x_valid: {len(x_valid)}")
 x_train = np.array(x_train) / 255
 y_train = np.array(y_train)
@@ -118,15 +117,15 @@ def plot_augmentation_image(train_sample, params):
         plt.tick_params(labelleft="off")
 
 
-train_sample = x_train[0]
-plt.subplot(1, 2, 1)
-plt.imshow(train_sample)
-plt.subplot(1, 2, 2)
-plt.imshow(y_train[0])
-plt.show()
-print(train_sample.shape)
-params = {"rotation_range": 45}
-plot_augmentation_image(train_sample, params)
+# train_sample = x_train[0]
+# plt.subplot(1, 2, 1)
+# plt.imshow(train_sample)
+# plt.subplot(1, 2, 2)
+# plt.imshow(y_train[0])
+# plt.show()
+# print(train_sample.shape)
+# params = {"rotation_range": 45}
+# plot_augmentation_image(train_sample, params)
 
 # %%
 # モデルの定義
@@ -141,11 +140,24 @@ complessed_mobilenet = Model(
 )
 for layer in complessed_mobilenet.layers:
     layer.trainable = False
+
+padding_h = 12 % LABEL_SIZE[0]
+padding_w = 12 % LABEL_SIZE[1]
+stride_h = (12 + padding_h * 2) // LABEL_SIZE[0]
+stride_w = (12 + padding_w * 2) // LABEL_SIZE[1]
+pool_h = (12 + padding_h * 2) // LABEL_SIZE[0]
+pool_w = (12 + padding_w * 2) // LABEL_SIZE[1]
+
+# poo_h, pool_w = 1, 1
 custom_model = tf.keras.models.Sequential(
     [
         complessed_mobilenet,
+        MaxPooling2D(
+            pool_size=(pool_h, pool_w),
+            strides=(stride_h, stride_w),
+        ),  # max >> average 終盤に就けるより前の方がいい
         Conv2D(
-            filters=32,
+            filters=128,
             kernel_size=1,
             strides=1,
             padding="same",
@@ -153,7 +165,7 @@ custom_model = tf.keras.models.Sequential(
         ),
         tf.keras.layers.BatchNormalization(),
         Conv2D(
-            filters=32,
+            filters=64,
             kernel_size=1,
             strides=1,
             padding="same",
@@ -167,7 +179,6 @@ custom_model = tf.keras.models.Sequential(
             padding="same",
             activation="sigmoid",
         ),
-        AveragePooling2D(pool_size=(2, 2)),  # max >> average
     ]
 )
 # combilned_output = Concatenate()([complessed_mobilenet.output, output_layers.output])
@@ -220,6 +231,7 @@ def DiceLoss(targets, inputs, smooth=1e-6):
     targets = tf.cast(targets, dtype=tf.float32)
     # print(inputs.shape, targets.shape)
     inputs = tf.expand_dims(inputs, axis=-1)
+    # print(inputs.shape, targets.shape)
     # inputs = MaxPooling2D(pool_size=(2, 2))(inputs)
     # inputs = K.softmax(inputs, axis=-1)
     inputs = K.flatten(inputs)
@@ -237,14 +249,14 @@ def DiceLoss(targets, inputs, smooth=1e-6):
 
 custom_model.compile(
     loss=DiceLoss,
-    optimizer=Adam(lr=0.01),
+    optimizer=Adam(learning_rate=0.001),
     metrics=[IoU],
 )
 custom_model.fit(
     x_train,
     y_train,
-    batch_size=32,
-    epochs=100,
+    batch_size=64,
+    epochs=50,
     validation_data=(x_valid, y_valid),
 )
 
@@ -276,24 +288,25 @@ for img in imgs:
     img = np.array([img]) / 255
     print(img.shape)
     pred = custom_model.predict(img)
+    img = func.draw_line(img[0])
     plt.subplot(1, 2, 1)
-    plt.imshow(img[0])
+    plt.imshow(img)
     plt.subplot(1, 2, 2)
     plt.imshow(pred[0])
     plt.show()
 # %%
-imgs = os.listdir("imgs")
-for img in imgs:
-    img = cv2.imread(os.path.join("imgs", img))
-    plt.subplot(1, 2, 1)
-    plt.imshow(img[..., ::-1])
-    img = cv2.resize(img, (96, 96), interpolation=cv2.INTER_LINEAR)
-    img = np.array([img])
-    # img = np.array(img)
-    print(img.shape)
-    plt.subplot(1, 2, 2)
-    plt.imshow(img[0][..., ::-1])
-    plt.show()
+# imgs = os.listdir("imgs")
+# for img in imgs:
+#     img = cv2.imread(os.path.join("imgs", img))
+#     plt.subplot(1, 2, 1)
+#     plt.imshow(img[..., ::-1])
+#     img = cv2.resize(img, (96, 96), interpolation=cv2.INTER_LINEAR)
+#     img = np.array([img])
+#     # img = np.array(img)
+#     print(img.shape)
+#     plt.subplot(1, 2, 2)
+#     plt.imshow(img[0][..., ::-1])
+#     plt.show()
 # %%
 # save model
 custom_model.save("full_model.h5")
