@@ -111,6 +111,11 @@ mobilenet.summary()
 complessed_mobilenet = Model(
     inputs=mobilenet.input, outputs=mobilenet.get_layer("block_6_expand_relu").output
 )
+# for layer in mobilenet.layers:
+#     print(layer.name)
+# complessed_mobilenet = Model(
+#     inputs=mobilenet.input, outputs=mobilenet.get_layer("re_lu_1").output
+# )
 for layer in complessed_mobilenet.layers:
     layer.trainable = False
 
@@ -256,6 +261,3 @@ header_file = (
 
 open(HEADER_QUANT_MODEL_PATH, "w").write(header_file)
 open(SPRESENSE_HEADER_QUANT_MODEL_PATH, "w").write(header_file)
-
-if __name__ == "__main__":
-    pass
