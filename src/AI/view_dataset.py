@@ -6,17 +6,25 @@ import sys
 from tqdm import tqdm
 from module.const import *
 from module import func
+import shutil
 
-for i, path in enumerate(os.listdir(os.path.join(DATA_DIR, "train"))):
-    path = os.path.join(DATA_DIR, "train", path)
+
+save_dir = "check_data"
+if os.path.exists(save_dir):
+    shutil.rmtree(save_dir)
+os.makedirs(save_dir)
+for i, path in enumerate(tqdm(os.listdir(DATA_DIR))):
+    path = os.path.join(DATA_DIR,  path)
     #     continue
     with h5py.File(path, "r") as f:
         img = f["img"][:]
         label = f["label"][:]
 
-    label = func.label_change(label)
+    label = func.label_change(label, False)
     plt.subplot(1, 2, 1)
     plt.imshow(img[..., ::-1])
     plt.subplot(1, 2, 2)
     plt.imshow(label)
-    plt.savefig(f"gomi/{i}.png")
+    save_path = os.path.join(save_dir, str(i) + ".png")
+    plt.savefig(save_path)
+    plt.close()

@@ -6,11 +6,12 @@ import tensorflow.keras.backend as K
 from tensorflow.keras.layers import Layer
 
 
-def label_change(label, ignore_haji=True):
+def label_change(label, ignore_haji=False):
     label_output = np.zeros(LABEL_SIZE)
     for i in range(label.shape[0]):
         for j in range(label.shape[1]):
             if label[i, j] == 1:
+                # print(2222222222)
                 label_output[
                     int(i / label.shape[0] * LABEL_SIZE[0]),
                     int(j / label.shape[1] * LABEL_SIZE[1]),
