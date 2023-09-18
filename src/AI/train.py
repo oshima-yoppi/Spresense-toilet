@@ -241,8 +241,8 @@ converter = tf.lite.TFLiteConverter.from_keras_model(custom_model)
 converter.optimizations = [tf.lite.Optimize.DEFAULT]
 converter.representative_dataset = representative_dataset_gen
 converter.target_spec.supported_ops = [tf.lite.OpsSet.TFLITE_BUILTINS_INT8]
-converter.inference_input_type = tf.int8
-converter.inference_output_type = tf.int8
+# converter.inference_input_type = tf.int8
+# converter.inference_output_type = tf.int8
 tflite_quant_model = converter.convert()
 
 tflite_quant_model_path = os.path.join(MODEL_DIR, "model_quant.tflite")

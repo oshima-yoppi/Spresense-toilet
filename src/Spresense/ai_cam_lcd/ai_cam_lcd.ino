@@ -46,10 +46,51 @@ void CamCB(CamImage img)
         return;
     }
 
+    // uint16_t *sbuf = (uint16_t *)img.getImgBuff();
+    // int n = 0;
+
+    // for (int y = offset_y; y < offset_y + target_h; ++y)
+    // {
+    //     if (y == offset_y)
+    //     {
+
+    //         uint16_t value = sbuf[y * width + offset_x];
+    //         float r = (float)((value >> 11) & 0x1F) / 31.0;
+    //         float g = (float)((value >> 5) & 0x3F) / 63.0;
+    //         float b = (float)((value >> 0) & 0x1F) / 31.0;
+    //         Serial.println("r = " + String(r) + ", g = " + String(g) + ", b = " + String(b));
+    //     }
+    //     for (int x = offset_x; x < offset_x + target_w; ++x)
+    //     {
+    //         /* extracting luminance data from YUV422 data */
+    //         uint16_t value = sbuf[y * width + x];
+    //         float r = (float)((value >> 11) & 0x1F) / 31.0;
+    //         float g = (float)((value >> 5) & 0x3F) / 63.0;
+    //         float b = (float)((value >> 0) & 0x1F) / 31.0;
+
+    //         input->data.f[n + target_h * target_w * 0] = r;
+    //         input->data.f[n + target_h * target_w * 1] = g;
+    //         input->data.f[n + target_h * target_w * 2] = b;
+    //         n++;
+    //     }
+    // }
     uint16_t *sbuf = (uint16_t *)img.getImgBuff();
     int n = 0;
+    float *fbuf_r = input->data.f + target_h * target_w * 0;
+    float *fbuf_g = input->data.f + target_h * target_w * 1;
+    float *fbuf_b = input->data.f + target_h * target_w * 2;
+
     for (int y = offset_y; y < offset_y + target_h; ++y)
     {
+        if (y == offset_y)
+        {
+
+            uint16_t value = sbuf[y * width + offset_x];
+            float r = (float)((value >> 11) & 0x1F) / 31.0;
+            float g = (float)((value >> 5) & 0x3F) / 63.0;
+            float b = (float)((value >> 0) & 0x1F) / 31.0;
+            Serial.println("r = " + String(r) + ", g = " + String(g) + ", b = " + String(b));
+        }
         for (int x = offset_x; x < offset_x + target_w; ++x)
         {
             /* extracting luminance data from YUV422 data */
@@ -57,14 +98,21 @@ void CamCB(CamImage img)
             float r = (float)((value >> 11) & 0x1F) / 31.0;
             float g = (float)((value >> 5) & 0x3F) / 63.0;
             float b = (float)((value >> 0) & 0x1F) / 31.0;
+            fbuf_r[n] = r;
+            fbuf_g[n] = g;
+            fbuf_b[n] = b;
+            // *fbuf_r = r;
+            // *fbuf_g = g;
+            // *fbuf_b = b;
+            // fbuf_r++;
+            // fbuf_g++;
 
-            input->data.f[n + target_h * target_w * 0] = r;
-            input->data.f[n + target_h * target_w * 1] = g;
-            input->data.f[n + target_h * target_w * 2] = b;
+            // input->data.f[n + target_h * target_w * 0] = r;
+            // input->data.f[n + target_h * target_w * 1] = g;
+            // input->data.f[n + target_h * target_w * 2] = b;
             n++;
         }
     }
-
     Serial.println("Do inference");
     TfLiteStatus invoke_status = interpreter->Invoke();
     if (invoke_status != kTfLiteOk)
@@ -76,7 +124,8 @@ void CamCB(CamImage img)
     {
         for (int x = 0; x < output_width; ++x)
         {
-            uint8_t value = output->data.uint8[y * output_width + x];
+            // uint8_t value = output->data.uint8[y * output_width + x];
+            float value = output->data.f[y * output_width + x];
 
             Serial.print(String(value) + ", ");
         }
@@ -85,19 +134,19 @@ void CamCB(CamImage img)
 
     /* get the result */
     bool result = false;
-    int8_t person_score = output->data.uint8[1];
-    int8_t no_person_score = output->data.uint8[0];
-    Serial.print("Person = " + String(person_score) + ", ");
-    Serial.println("No_person = " + String(no_person_score));
-    if ((person_score > no_person_score) && (person_score > 60))
-    {
-        digitalWrite(LED3, HIGH);
-        result = true;
-    }
-    else
-    {
-        digitalWrite(LED3, LOW);
-    }
+    // int8_t person_score = output->data.uint8[1];
+    // int8_t no_person_score = output->data.uint8[0];
+    // Serial.print("Person = " + String(person_score) + ", ");
+    // Serial.println("No_person = " + String(no_person_score));
+    // if ((person_score > no_person_score) && (person_score > 60))
+    // {
+    //     digitalWrite(LED3, HIGH);
+    //     result = true;
+    // }
+    // else
+    // {
+    //     digitalWrite(LED3, LOW);
+    // }
 
     /* display the captured data */
     disp_image(sbuf, offset_x, offset_y, target_w, target_h, result);
