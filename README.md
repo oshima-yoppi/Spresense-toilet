@@ -28,11 +28,8 @@ conda env create -f conda.yml
 
  
 # ディレクトリの説明
-## env
-anacondaの環境ファイルがまとまっています。
-
-## src
-ソースコードがまとまっています。
+- env：anacondaの環境ファイルがまとまっています。
+-  src：ソースコードがまとまっています。
 
 <!--  
 # Usage
