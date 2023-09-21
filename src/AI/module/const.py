@@ -11,7 +11,7 @@ DATA_DIR = "data" # データセット。生データを変換したもの
 
 # 保存するモデルのパス
 MODEL_DIR = "model"
-SPRESENSE_MODEL_DIR = "../Spresense/ai_cam_lcd/"
+SPRESENSE_MODEL_DIR = "../Spresense/detect_people/"
 FULL_MODEL_PATH = os.path.join(MODEL_DIR, "model.h5")
 TFLITE_MODEL_PATH = os.path.join(MODEL_DIR, "model.tflite")
 TFLITE_QUANT_MODEL_PATH = os.path.join(MODEL_DIR, "model_quant.tflite")
