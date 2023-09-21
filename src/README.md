@@ -28,17 +28,9 @@ conda env create -f conda.yml
  
 # ディレクトリの説明
 
-## AI
-人検知のモデルを学習させるためのコードがまとまっている。このディレクトリにあるソースコードは自分のPC上で動かします。 
- - `AI/train.py` ： MobileNetを学習させるためのコード
- - `AI/gpu.py`：自分のPCでGPUが使えるかどうかを確認するためのコード
- - `AI/test.py`：学習したモデルを使ってテストするためのコード
- - `AI/make_dataset.py`：データセットを作成するためのコード
- - `AI/view_dataset.py`：データセットの中身を確認するためのコード
+- `AI`：人検知のモデルを学習させるためのコードがまとまっている。このディレクトリにあるソースコードは自分のPC上で動かします。
+- `Spresense`：Spresense上で実際に動かすコードです。
 
-## Spresense
-Spresense上で実際に動かすコードです。
-- `Spresense/detect_people.ino`：人検知プログラム
 
  
 <!-- # Usage
