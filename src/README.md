@@ -41,7 +41,7 @@ Spresense上で実際に動かすコードです。
 - `Spresense/detect_people.ino`：人検知プログラム
 
  
-# Usage
+<!-- # Usage
  
 DEMOの実行方法など、"hoge"の基本的な使い方を説明する
  
@@ -70,4 +70,4 @@ python demo.py
  
 社内向けなら社外秘であることを明示してる
  
-"hoge" is Confidential.
+"hoge" is Confidential. -->
