@@ -1,7 +1,7 @@
 src/AI/rawdata
 src/AI/data
 src/AI/gomi
-.vscode/*
+# .vscode/*
 *.h5
 *.jpg
 *.xml
