@@ -5,19 +5,18 @@
 spresense上でmobilenetを動かし、トイレの空き状況をクラウドに送信する
 
  
-<!-- # DEMO
+# DEMO
  
 "hoge"の魅力が直感的に伝えわるデモ動画や図解を載せる
  
 # Features
  
-"hoge"のセールスポイントや差別化などを説明する -->
+"hoge"のセールスポイントや差別化などを説明する
  
 # Requirement
  
-機械学習モデルを自分で学習したい場合は、tensorflowをインストールする必要あり。
-（spresenseだけを動かしたい場合は不要）
-
+MobileNetを学習させるために、tensorflowをインストールする必要あり。
+ 
 * tensorflow-gpu==2.8.0
 
 またその他のライブラリもインストールする必要があります。アナコンダで環境を作成する場合は以下のコマンドを実行。
@@ -29,12 +28,22 @@ conda env create -f conda.yml
  
 # ディレクトリの説明
 ## env
-anacondaの環境ファイルがまとまっています。
-
+アナコンダの環境ファイルがまとまっています。
 ## src
 ソースコードがまとまっています。
+## AI
+人検知のモデルを学習させるためのコードがまとまっている。このディレクトリにあるソースコードは自分のPC上で動かします。 
+ - `AI/train.py` ： MobileNetを学習させるためのコード
+ - `AI/gpu.py`：自分のPCでGPUが使えるかどうかを確認するためのコード
+ - `AI/test.py`：学習したモデルを使ってテストするためのコード
+ - `AI/make_dataset.py`：データセットを作成するためのコード
+ - `AI/view_dataset.py`：データセットの中身を確認するためのコード
 
-<!--  
+## Spresense
+Spresense上で実際に動かすコードです。
+- `Spresense/detect_people.ino`：人検知プログラム
+
+ 
 # Usage
  
 DEMOの実行方法など、"hoge"の基本的な使い方を説明する
@@ -63,5 +72,5 @@ python demo.py
 "hoge" is under [MIT license](https://en.wikipedia.org/wiki/MIT_License).
  
 社内向けなら社外秘であることを明示してる
-  -->
-<!-- "hoge" is Confidential. -->
+ 
+"hoge" is Confidential.
