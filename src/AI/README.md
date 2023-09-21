@@ -22,7 +22,7 @@
 ### データセットのダウンロード
 学習データとテスト用の画像をダウンロードします。
 1. 学習データ  
-[ここのドライブリンク](https://drive.google.com/drive/folders/1TG5E54d8ZgZTDf00AfXFOc9XzJVlTGZr?usp=drive_link)より、`imgs`フォルダをダウンロードし、このディレクトリに保存。
+[ここのドライブリンク](https://drive.google.com/drive/folders/1TG5E54d8ZgZTDf00AfXFOc9XzJVlTGZr?usp=drive_link)より、`imgs`フォルダをダウンロードし、このディレクトリに保存。(上書きしますか、というメッセージが出るかもしれませんが上書きしてokでです。)
 
 2. テスト用データ  
 [ここのドライブリンク](https://drive.google.com/drive/folders/11jL48oYxZTncWYO84Qm-NZR4xx1J8uxO?usp=drive_link)より、`images.zip`をダウンロードする。そしたら、`annotations`フォルダと`images`フォルダと`classses.txt`ファイルが出てくると思います。次に、現在のディレクトリ配下に`rawdata`を作成し、それらを`rawdata`内に保存してください。
