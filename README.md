@@ -28,9 +28,10 @@ conda env create -f conda.yml
 
  
 # ディレクトリの説明
+
 - `env`：anacondaの環境ファイルがまとまっています。
 -  `src`：ソースコードがまとまっています。
-
+-  `.vscode`：vscodeの設定がまとまってます。
 <!--  
 # Usage
  
