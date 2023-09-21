@@ -1,4 +1,4 @@
-# トイレのクラウドモニター by spresense and MobileNetV2
+<!-- # トイレのクラウドモニター by spresense and MobileNetV2
  
 
  
@@ -23,7 +23,7 @@ MobileNetを学習させるために、tensorflowをインストールする必�
      
 ```bash
 conda env create -f conda.yml
-```
+``` -->
 
  
 # ディレクトリの説明
