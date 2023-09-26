@@ -18,7 +18,7 @@ TfLiteTensor *input = nullptr;
 TfLiteTensor *output = nullptr;
 int inference_count = 0;
 
-constexpr int kTensorArenaSize = (600) * 1024; // 250
+constexpr int kTensorArenaSize = (500) * 1024; // 250
 uint8_t tensor_arena[kTensorArenaSize];
 
 /* cropping and scaling parameters */
@@ -29,6 +29,7 @@ const int height = 120;
 const int target_w = 96;
 const int target_h = 96;
 const int pixfmt = CAM_IMAGE_PIX_FMT_YUV422;
+// const int pixfmt = CAM_IMAGE_PIX_FMT_RGB565;
 const int OUTPUT_WIDTH = 4;
 const int OUTPUT_HEIGHT = 4;
 
@@ -36,6 +37,10 @@ int output_width, output_height; // 出力されるセグメンテーション�
 
 /* callback function of the camera streaming */
 /* the inference process is done in this function */
+void print(String str)
+{
+    Serial.println(str);
+}
 void CamCB(CamImage img)
 {
     static uint32_t last_mills = 0;
@@ -46,73 +51,42 @@ void CamCB(CamImage img)
         return;
     }
 
-    // uint16_t *sbuf = (uint16_t *)img.getImgBuff();
-    // int n = 0;
+    CamImage small;
+    CamErr err = img.clipAndResizeImageByHW(small,
+                                            offset_x, offset_y,
+                                            offset_x + target_w - 1,
+                                            offset_y + target_h - 1,
+                                            target_w, target_h);
 
-    // for (int y = offset_y; y < offset_y + target_h; ++y)
-    // {
-    //     if (y == offset_y)
-    //     {
+    small.convertPixFormat(CAM_IMAGE_PIX_FMT_RGB565);
 
-    //         uint16_t value = sbuf[y * width + offset_x];
-    //         float r = (float)((value >> 11) & 0x1F) / 31.0;
-    //         float g = (float)((value >> 5) & 0x3F) / 63.0;
-    //         float b = (float)((value >> 0) & 0x1F) / 31.0;
-    //         Serial.println("r = " + String(r) + ", g = " + String(g) + ", b = " + String(b));
-    //     }
-    //     for (int x = offset_x; x < offset_x + target_w; ++x)
-    //     {
-    //         /* extracting luminance data from YUV422 data */
-    //         uint16_t value = sbuf[y * width + x];
-    //         float r = (float)((value >> 11) & 0x1F) / 31.0;
-    //         float g = (float)((value >> 5) & 0x3F) / 63.0;
-    //         float b = (float)((value >> 0) & 0x1F) / 31.0;
-
-    //         input->data.f[n + target_h * target_w * 0] = r;
-    //         input->data.f[n + target_h * target_w * 1] = g;
-    //         input->data.f[n + target_h * target_w * 2] = b;
-    //         n++;
-    //     }
-    // }
-    uint16_t *sbuf = (uint16_t *)img.getImgBuff();
-    int n = 0;
-    float *fbuf_r = input->data.f + target_h * target_w * 0;
-    float *fbuf_g = input->data.f + target_h * target_w * 1;
-    float *fbuf_b = input->data.f + target_h * target_w * 2;
-
-    for (int y = offset_y; y < offset_y + target_h; ++y)
+    int16_t *sbuf = (uint16_t *)small.getImgBuff();
+    if (err != CAM_ERR_SUCCESS)
     {
-        if (y == offset_y)
+        Serial.println("clipAndResizeImageByHW err: " + String(err));
+        return;
+    }
+    int n = 0;
+    float *fbuf_r = input->data.f + target_h * target_w * 2;
+    float *fbuf_g = input->data.f + target_h * target_w * 1;
+    float *fbuf_b = input->data.f + target_h * target_w * 0;
+    for (int y = 0; y < target_h; y++)
+    {
+        for (int x = 0; x < target_w; x++)
         {
-
-            uint16_t value = sbuf[y * width + offset_x];
-            float r = (float)((value >> 11) & 0x1F) / 31.0;
-            float g = (float)((value >> 5) & 0x3F) / 63.0;
-            float b = (float)((value >> 0) & 0x1F) / 31.0;
-            Serial.println("r = " + String(r) + ", g = " + String(g) + ", b = " + String(b));
-        }
-        for (int x = offset_x; x < offset_x + target_w; ++x)
-        {
-            /* extracting luminance data from YUV422 data */
-            uint16_t value = sbuf[y * width + x];
+            uint16_t value = sbuf[y * target_w + x];
             float r = (float)((value >> 11) & 0x1F) / 31.0;
             float g = (float)((value >> 5) & 0x3F) / 63.0;
             float b = (float)((value >> 0) & 0x1F) / 31.0;
             fbuf_r[n] = r;
             fbuf_g[n] = g;
             fbuf_b[n] = b;
-            // *fbuf_r = r;
-            // *fbuf_g = g;
-            // *fbuf_b = b;
-            // fbuf_r++;
-            // fbuf_g++;
-
-            // input->data.f[n + target_h * target_w * 0] = r;
-            // input->data.f[n + target_h * target_w * 1] = g;
-            // input->data.f[n + target_h * target_w * 2] = b;
             n++;
         }
     }
+
+    bool result = false;
+    disp_image(sbuf, 0, 0, target_w, target_h, result);
     Serial.println("Do inference");
     TfLiteStatus invoke_status = interpreter->Invoke();
     if (invoke_status != kTfLiteOk)
@@ -132,8 +106,6 @@ void CamCB(CamImage img)
         Serial.println("\n");
     }
 
-    /* get the result */
-    bool result = false;
     // int8_t person_score = output->data.uint8[1];
     // int8_t no_person_score = output->data.uint8[0];
     // Serial.print("Person = " + String(person_score) + ", ");
@@ -147,9 +119,6 @@ void CamCB(CamImage img)
     // {
     //     digitalWrite(LED3, LOW);
     // }
-
-    /* display the captured data */
-    disp_image(sbuf, offset_x, offset_y, target_w, target_h, result);
 
     uint32_t current_mills = millis();
     uint32_t duration = current_mills - last_mills;
