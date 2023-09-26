@@ -19,7 +19,7 @@ var server = http.createServer(function(req, res) {
                 res.writeHead(200, { 'Content-Type': 'text/html' });
                 // res.end(content);
 				console.log( 'GET Response :', postData['data']);
-				res.end( postData['data'] ,content);
+				res.end(content);
             }
         });
 
