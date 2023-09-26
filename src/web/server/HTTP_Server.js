@@ -17,12 +17,13 @@ var server = http.createServer(function(req, res) {
                 res.end('Internal Server Error');
             } else {
                 res.writeHead(200, { 'Content-Type': 'text/html' });
-                res.end(content);
+                // res.end(content);
+				console.log( 'GET Response :', postData['data']);
+				res.end( postData['data'] );
             }
         });
 
-	console.log( 'GET Response :', postData['data']);
-	res.end( postData['data'] );
+	
     }
 	
     // Access '/postPage' by POST method
