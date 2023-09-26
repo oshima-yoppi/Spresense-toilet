@@ -1,0 +1,16 @@
+{
+  "name": "spresense-toilet",
+  "version": "1.0.0",
+  "description": "spresense上でmobilenetを動かし、トイレの空き状況をクラウドに送信する",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^3.1.9",
+    "express": "^4.18.2"
+  }
+}
