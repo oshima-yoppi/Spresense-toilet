@@ -9,13 +9,18 @@ const PORT = 3000;
 
 
 var server = http.createServer(function(req, res) {
-	fs.readFile('./index.html', 'utf-8', function(err, data){
-        res.writeHead(200, {'Content-Type': 'text/html'});
-        res.write(data);
-        res.end();
-	});
 	// Access '/', response back with the latest postData
     if (req.url === '/' && req.method === 'GET') {
+		fs.readFile('index.html', 'utf8', function(err, content) {
+            if (err) {
+                res.statusCode = 500;
+                res.end('Internal Server Error');
+            } else {
+                res.writeHead(200, { 'Content-Type': 'text/html' });
+                res.end(content);
+            }
+        });
+
 	console.log( 'GET Response :', postData['data']);
 	res.end( postData['data'] );
     }
