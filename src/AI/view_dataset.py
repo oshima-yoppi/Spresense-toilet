@@ -22,7 +22,7 @@ for i, path in enumerate(tqdm(os.listdir(DATA_DIR))):
 
     label = func.label_change(label, False)
     plt.subplot(1, 2, 1)
-    plt.imshow(img[..., ::-1])
+    plt.imshow(img)
     plt.subplot(1, 2, 2)
     plt.imshow(label)
     save_path = os.path.join(save_dir, str(i) + ".png")
