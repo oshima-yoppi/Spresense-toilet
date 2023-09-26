@@ -1,5 +1,5 @@
 var http = require('http');
-//var fs = require('fs');
+var fs = require('fs');
 var querystring = require('querystring');
 var url = require('url');
 var data;
