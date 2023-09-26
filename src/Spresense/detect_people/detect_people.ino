@@ -140,7 +140,7 @@ int16_t *convert_img(CamImage img)
 
 int detect_people(int16_t *sbuf, float th_detect = 0.5)
 {
-    int count_people;
+    int count_people = 0;
     // tfliteに入力するために、データ構造を変換＆正規化スル。
     // カメラから直接得られる画像smallと、tfliteに入力するinputのデータ構造は異なる。(参考書「spresenseで始める～～」p 180参照)
     int n = 0;
@@ -264,9 +264,11 @@ void loop()
 {
     print("call takePicture");
     CamImage img = take_picture();
+
     int16_t *sbuf = convert_img(img);
     disp_image(sbuf, 0, 0, target_w, target_h, result);
-    int count_people = detect_people(sbuf);
+
+    int count_people = detect_people(sbuf, 0.9);
     print("count_people = " + String(count_people));
     // delay(1000);
 }
