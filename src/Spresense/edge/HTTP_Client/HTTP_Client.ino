@@ -59,18 +59,26 @@ void setup() {
 	/* Initialize AT Command Library Buffer */
 	gsparams.mode = ATCMD_MODE_STATION;
 	gsparams.psave = ATCMD_PSAVE_DEFAULT;
+
+	ConsoleLog(gs2200.begin(gsparams));
 	if (gs2200.begin(gsparams)) {
 		ConsoleLog("GS2200 Initilization Fails");
 		while (1);
 	}
 
 	/* GS2200 Association to AP */
+
+	ConsoleLog(gs2200.activate_station(AP_SSID, PASSPHRASE));
+
 	if (gs2200.activate_station(AP_SSID, PASSPHRASE)) {
 		ConsoleLog("Association Fails");
 		while (1);
 	}
 
-	hostParams.host = (char *)HTTP_SRVR_IP;
+	// while (){
+
+	// }
+	// hostParams.host = (char *)HTTP_SRVR_IP;
 	hostParams.port = (char *)HTTP_PORT;
 	theHttpGs2200.begin(&hostParams);
 
