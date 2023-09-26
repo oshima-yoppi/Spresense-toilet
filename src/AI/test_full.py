@@ -8,8 +8,8 @@ import tensorflow.keras.backend as K
 from module.const import *
 from module import func, loss
 
-custom_model_path = os.path.join(MODEL_DIR, "full_model.h5")  # tensorflowのモデル
-model = tf.lite.Interpreter(model_path="model.tflite")
+custom_model_path = FULL_MODEL_PATH # tensorflowのモデル
+# model = tf.lite.Interpreter(model_path=TFLITE_MODEL_PATH)
 model = tf.keras.models.load_model(
     custom_model_path, custom_objects={"DiceLoss": loss.DiceLoss}, compile=False
 )
