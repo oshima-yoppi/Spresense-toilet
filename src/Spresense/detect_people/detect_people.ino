@@ -32,7 +32,7 @@ const int pixfmt = CAM_IMAGE_PIX_FMT_YUV422;
 // const int pixfmt = CAM_IMAGE_PIX_FMT_RGB565;
 const int OUTPUT_WIDTH = 4;
 const int OUTPUT_HEIGHT = 4;
-
+bool result = false;
 int output_width, output_height; // 出力されるセグメンテーションサイズ
 
 /* callback function of the camera streaming */
@@ -41,6 +41,7 @@ void print(String str)
 {
     Serial.println(str);
 }
+
 void CamCB(CamImage img)
 {
     static uint32_t last_mills = 0;
@@ -51,6 +52,7 @@ void CamCB(CamImage img)
         return;
     }
 
+    // 画像をクリッピングをしてRGBフォーマットに変換。
     CamImage small;
     CamErr err = img.clipAndResizeImageByHW(small,
                                             offset_x, offset_y,
@@ -66,10 +68,13 @@ void CamCB(CamImage img)
         Serial.println("clipAndResizeImageByHW err: " + String(err));
         return;
     }
+
+    // tfliteに入力するために、データ構造を変換＆正規化スル。
+    // カメラから直接得られる画像smallと、tfliteに入力するinputのデータ構造は異なる。(参考書「spresenseで始める～～」p 180参照)
     int n = 0;
-    float *fbuf_r = input->data.f + target_h * target_w * 2;
+    float *fbuf_r = input->data.f + target_h * target_w * 0;
     float *fbuf_g = input->data.f + target_h * target_w * 1;
-    float *fbuf_b = input->data.f + target_h * target_w * 0;
+    float *fbuf_b = input->data.f + target_h * target_w * 2;
     for (int y = 0; y < target_h; y++)
     {
         for (int x = 0; x < target_w; x++)
@@ -106,30 +111,89 @@ void CamCB(CamImage img)
         Serial.println("\n");
     }
 
-    // int8_t person_score = output->data.uint8[1];
-    // int8_t no_person_score = output->data.uint8[0];
-    // Serial.print("Person = " + String(person_score) + ", ");
-    // Serial.println("No_person = " + String(no_person_score));
-    // if ((person_score > no_person_score) && (person_score > 60))
-    // {
-    //     digitalWrite(LED3, HIGH);
-    //     result = true;
-    // }
-    // else
-    // {
-    //     digitalWrite(LED3, LOW);
-    // }
-
     uint32_t current_mills = millis();
     uint32_t duration = current_mills - last_mills;
     Serial.println("duration = " + String(duration));
     last_mills = current_mills;
 }
 
+int16_t *convert_img(CamImage img)
+{
+    if (!img.isAvailable())
+    {
+        Serial.println("img is not available");
+        return;
+    }
+
+    // 画像をクリッピングをしてRGBフォーマットに変換。
+    CamImage small;
+    CamErr err = img.clipAndResizeImageByHW(small,
+                                            offset_x, offset_y,
+                                            offset_x + target_w - 1,
+                                            offset_y + target_h - 1,
+                                            target_w, target_h);
+
+    small.convertPixFormat(CAM_IMAGE_PIX_FMT_RGB565);
+    int16_t *sbuf = (uint16_t *)small.getImgBuff();
+    return sbuf;
+}
+
+int detect_people(int16_t *sbuf, float th_detect = 0.5)
+{
+    int count_people;
+    // tfliteに入力するために、データ構造を変換＆正規化スル。
+    // カメラから直接得られる画像smallと、tfliteに入力するinputのデータ構造は異なる。(参考書「spresenseで始める～～」p 180参照)
+    int n = 0;
+    float *fbuf_r = input->data.f + target_h * target_w * 0;
+    float *fbuf_g = input->data.f + target_h * target_w * 1;
+    float *fbuf_b = input->data.f + target_h * target_w * 2;
+    for (int y = 0; y < target_h; y++)
+    {
+        for (int x = 0; x < target_w; x++)
+        {
+            uint16_t value = sbuf[y * target_w + x];
+            float r = (float)((value >> 11) & 0x1F) / 31.0;
+            float g = (float)((value >> 5) & 0x3F) / 63.0;
+            float b = (float)((value >> 0) & 0x1F) / 31.0;
+            fbuf_r[n] = r;
+            fbuf_g[n] = g;
+            fbuf_b[n] = b;
+            n++;
+        }
+    }
+
+    bool result = false;
+    disp_image(sbuf, 0, 0, target_w, target_h, result);
+    Serial.println("Do inference");
+    TfLiteStatus invoke_status = interpreter->Invoke();
+    if (invoke_status != kTfLiteOk)
+    {
+        Serial.println("Invoke failed");
+        return;
+    }
+    for (int y = 0; y < output_height; ++y)
+    {
+        for (int x = 0; x < output_width; ++x)
+        {
+            // uint8_t value = output->data.uint8[y * output_width + x];
+            float value = output->data.f[y * output_width + x];
+
+            Serial.print(String(value) + ", ");
+            if (value >= th_detect)
+            {
+                count_people++;
+            }
+        }
+        Serial.println("\n");
+    }
+    return count_people;
+}
+
 void setup()
 {
     Serial.begin(115200);
     setup_display();
+    CamErr err;
 
     tflite::InitializeTarget();
     memset(tensor_arena, 0, kTensorArenaSize * sizeof(uint8_t));
@@ -193,20 +257,16 @@ void setup()
     Serial.println("Completed tensorflow setup");
     digitalWrite(LED0, HIGH);
 
-    CamErr err = theCamera.begin(1, CAM_VIDEO_FPS_15, width, height, pixfmt);
-    if (err != CAM_ERR_SUCCESS)
-    {
-        Serial.println("camera begin err: " + String(err));
-        return;
-    }
-    err = theCamera.startStreaming(true, CamCB); // この関数でずっとカメラの画像を取得し続ける。止めたかったらfalseにする。
-    if (err != CAM_ERR_SUCCESS)
-    {
-        Serial.println("start streaming err: " + String(err));
-        return;
-    }
+    setup_camera();
 }
 
 void loop()
 {
+    print("call takePicture");
+    CamImage img = take_picture();
+    int16_t *sbuf = convert_img(img);
+    disp_image(sbuf, 0, 0, target_w, target_h, result);
+    int count_people = detect_people(sbuf);
+    print("count_people = " + String(count_people));
+    // delay(1000);
 }
