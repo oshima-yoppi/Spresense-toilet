@@ -118,36 +118,38 @@ void loop() {
 
 			delay(1000);
 			count+=100;
-			httpStat = GET;
+			// httpStat = GET;
 			break;
-			
-		case GET:
-			theHttpGs2200.config(HTTP_HEADER_TRANSFER_ENCODING, "identity");
 
-			result = theHttpGs2200.get(HTTP_GET_PATH);
-			if (true == result) {
-				theHttpGs2200.read_data(Receive_Data, RECEIVE_PACKET_SIZE);
-				parse_httpresponse((char *)(Receive_Data));
-			} else {
-				ConsoleLog( "?? Unexpected HTTP Response ??" );
-			}
+    // サーバーにリクエストしてデータ取得	
+		// case GET:
+		// 	theHttpGs2200.config(HTTP_HEADER_TRANSFER_ENCODING, "identity");
 
- 			do {
-				result = theHttpGs2200.receive(2000);
-				if (result) {
-					theHttpGs2200.read_data(Receive_Data, RECEIVE_PACKET_SIZE);
-					ConsolePrintf("%s", (char *)(Receive_Data));
-				} else {
-					// AT+HTTPSEND command is done
-					ConsolePrintf( "\r\n");
-				}
-			} while (result);
+		// 	result = theHttpGs2200.get(HTTP_GET_PATH);
+		// 	if (true == result) {
+		// 		theHttpGs2200.read_data(Receive_Data, RECEIVE_PACKET_SIZE);
+		// 		parse_httpresponse((char *)(Receive_Data));
+		// 	} else {
+		// 		ConsoleLog( "?? Unexpected HTTP Response ??" );
+		// 	}
 
-			result = theHttpGs2200.end();
+ 		// 	do {
+		// 		result = theHttpGs2200.receive(2000);
+		// 		if (result) {
+		// 			theHttpGs2200.read_data(Receive_Data, RECEIVE_PACKET_SIZE);
+		// 			ConsolePrintf("%s", (char *)(Receive_Data));
+		// 		} else {
+		// 			// AT+HTTPSEND command is done
+		// 			ConsolePrintf( "\r\n");
+		// 		}
+		// 	} while (result);
 
-			delay(500);
-			httpStat = POST;
-			break;
+		// 	result = theHttpGs2200.end();
+
+		// 	delay(500);
+		// 	httpStat = POST;
+		// 	break;
+    
 		default:
 			break;
 		}
