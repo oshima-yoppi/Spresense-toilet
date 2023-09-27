@@ -62,13 +62,14 @@ var server = http.createServer(function (req, res) {
                             console.log('GET Response :', value);
                             var displayValue;
 
-                            if (value === 0) {
-                                console.log('a');
-                                displayValue = 'あ';
+                            if (value === '0') {
+                                displayValue = '非常に空いています';
                             } else if (value === '1') {
-                                displayValue = 'い';
+                                displayValue = '空いています';
                             } else if (value === '2') {
-                                displayValue = 'う';
+                                displayValue = '混雑しています';
+                            } else if (value === '3') {
+                                displayValue = '非常に混雑しています';
                             } else {
                                 displayValue = a;
                             }
