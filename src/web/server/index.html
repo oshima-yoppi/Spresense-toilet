@@ -1,29 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <h1>
-        トイレのクラウドモニター
-        <a href="">
-          <img src="imgs/map.jpg" alt="トイレのクラウドモニタ">
-        </a>
-    </h1>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spresene</title>
-    <style>
-        /* ボディ要素の背景色を黒に設定 */
-        body {
-            background-color: black;
-        }
-
-        /* ボディ内のテキストの文字色を白に設定 */
-        body {
-            color: white;
-        }
-    </style>
+    <title>リアルタイム更新</title>
 </head>
 <body>
-    <p>Data from POST request: <span id="data_placeholder"></span></p>
-    <img src="imgs/map.jpg" alt="map">
+    <h1>Data: <span id="data_placeholder">読み込み中...</span></h1>
+    
+    <!-- WebSocketのスクリプトを追加 -->
+    <script>
+        const socket = new WebSocket('ws://localhost:3000');
+
+        // 接続が開かれた時の処理
+        socket.addEventListener('open', (event) => {
+            console.log('WebSocketに接続しました');
+        });
+
+        // メッセージを受信した時の処理
+        socket.addEventListener('message', (event) => {
+            console.log('サーバーからのメッセージ:', event.data);
+            document.getElementById('data_placeholder').innerText = event.data;
+        });
+
+        // 接続が閉じられた時の処理
+        socket.addEventListener('close', (event) => {
+            console.log('WebSocketの接続が閉じられました');
+        });
+    </script>
 </body>
 </html>
