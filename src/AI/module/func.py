@@ -7,6 +7,8 @@ from tensorflow.keras.layers import Layer
 
 
 def label_change(label, ignore_haji=False):
+    label_output = cv2.resize(label, LABEL_SIZE)
+    return label_output
     label_output = np.zeros(LABEL_SIZE)
     for i in range(label.shape[0]):
         for j in range(label.shape[1]):
