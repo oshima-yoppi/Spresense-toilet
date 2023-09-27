@@ -9,6 +9,8 @@ const PORT = 3000;
 let a = "loading..."
 
 var server = http.createServer(function(req, res) {
+    var fullPath = __dirname + filePath;
+    console.log('fullPath:', fullPath);
     // Access '/', response back with the latest postData
     if (req.url === '/' && req.method === 'GET') {
         fs.readFile('index.html', 'utf8', function(err, content) {
