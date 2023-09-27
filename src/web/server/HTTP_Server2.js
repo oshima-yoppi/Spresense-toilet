@@ -28,17 +28,17 @@ var server = http.createServer(function(req, res) {
                             a = '非常に空いています';
                             break;
 
-                        case 1:
+                        case '1':
                             console.log("選択された値: 1")
                             a = '空いています';
                             break;
 
-                        case 2:
+                        case '2':
                             console.log("選択された値: 2")
                             a = '混雑しています';
                             break;
 
-                        case 3:
+                        case '3':
                             console.log("選択された値: 3")
                             a = '非常に混雑しています';
                             break;
