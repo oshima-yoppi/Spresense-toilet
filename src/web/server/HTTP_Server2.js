@@ -17,12 +17,13 @@ var server = http.createServer(function(req, res) {
             } else {
                 res.writeHead(200, { 'Content-Type': 'text/html' });
 
-                // Check if 'data' key exists in postData
-                if ('data' in postData) {
+                if ('data' in postData && postData['data'].trim() !== '') {
                     // Embed postData['data'] into the HTML response
                     content = content.replace('<span id="data_placeholder"></span>', postData['data']);
+                } else {
+                    // If 'data' is empty, display "loading"
+                    content = content.replace('<span id="data_placeholder"></span>', 'loading');
                 }
-
                 res.end(content);
             }
         });
