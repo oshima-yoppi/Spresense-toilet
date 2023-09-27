@@ -24,7 +24,7 @@ var server = http.createServer(function (req, res) {
                     var value = postData['data'];
                     var displayValue;
 
-                    if (value === '0') {
+                    if (value === 0) {
                         console.log('a');
                         displayValue = 'あ';
                     } else if (value === '1') {
