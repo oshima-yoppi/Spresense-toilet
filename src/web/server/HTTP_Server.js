@@ -2,8 +2,9 @@ var http = require('http');
 var fs = require('fs');
 var querystring = require('querystring');
 var url = require('url');
+const { lookup } = require('dns');
 var data;
-var postData = {};
+var postData = "loading...";
 const hostname = '10.204.47.155';
 const PORT = 3000;
 
