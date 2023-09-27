@@ -4,7 +4,7 @@ var querystring = require('querystring');
 var url = require('url');
 var data;
 var postData = {};
-const hostname = 'localhost';
+const hostname = '10.204.47.155';
 const PORT = 3000;
 let a = "loading..."
 
