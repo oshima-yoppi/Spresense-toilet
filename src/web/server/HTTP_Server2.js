@@ -25,6 +25,7 @@ var server = http.createServer(function (req, res) {
                     var displayValue;
 
                     if (value === '0') {
+                        console.log('a');
                         displayValue = 'あ';
                     } else if (value === '1') {
                         displayValue = 'い';
