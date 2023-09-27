@@ -58,7 +58,21 @@ var server = http.createServer(function (req, res) {
                     // Broadcast the updated data to all connected clients
                     wss.clients.forEach(function (client) {
                         if (client.readyState === WebSocket.OPEN) {
-                            client.send(postData[key]);
+                            var value = postData['data'];
+                            console.log('GET Response :', value);
+                            var displayValue;
+
+                            if (value === 0) {
+                                console.log('a');
+                                displayValue = 'あ';
+                            } else if (value === '1') {
+                                displayValue = 'い';
+                            } else if (value === '2') {
+                                displayValue = 'う';
+                            } else {
+                                displayValue = a;
+                            }
+                            client.send(displayValue);
                         }
                     });
                 }
