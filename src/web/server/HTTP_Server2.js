@@ -22,7 +22,7 @@ var server = http.createServer(function (req, res) {
 
                 if ('data' in postData && postData['data'].trim() !== '') {
                     switch (postData['data']) {
-                        case '0':
+                        case 0:
                             a = '非常に空いています';
                             break;
 
