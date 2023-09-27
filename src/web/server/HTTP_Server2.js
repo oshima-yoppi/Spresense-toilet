@@ -2,16 +2,18 @@ var http = require('http');
 var fs = require('fs');
 var querystring = require('querystring');
 var url = require('url');
+var WebSocket = require('ws');
+
 var data;
 var postData = {};
+let a = 'loading...';
+
 const hostname = '10.204.47.155';
 const PORT = 3000;
-let a = "loading..."
 
-var server = http.createServer(function(req, res) {
-    // Access '/', response back with the latest postData
+var server = http.createServer(function (req, res) {
     if (req.url === '/' && req.method === 'GET') {
-        fs.readFile('index.html', 'utf8', function(err, content) {
+        fs.readFile('index.html', 'utf8', function (err, content) {
             if (err) {
                 res.statusCode = 500;
                 res.end('Internal Server Error');
@@ -19,37 +21,29 @@ var server = http.createServer(function(req, res) {
                 res.writeHead(200, { 'Content-Type': 'text/html' });
 
                 if ('data' in postData && postData['data'].trim() !== '') {
-                    // Embed postData['data'] into the HTML response
-                    console.log("postData['data']:", postData['data'])
                     switch (postData['data']) {
-                        
                         case '0':
-                            console.log("選択された値: 0")
                             a = '非常に空いています';
                             break;
 
                         case '1':
-                            console.log("選択された値: 1")
                             a = '空いています';
                             break;
 
                         case '2':
-                            console.log("選択された値: 2")
                             a = '混雑しています';
                             break;
 
                         case '3':
-                            console.log("選択された値: 3")
                             a = '非常に混雑しています';
                             break;
 
                         default:
-                            a = "loading..."
-                            console.log("error")
+                            a = 'loading...';
+                            console.log('error');
                     }
                     content = content.replace('<span id="data_placeholder"></span>', a);
                 } else {
-                    // If 'data' is empty, display "loading"
                     content = content.replace('<span id="data_placeholder"></span>', ' loading...');
                 }
                 res.end(content);
@@ -57,18 +51,22 @@ var server = http.createServer(function(req, res) {
         });
     } else if (req.url === '/postData' && req.method === 'POST') {
         data = '';
-        req.on('data', function(chunk) {
+        req.on('data', function (chunk) {
             data += chunk;
         });
 
-        req.on('end', function() {
-            // Parse the query
+        req.on('end', function () {
             postData = querystring.parse(data);
             for (key in postData) {
-                // check the key
                 if (key == 'data') {
                     console.log('POST data    :', postData[key]);
                     res.end(postData[key]);
+                    // Broadcast the updated data to all connected clients
+                    wss.clients.forEach(function (client) {
+                        if (client.readyState === WebSocket.OPEN) {
+                            client.send(postData[key]);
+                        }
+                    });
                 }
             }
         });
@@ -78,7 +76,13 @@ var server = http.createServer(function(req, res) {
     }
 });
 
-// Listen port 3000
+var wss = new WebSocket.Server({ server });
+
+wss.on('connection', function (ws) {
+    // Send initial data to the connected client
+    ws.send(a);
+});
+
 server.listen(PORT, () => {
     console.log(`Server running at http://${hostname}:${PORT}/`);
 });
