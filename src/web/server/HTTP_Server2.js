@@ -6,6 +6,7 @@ var data;
 var postData = {};
 const hostname = '10.204.47.155';
 const PORT = 3000;
+let a = "loading..."
 
 var server = http.createServer(function(req, res) {
     // Access '/', response back with the latest postData
