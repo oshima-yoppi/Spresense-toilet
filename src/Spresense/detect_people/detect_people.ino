@@ -30,8 +30,8 @@ const int target_w = 96;
 const int target_h = 96;
 const int pixfmt = CAM_IMAGE_PIX_FMT_YUV422;
 // const int pixfmt = CAM_IMAGE_PIX_FMT_RGB565;
-const int OUTPUT_WIDTH = 4;
-const int OUTPUT_HEIGHT = 4;
+const int OUTPUT_WIDTH = 12;
+const int OUTPUT_HEIGHT = 12;
 bool result = false;
 int output_width, output_height; // 出力されるセグメンテーションサイズ
 
