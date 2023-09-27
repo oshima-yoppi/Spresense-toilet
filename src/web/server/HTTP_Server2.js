@@ -23,7 +23,7 @@ var server = http.createServer(function(req, res) {
                     console.log("postData['data']:", postData['data'])
                     switch (postData['data']) {
                         
-                        case 0:
+                        case '0':
                             console.log("選択された値: 0")
                             a = '非常に空いています';
                             break;
