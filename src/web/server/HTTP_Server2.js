@@ -21,21 +21,7 @@ var server = http.createServer(function (req, res) {
                 res.writeHead(200, { 'Content-Type': 'text/html' });
 
                 if ('data' in postData && postData['data'].trim() !== '') {
-                    var value = postData['data'];
                     console.log('GET Response :', value);
-                    var displayValue;
-
-                    if (value === 0) {
-                        console.log('a');
-                        displayValue = 'あ';
-                    } else if (value === '1') {
-                        displayValue = 'い';
-                    } else if (value === '2') {
-                        displayValue = 'う';
-                    } else {
-                        displayValue = a;
-                    }
-
                     content = content.replace('<span id="data_placeholder"></span>', displayValue);
                 } else {
                     content = content.replace('<span id="data_placeholder"></span>', ' loading...');
