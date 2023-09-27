@@ -22,7 +22,7 @@ var server = http.createServer(function(req, res) {
                     content = content.replace('<span id="data_placeholder"></span>', postData['data']);
                 } else {
                     // If 'data' is empty, display "loading"
-                    content = content.replace('<span id="data_placeholder"></span>', 'loading...');
+                    content = content.replace('<span id="data_placeholder"></span>', ' loading...');
                 }
                 res.end(content);
             }
