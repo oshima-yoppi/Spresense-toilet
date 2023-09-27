@@ -34,8 +34,10 @@ for i, (image_filepath, annotation_filepath) in enumerate(
 
     height, width, _ = image.shape
     # print(height, width)
+    label = np.zeros((height, width))
+    # bool_label = False
     for sentense in sentenses:
-        _, x, y, w, h = map(float, sentense.split())
+        _, x, y, w, h = map(float, sentense.split()) 
         # print(x, y, w, h)
         x1 = int(x * width - w * width / 2)
         y1 = int(y * height - h * height / 2)
@@ -43,18 +45,25 @@ for i, (image_filepath, annotation_filepath) in enumerate(
         y2 = int(y * height + h * height / 2)
         boxes.append([x1, y1, x2, y2])
         centroids.append((int(x * width), int(y * height)))
+        # print(y1, y2, x1, x2)
+        label[y1:y2, x1:x2] = 1
+        # print(888888888)
 
     image = cv2.resize(image, INPUT_SIZE)
-    label = np.zeros(INPUT_SIZE)
-
-    for x, y in centroids:
-        # ここでのx, yは画像の座標.ｘは横方向、ｙは縦方向
-        x_resized = int(x / width * INPUT_SIZE[0])
-        y_resized = int(y / height * INPUT_SIZE[1])
-        label[y_resized, x_resized] = 1
+    label = cv2.resize(label, INPUT_SIZE)
 
     save_data_path = os.path.join(DATA_DIR, str(i) + ".h5")
     with h5py.File(save_data_path, "w") as f:
         f.create_dataset("img", data=image)
         f.create_dataset("label", data=label)
+    # if np.any(label ==1):
+    #     pass
+    # else:
+    #     continue
+    # plt.subplot(1, 2, 1)
+    # plt.imshow(image)
+    # plt.subplot(1, 2, 2)
+    # plt.imshow(label)
+    # plt.show()
+
 

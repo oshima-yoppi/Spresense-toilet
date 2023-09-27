@@ -1,7 +1,7 @@
 import os
 
 INPUT_SIZE = (96, 96)
-NUM_AREA = 4
+NUM_AREA = 12
 LABEL_SIZE = (NUM_AREA, NUM_AREA)
 INPUT_CHANNEL = 3
 ALPHA = 0.75 # 1はダメ0.5は行ける
