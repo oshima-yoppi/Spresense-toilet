@@ -1,7 +1,8 @@
-var http = require('http');
-var fs = require('fs');
-var url = require('url');
-var WebSocket = require('ws');
+// サーバのコード
+
+const http = require('http');
+const fs = require('fs');
+const WebSocket = require('ws');
 
 const hostname = '10.204.47.155';
 const PORT = 3000;
@@ -9,22 +10,14 @@ const PORT = 3000;
 let a = "loading...";
 
 // Create an HTTP server
-var server = http.createServer(function (req, res) {
+const server = http.createServer((req, res) => {
     if (req.url === '/' && req.method === 'GET') {
-        fs.readFile('index.html', 'utf8', function (err, content) {
+        fs.readFile('index.html', 'utf8', (err, content) => {
             if (err) {
                 res.statusCode = 500;
                 res.end('Internal Server Error');
             } else {
                 res.writeHead(200, { 'Content-Type': 'text/html' });
-
-                if (wsServer.clients.size > 0) {
-                    // If there are connected WebSocket clients, send data to them
-                    wsServer.clients.forEach(function each(client) {
-                        client.send(a);
-                    });
-                }
-
                 // Replace the placeholder with the current value of 'a'
                 content = content.replace('<span id="data_placeholder"></span>', a);
                 res.end(content);
@@ -32,20 +25,18 @@ var server = http.createServer(function (req, res) {
         });
     } else if (req.url === '/postData' && req.method === 'POST') {
         let data = '';
-        req.on('data', function (chunk) {
+        req.on('data', (chunk) => {
             data += chunk;
         });
 
-        req.on('end', function () {
-            // Parse the query
-            let postData = new URLSearchParams(data);
+        req.on('end', () => {
+            const postData = new URLSearchParams(data);
             for (const [key, value] of postData) {
-                // Check the key
                 if (key === 'data') {
                     console.log('POST data:', value);
                     a = determineStatus(value);
                     // Send the updated value to connected WebSocket clients
-                    wsServer.clients.forEach(function each(client) {
+                    wsServer.clients.forEach((client) => {
                         client.send(a);
                     });
                     res.end(value);
@@ -62,26 +53,26 @@ var server = http.createServer(function (req, res) {
 const wsServer = new WebSocket.Server({ noServer: true });
 
 // Handle WebSocket connection
-wsServer.on('connection', function connection(ws) {
+wsServer.on('connection', (ws) => {
     console.log('WebSocket connected');
 
     // Send the initial value to the connected WebSocket client
     ws.send(a);
 
-    ws.on('close', function () {
+    ws.on('close', () => {
         console.log('WebSocket disconnected');
     });
 });
 
 // Upgrade the HTTP server to support WebSocket
-server.on('upgrade', function upgrade(request, socket, head) {
-    wsServer.handleUpgrade(request, socket, head, function done(ws) {
+server.on('upgrade', (request, socket, head) => {
+    wsServer.handleUpgrade(request, socket, head, (ws) => {
         wsServer.emit('connection', ws, request);
     });
 });
 
 // Listen on port 3000
-server.listen(PORT, () => {
+server.listen(PORT, hostname, () => {
     console.log(`Server running at http://${hostname}:${PORT}/`);
 });
 
