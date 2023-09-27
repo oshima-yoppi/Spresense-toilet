@@ -1,21 +1,35 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Spresense</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>データの受け渡し</title>
     <style>
-        /* ボディ要素の背景色を黒に設定 */
         body {
             background-color: black;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
         }
 
-        /* ボディ内のテキストの文字色を白に設定 */
-        body {
-            color: white;
+        #data_placeholder {
+            font-size: 24px; /* 任意のフォントサイズ */
+        }
+
+        img {
+            width: 100%; /* 画像を親要素の幅いっぱいに広げる */
+            max-width: 600px; /* 画像の最大幅を設定（任意の幅） */
+            height: auto; /* アスペクト比を維持しつつ高さを自動調整 */
+            margin-top: 20px; /* 画像とテキストの間に余白を追加（任意の値） */
         }
     </style>
 </head>
 <body>
     <p>Data from POST request: <span id="data_placeholder"></span></p>
-    <img src="imgs/map.jpg" alt="map" width="300" height="200">
+    <img src="imgs/map.jpg" alt="map">
 </body>
 </html>
