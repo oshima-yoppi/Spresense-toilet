@@ -21,27 +21,27 @@ var server = http.createServer(function (req, res) {
                 res.writeHead(200, { 'Content-Type': 'text/html' });
 
                 if ('data' in postData && postData['data'].trim() !== '') {
-                    switch (postData['data']) {
-                        case '0':
-                            a = '非常に空いています';
-                            break;
+                    // switch (postData['data']) {
+                    //     case '0':
+                    //         a = '非常に空いています';
+                    //         break;
 
-                        case '1':
-                            a = '空いています';
-                            break;
+                    //     case '1':
+                    //         a = '空いています';
+                    //         break;
 
-                        case '2':
-                            a = '混雑しています';
-                            break;
+                    //     case '2':
+                    //         a = '混雑しています';
+                    //         break;
 
-                        case '3':
-                            a = '非常に混雑しています';
-                            break;
+                    //     case '3':
+                    //         a = '非常に混雑しています';
+                    //         break;
 
-                        default:
-                            a = 'loading...';
-                            console.log('error');
-                    }
+                    //     default:
+                    //         a = 'loading...';
+                    //         console.log('error');
+                    // }
                     content = content.replace('<span id="data_placeholder"></span>', a);
                 } else {
                     content = content.replace('<span id="data_placeholder"></span>', ' loading...');
