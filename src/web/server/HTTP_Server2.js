@@ -17,8 +17,8 @@ var server = http.createServer(function(req, res) {
             } else {
                 res.writeHead(200, { 'Content-Type': 'text/html' });
 
-                // Check if there is data in postData
-                if (postData.hasOwnProperty('data')) {
+                // Check if 'data' key exists in postData
+                if ('data' in postData) {
                     // Embed postData['data'] into the HTML response
                     content = content.replace('<span id="data_placeholder"></span>', postData['data']);
                 }
