@@ -19,7 +19,31 @@ var server = http.createServer(function(req, res) {
 
                 if ('data' in postData && postData['data'].trim() !== '') {
                     // Embed postData['data'] into the HTML response
-                    content = content.replace('<span id="data_placeholder"></span>', postData['data']);
+                    switch (postData['data']) {
+                        case 0:
+                            console.log("選択された値: 0")
+                            a = '非常に空いています';
+                            break;
+
+                        case 1:
+                            console.log("選択された値: 1")
+                            a = '空いています';
+                            break;
+
+                        case 2:
+                            console.log("選択された値: 2")
+                            a = '混雑しています';
+                            break;
+
+                        case 3:
+                            console.log("選択された値: 3")
+                            a = '非常に混雑しています';
+                            break;
+
+                        default:
+                            console.log("error")
+                    }
+                    content = content.replace('<span id="data_placeholder"></span>', a);
                 } else {
                     // If 'data' is empty, display "loading"
                     content = content.replace('<span id="data_placeholder"></span>', ' loading...');
