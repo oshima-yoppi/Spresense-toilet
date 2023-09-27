@@ -22,6 +22,7 @@ var server = http.createServer(function (req, res) {
 
                 if ('data' in postData && postData['data'].trim() !== '') {
                     var value = postData['data'];
+                    console.log('GET Response :', value);
                     var displayValue;
 
                     if (value === 0) {
