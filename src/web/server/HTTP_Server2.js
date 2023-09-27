@@ -20,8 +20,9 @@ var server = http.createServer(function(req, res) {
 
                 if ('data' in postData && postData['data'].trim() !== '') {
                     // Embed postData['data'] into the HTML response
+                    console.log("postData['data']:", postData['data'])
                     switch (postData['data']) {
-                        console.log("postData['data']:", postData['data'])
+                        
                         case 0:
                             console.log("選択された値: 0")
                             a = '非常に空いています';
