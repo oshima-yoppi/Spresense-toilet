@@ -41,6 +41,7 @@ var server = http.createServer(function(req, res) {
                             break;
 
                         default:
+                            a = "loading..."
                             console.log("error")
                     }
                     content = content.replace('<span id="data_placeholder"></span>', a);
