@@ -28,7 +28,7 @@
 </body>
 </html> -->
 
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -38,7 +38,7 @@
 <body>
     <h1>Data: <span id="data_placeholder">読み込み中...</span></h1>
     
-    <!-- WebSocketのスクリプトを追加 -->
+    //WebSocketのスクリプトを追加
     <script>
         const socket = new WebSocket('ws://10.204.47.155:3000');
 
@@ -51,6 +51,63 @@
         socket.addEventListener('message', (event) => {
             console.log('サーバーからのメッセージ:', event.data);
             document.getElementById('data_placeholder').innerText = event.data;
+        });
+
+        // 接続が閉じられた時の処理
+        socket.addEventListener('close', (event) => {
+            console.log('WebSocketの接続が閉じられました');
+        });
+    </script>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>リアルタイム更新</title>
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .data-container {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="data-container">
+        <h1>Data 1: <span id="data_placeholder_1">読み込み中...</span></h1>
+        <h1>Data 2: <span id="data_placeholder_2">読み込み中...</span></h1>
+        <h1>Data 3: <span id="data_placeholder_3">読み込み中...</span></h1>
+    </div>
+    
+    <!-- WebSocketのスクリプトを追加 -->
+    <script>
+        const socket = new WebSocket('ws://10.204.47.155:3000');
+
+        function updateData(index, data) {
+            document.getElementById(`data_placeholder_${index}`).innerText = data;
+        }
+
+        // 接続が開かれた時の処理
+        socket.addEventListener('open', (event) => {
+            console.log('WebSocketに接続しました');
+        });
+
+        // メッセージを受信した時の処理
+        socket.addEventListener('message', (event) => {
+            console.log('サーバーからのメッセージ:', event.data);
+            
+            // ここでデータを更新
+            updateData(1, event.data);
+            updateData(2, event.data);
+            updateData(3, event.data);
         });
 
         // 接続が閉じられた時の処理
