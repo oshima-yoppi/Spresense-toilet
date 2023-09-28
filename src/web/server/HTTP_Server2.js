@@ -45,7 +45,7 @@ var server = http.createServer(function (req, res) {
                     wss.clients.forEach(function (client) {
                         if (client.readyState === WebSocket.OPEN) {
                             var value = postData['data'];
-                            console.log('GET Response :', value);
+                            // console.log('GET Response :', value);
                             var displayValue;
 
                             if (value === '0') {
