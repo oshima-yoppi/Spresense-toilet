@@ -7,6 +7,7 @@ var WebSocket = require('ws');
 var data;
 var postData = {};
 let a = 'loading...';
+var displayValue = 'loading...';
 
 const hostname = '10.204.47.155';
 const PORT = 3000;
@@ -46,7 +47,7 @@ var server = http.createServer(function (req, res) {
                         if (client.readyState === WebSocket.OPEN) {
                             var value = postData['data'];
                             // console.log('GET Response :', value);
-                            var displayValue;
+                            
 
                             if (value === '0') {
                                 displayValue = '非常に空いています';
