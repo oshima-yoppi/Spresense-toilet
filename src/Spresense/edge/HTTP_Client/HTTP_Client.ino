@@ -28,6 +28,7 @@ typedef enum{
 
 DEMO_STATUS_E httpStat;
 char sendData[100];
+char id=1;
 
 const uint16_t RECEIVE_PACKET_SIZE = 1500;
 uint8_t Receive_Data[RECEIVE_PACKET_SIZE] = {0};
@@ -117,7 +118,8 @@ void loop() {
 			result = theHttpGs2200.end();
 
 			delay(1000);
-			count = rand() %4;
+			count = rand() %4 + id;
+      snprintf(count)
 			// count=100;
 
 			// httpStat = GET;
