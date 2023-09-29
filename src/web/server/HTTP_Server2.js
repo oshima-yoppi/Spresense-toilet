@@ -24,7 +24,7 @@ var server = http.createServer(function (req, res) {
                     console.log('GET Response :', value);
                     content = content.replace('<span id="data_placeholder"></span>', displayValue);
                 } else {
-                    content = content.replace('<span id="data_placeholder"></span>', ' loading...');
+                    content = content.replace('<span id="data_placeholder_3"></span>', ' loading...');
                 }
                 res.end(content);
             }
