@@ -119,7 +119,6 @@ void loop() {
 
 			delay(1000);
 			count = rand() %4 + id;
-      snprintf(count)
 			// count=100;
 
 			// httpStat = GET;
