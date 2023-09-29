@@ -30,6 +30,7 @@ var server = http.createServer(function (req, res) {
                 res.end(content);
             }
         });
+
     } else if (req.url === '/postData' && req.method === 'POST') {
         data = '';
         req.on('data', function (chunk) {
@@ -66,6 +67,7 @@ var server = http.createServer(function (req, res) {
                 }
             }
         });
+        
     } else {
         res.statusCode = 404;
         res.end('NotFound');
