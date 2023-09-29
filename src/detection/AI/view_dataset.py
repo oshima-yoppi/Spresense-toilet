@@ -13,14 +13,18 @@ save_dir = "check_data"
 if os.path.exists(save_dir):
     shutil.rmtree(save_dir)
 os.makedirs(save_dir)
+count = 0
 for i, path in enumerate(tqdm(os.listdir(DATA_DIR))):
-    path = os.path.join(DATA_DIR,  path)
+    path = os.path.join(DATA_DIR, path)
     #     continue
     with h5py.File(path, "r") as f:
         img = f["img"][:]
         label = f["label"][:]
 
-    label = func.label_change(label, False)
+    # label = func.label_change(label, False)
+    splited_img_lst = func.split_img(img, NUM_AREA)
+    splited_label_lst = func.split_img(label, NUM_AREA)
+
     plt.subplot(1, 2, 1)
     plt.imshow(img)
     plt.subplot(1, 2, 2)

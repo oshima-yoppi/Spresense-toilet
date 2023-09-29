@@ -28,7 +28,7 @@ conda env create -f conda.yml
  
 # ディレクトリの説明
 
-- `AI`：人検知のモデルを学習させるためのコードがまとまっている。このディレクトリにあるソースコードは自分のPC上で動かします。
+- `detection`：人検知のためのコードがまとまっている。このディレクトリにあるソースコードは自分のPC上で動かします。
 - `Spresense`：Spresense上で実際に動かすコードです。
 - `web`：Spresense-server間の通信を行うコードです。severとedgeに分けて保存しています。
 

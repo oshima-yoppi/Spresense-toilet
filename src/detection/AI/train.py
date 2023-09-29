@@ -48,7 +48,7 @@ ignore = False  # falseの方が精度が高い
 trans_lst = []
 center = (INPUT_SIZE[0] / 2, INPUT_SIZE[1] / 2)
 scale = 1.0
-for i in [theta for theta in range(0, 360, 30)]:
+for i in [theta for theta in [0, 10]]:
     trans_lst.append(cv2.getRotationMatrix2D(center, i, scale))
 
     # for dir in ["train", "valid"]:
@@ -64,25 +64,36 @@ random_idx = list(range(0, len(dataset)))
 # データをランダムに取得するためのインデックス
 random.shuffle(random_idx)
 # データ取得。データ数が少ないため、auguentationを行う。回転、反転、明るさ調整を行い、学習データに追加。
+positive_count = 0
 for i, idx in enumerate(tqdm(random_idx)):
     img, label = dataset[idx]
     if i < len(random_idx) * 0.9:
-        for trans in trans_lst:
-            img_trans = cv2.warpAffine(img, trans, INPUT_SIZE)
-            label_trans = cv2.warpAffine(label, trans, INPUT_SIZE)
-            img_trans = func.augment_brightness(img_trans)
-            x_train.append(img_trans)
-            y_train.append(func.label_change(label_trans, ignore_haji=ignore))
-            img_trans = np.fliplr(img_trans)
-            img_trans = func.augment_brightness(img_trans)
-            x_train.append(img_trans)
-            y_train.append(
-                func.label_change(np.fliplr(label_trans), ignore_haji=ignore)
-            )
+        if np.any(label == 1):
+            positive_count += 1
+        # else:
+        #     continue
+        img_trans = img
+        img_trans = func.augment_brightness(img_trans)
+        x_train.append(img_trans)
+        y_train.append(cv2.resize(label, LABEL_SIZE))
+        img_trans = np.fliplr(img_trans)
+        img_trans = func.augment_brightness(img_trans)
+        x_train.append(img_trans)
+        y_train.append(cv2.resize(np.fliplr(label), LABEL_SIZE))
+        # for trans in trans_lst:
+        #     img_trans = cv2.warpAffine(img, trans, INPUT_SIZE)
+        #     label_trans = cv2.warpAffine(label, trans, INPUT_SIZE)
+        #     img_trans = func.augment_brightness(img_trans)
+        #     x_train.append(img_trans)
+        #     y_train.append(cv2.resize(label, LABEL_SIZE))
+        #     img_trans = np.fliplr(img_trans)
+        #     img_trans = func.augment_brightness(img_trans)
+        #     x_train.append(img_trans)
+        #     y_train.append(cv2.resize(np.fliplr(label_trans), LABEL_SIZE))
 
     else:
         x_valid.append(img)
-        y_valid.append(func.label_change(label, ignore_haji=ignore))
+        y_valid.append(cv2.resize(label, LABEL_SIZE))
     # break
 
 # print(f"x_train: {len(x_train)}, x_test: {len(x_test)}, x_valid: {len(x_valid)}")
@@ -105,9 +116,9 @@ mobilenet = MobileNetV2(
     input_shape=(INPUT_SIZE[0], INPUT_SIZE[1], INPUT_CHANNEL),
     include_top=False,
     alpha=ALPHA,
-    weights="imagenet"
+    weights="imagenet",
 )
-mobilenet.summary()  
+mobilenet.summary()
 complessed_mobilenet = Model(
     inputs=mobilenet.input, outputs=mobilenet.get_layer("block_6_expand_relu").output
 )
@@ -145,7 +156,7 @@ custom_model = tf.keras.models.Sequential(
         ),
         tf.keras.layers.BatchNormalization(),
         Conv2D(
-            filters=32,
+            filters=16,
             kernel_size=1,
             strides=1,
             padding="same",
@@ -188,7 +199,6 @@ custom_model.fit(
 )
 
 
-
 # %%
 """
 save Model
@@ -227,14 +237,17 @@ header_file = (
 # print(c_file)
 open(HEADER_MODEL_PATH, "w").write(header_file)
 open(SPRESENSE_HEADER_MODEL_PATH, "w").write(header_file)
-#%%
-print('--------start quantization--------')
+# %%
+print("--------start quantization--------")
+
 
 def representative_dataset_gen():
-   for i in range(len(x_valid)):
-      input_image = tf.cast(x_valid[i], tf.float32)
-      input_image = tf.reshape(input_image, [1,INPUT_SIZE[0],INPUT_SIZE[1],INPUT_CHANNEL])
-      yield ([input_image])
+    for i in range(len(x_valid)):
+        input_image = tf.cast(x_valid[i], tf.float32)
+        input_image = tf.reshape(
+            input_image, [1, INPUT_SIZE[0], INPUT_SIZE[1], INPUT_CHANNEL]
+        )
+        yield ([input_image])
 
 
 converter = tf.lite.TFLiteConverter.from_keras_model(custom_model)
@@ -246,8 +259,8 @@ converter.target_spec.supported_ops = [tf.lite.OpsSet.TFLITE_BUILTINS_INT8]
 tflite_quant_model = converter.convert()
 
 tflite_quant_model_path = os.path.join(MODEL_DIR, "model_quant.tflite")
-with open(tflite_quant_model_path, 'wb') as f:
-   f.write(tflite_quant_model)
+with open(tflite_quant_model_path, "wb") as f:
+    f.write(tflite_quant_model)
 spresense_quant_model_path = os.path.join(MODEL_DIR, "spresense_model_quant.h")
 tflite_binary = open(tflite_quant_model_path, "rb").read()
 ascii_bytes = convert_to_c_array(tflite_binary)
