@@ -21,7 +21,7 @@ var server = http.createServer(function (req, res) {
                 res.writeHead(200, { 'Content-Type': 'text/html' });
 
                 if ('data' in postData && postData['data'].trim() !== '') {
-                    console.log('GET Response :', value);
+                    console.log('GET Response :', displayValue);
                     content = content.replace('<span id="data_placeholder"></span>', displayValue);
                 } else {
                     content = content.replace('<span id="data_placeholder"></span>', ' loading...');
