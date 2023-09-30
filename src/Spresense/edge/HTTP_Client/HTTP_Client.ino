@@ -30,6 +30,8 @@ DEMO_STATUS_E httpStat;
 char sendData[100];
 
 int id=0;
+int num=1;
+char b;
 
 const uint16_t RECEIVE_PACKET_SIZE = 1500;
 uint8_t Receive_Data[RECEIVE_PACKET_SIZE] = {0};
@@ -118,8 +120,8 @@ void loop() {
 
 			result = theHttpGs2200.end();
 
-			delay(1000);
-			count = rand() %4 *10 + id;
+			delay(rand()%2000);
+      count = rand()%4*10+id;
 			// count=100;
 
 			// httpStat = GET;

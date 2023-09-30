@@ -9,7 +9,8 @@ var postData = {};
 let a = 'loading...';
 var displayValue = 'loading...';
 
-const hostname = '10.204.47.155';
+// const hostname = '10.204.47.155';
+const hostname = '172.17.254.13'
 const PORT = 3000;
 
 var server = http.createServer(function (req, res) {
@@ -48,20 +49,30 @@ var server = http.createServer(function (req, res) {
                         if (client.readyState === WebSocket.OPEN) {
                             var value = postData['data'];
                             // console.log('GET Response :', value);
-                            
 
-                            if (value === '0') {
-                                displayValue = '非常に空いています';
-                            } else if (value === '1') {
-                                displayValue = '空いています';
-                            } else if (value === '2') {
-                                displayValue = '混雑しています';
-                            } else if (value === '3') {
-                                displayValue = '非常に混雑しています';
+                            if (Math.floor(parseInt(value)%10) === 0){
+                                id = 1;
+                            }else if (Math.floor(parseInt(value)%10) === 1){
+                                id = 2;
+                            }else {
+                                id = 3;
+                            }
+
+                            if (Math.floor(parseInt(value)/10) === 0) {
+                                displayValue = id + '非常に空いています';
+                            } else if (Math.floor(parseInt(value)/10) === 1) {
+                                displayValue = id + '空いています';
+                            } else if (Math.floor(parseInt(value)/10) === 2) {
+                                displayValue = id + '混雑しています';
+                            } else if (Math.floor(parseInt(value)/10) === 3) {
+                                displayValue = id + '非常に混雑しています';
                             } else {
                                 displayValue = a;
                             }
                             client.send(displayValue);
+
+                            
+                            
                         }
                     });
                 }

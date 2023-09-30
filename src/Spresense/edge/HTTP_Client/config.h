@@ -23,7 +23,7 @@
 #define  AP_SSID        "KimuraLab_StudentRoom"
 #define  PASSPHRASE     "since20070403"
 
-#define  HTTP_SRVR_IP  "10.204.47.155"
+#define  HTTP_SRVR_IP  "172.17.254.13"
 #define  HTTP_PORT     "3000"
 #define  HTTP_GET_PATH "/"
 #define  HTTP_POST_PATH "/postData"

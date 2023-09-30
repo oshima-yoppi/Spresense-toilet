@@ -26,7 +26,7 @@
     
     <!-- WebSocketのスクリプトを追加 -->
     <script>
-        const socket = new WebSocket('ws://10.204.47.155:3000');
+        const socket = new WebSocket('ws://172.17.254.13:3000');
 
         function updateData(index, data) {
             document.getElementById(`data_placeholder_${index}`).innerText = data;
@@ -40,11 +40,14 @@
         // メッセージを受信した時の処理
         socket.addEventListener('message', (event) => {
             console.log('サーバーからのメッセージ:', event.data);
+
+            let id   = event.data.slice(0, 1);
+            let data = event.data.slice(1);
+            console.log('id:', id);
+            console.log('data:', data);
             
             // ここでデータを更新
-            updateData(1, event.data);
-            updateData(2, event.data);
-            updateData(3, event.data);
+            updateData(id, data);
         });
 
         // 接続が閉じられた時の処理
