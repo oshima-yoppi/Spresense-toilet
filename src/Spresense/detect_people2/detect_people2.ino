@@ -1,11 +1,11 @@
 #include <Camera.h>
-
+// c:\Users\oosim\Documents\Arduino
 #include "tensorflow/lite/micro/all_ops_resolver.h"
 #include "tensorflow/lite/micro/micro_error_reporter.h"
 #include "tensorflow/lite/micro/micro_interpreter.h"
 #include "tensorflow/lite/micro/system_setup.h"
 #include "tensorflow/lite/schema/schema_generated.h"
-#include "_lib_camera.h"
+#include "src/_lib_camera.h"
 #include "_lib_detection.h"
 // #include <vector>
 // #include <spreseense_inferencing.h>
@@ -351,7 +351,7 @@ void loop()
     int16_t *sbuf = convert_img(img);
     disp_image(sbuf, 0, 0, target_w, target_h, result);
 
-    int count_people = detect_people(sbuf, 0.9);
+    int count_people = detect_people_(sbuf, 0.9);
     print("count_people = " + String(count_people));
 
     // delay(1000);
