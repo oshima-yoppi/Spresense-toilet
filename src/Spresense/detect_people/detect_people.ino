@@ -5,6 +5,7 @@
 #include "tensorflow/lite/micro/micro_interpreter.h"
 #include "tensorflow/lite/micro/system_setup.h"
 #include "tensorflow/lite/schema/schema_generated.h"
+// #include <vector>
 // #include <spreseense_inferencing.h>
 // #include "Dental_Model_Classifier_inferencing.h"
 
@@ -30,13 +31,75 @@ const int target_w = 96;
 const int target_h = 96;
 const int pixfmt = CAM_IMAGE_PIX_FMT_YUV422;
 // const int pixfmt = CAM_IMAGE_PIX_FMT_RGB565;
-const int OUTPUT_WIDTH = 12;
-const int OUTPUT_HEIGHT = 12;
+#define OUTPUT_WIDTH 12
+#define OUTPUT_HEIGHT 12
+// const int OUTPUT_HEIGHT = 12;
 bool result = false;
 int output_width, output_height; // 出力されるセグメンテーションサイズ
 
 /* callback function of the camera streaming */
 /* the inference process is done in this function */
+struct UnionFind
+{
+    int parent[OUTPUT_WIDTH * OUTPUT_HEIGHT] = {};
+    int rank[OUTPUT_WIDTH * OUTPUT_HEIGHT] = {};
+    UnionFind(int n)
+    {
+        for (int i = 0; i < n; i++)
+        {
+            parent[i] = i;
+            rank[i] = 0;
+        }
+    }
+    int find(int x)
+    {
+        if (parent[x] == x)
+        {
+            return x;
+        }
+        else
+        {
+            return parent[x] = find(parent[x]);
+        }
+    }
+    void unite(int x, int y)
+    {
+        x = find(x);
+        y = find(y);
+        if (x == y)
+        {
+            return;
+        }
+        if (rank[x] < rank[y])
+        {
+            parent[x] = y;
+        }
+        else
+        {
+            parent[y] = x;
+            if (rank[x] == rank[y])
+            {
+                rank[x]++;
+            }
+        }
+    }
+    bool same(int x, int y)
+    {
+        return find(x) == find(y);
+    }
+    int count()
+    {
+        int cnt = 0;
+        for (int i = 0; i < OUTPUT_WIDTH * OUTPUT_HEIGHT; i++)
+        {
+            if (parent[i] == i)
+            {
+                cnt++;
+            }
+        }
+        return cnt;
+    }
+};
 void print(String str)
 {
     Serial.println(str);
@@ -140,7 +203,7 @@ int16_t *convert_img(CamImage img)
 
 int detect_people(int16_t *sbuf, float th_detect = 0.5)
 {
-    int count_people = 0;
+    // int count_people = 0;
     // tfliteに入力するために、データ構造を変換＆正規化スル。
     // カメラから直接得られる画像smallと、tfliteに入力するinputのデータ構造は異なる。(参考書「spresenseで始める～～」p 180参照)
     int n = 0;
@@ -171,6 +234,10 @@ int detect_people(int16_t *sbuf, float th_detect = 0.5)
         Serial.println("Invoke failed");
         return;
     }
+
+    std::pair<int, int> directions[4] = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+    UnionFind uf(OUTPUT_WIDTH * OUTPUT_HEIGHT);
+
     for (int y = 0; y < output_height; ++y)
     {
         for (int x = 0; x < output_width; ++x)
@@ -181,11 +248,25 @@ int detect_people(int16_t *sbuf, float th_detect = 0.5)
             Serial.print(String(value) + ", ");
             if (value >= th_detect)
             {
-                count_people++;
+                for (auto dir : directions)
+                {
+                    int nx = x + dir.first;
+                    int ny = y + dir.second;
+                    if (nx < 0 || nx >= output_width || ny < 0 || ny >= output_height)
+                    {
+                        continue;
+                    }
+                    if (output->data.f[ny * output_width + nx] >= th_detect)
+                    {
+                        uf.unite(y * output_width + x, ny * output_width + nx);
+                    }
+                }
             }
         }
         Serial.println("\n");
     }
+    int count_people = uf.count();
+    print("!!!!!!!!!!count_people = " + String(count_people));
     return count_people;
 }
 
