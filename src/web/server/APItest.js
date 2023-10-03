@@ -1,4 +1,5 @@
-const axios = require('axios');
+// const axios = require('axios');
+import axios from 'axios';
 
 // 送信先の外部サーバーのAPI URL
 const externalApiUrl = "https://api.clip-viewer-lite.com/payload/latest/00010197a7";
