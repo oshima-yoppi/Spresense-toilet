@@ -54,8 +54,10 @@ var server = http.createServer(function (req, res) {
                                 id = 1;
                             }else if (Math.floor(parseInt(value)%10) === 1){
                                 id = 2;
-                            }else {
+                            }else if (Math.floor(parseInt(value)%10) === 2){
                                 id = 3;
+                            }else{
+                                id = 4;
                             }
 
                             if (Math.floor(parseInt(value)/10) === 0) {
