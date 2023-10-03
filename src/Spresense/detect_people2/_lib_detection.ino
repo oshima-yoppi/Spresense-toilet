@@ -26,7 +26,7 @@ int16_t *convert_img(CamImage img)
     return sbuf;
 }
 
-int detect_people(int16_t *sbuf, float th_detect = 0.5)
+int detect_people_(int16_t *sbuf, float th_detect)
 {
     // int count_people = 0;
     // tfliteに入力するために、データ構造を変換＆正規化スル。

@@ -1,4 +1,4 @@
-#include <Camera.h>
+// #include <Camera.h>
 #include "_lib_camera.h"
 void setup_camera()
 {
