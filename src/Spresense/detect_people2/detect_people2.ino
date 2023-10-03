@@ -5,7 +5,7 @@
 #include "tensorflow/lite/micro/micro_interpreter.h"
 #include "tensorflow/lite/micro/system_setup.h"
 #include "tensorflow/lite/schema/schema_generated.h"
-#include "src/_lib_camera.h"
+// #include "src/_lib_camera.h"
 #include "_lib_detection.h"
 // #include <vector>
 // #include <spreseense_inferencing.h>
