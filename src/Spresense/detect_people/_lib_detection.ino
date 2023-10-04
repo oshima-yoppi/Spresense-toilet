@@ -1,5 +1,5 @@
 #include <Camera.h>
-#include "_lib_detection.h"
+// #include "_lib_detection.h"
 void print(String str)
 {
     Serial.println(str);
@@ -26,7 +26,7 @@ int16_t *convert_img(CamImage img)
     return sbuf;
 }
 
-int detect_people_(int16_t *sbuf, float th_detect)
+bool *detect_people_(int16_t *sbuf, float th_detect)
 {
     // int count_people = 0;
     // tfliteに入力するために、データ構造を変換＆正規化スル。
@@ -49,9 +49,11 @@ int detect_people_(int16_t *sbuf, float th_detect)
             n++;
         }
     }
+    // print rgb
+    print(String("r: ") + String(fbuf_r[0]) + String(", g: ") + String(fbuf_g[0]) + String(", b: ") + String(fbuf_b[0]));
 
     bool result = false;
-    disp_image(sbuf, 0, 0, target_w, target_h, result);
+    // disp_image(sbuf, 0, 0, target_w, target_h, result);
     Serial.println("Do inference");
     TfLiteStatus invoke_status = interpreter->Invoke();
     if (invoke_status != kTfLiteOk)
@@ -61,8 +63,8 @@ int detect_people_(int16_t *sbuf, float th_detect)
     }
 
     std::pair<int, int> directions[4] = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
-    UnionFind uf(OUTPUT_WIDTH * OUTPUT_HEIGHT);
-
+    // UnionFind uf(OUTPUT_WIDTH * OUTPUT_HEIGHT);
+    bool *result_mask = new bool[OUTPUT_WIDTH * OUTPUT_HEIGHT];
     for (int y = 0; y < output_height; ++y)
     {
         for (int x = 0; x < output_width; ++x)
@@ -73,24 +75,14 @@ int detect_people_(int16_t *sbuf, float th_detect)
             Serial.print(String(value) + ", ");
             if (value >= th_detect)
             {
-                for (auto dir : directions)
-                {
-                    int nx = x + dir.first;
-                    int ny = y + dir.second;
-                    if (nx < 0 || nx >= output_width || ny < 0 || ny >= output_height)
-                    {
-                        continue;
-                    }
-                    if (output->data.f[ny * output_width + nx] >= th_detect)
-                    {
-                        uf.unite(y * output_width + x, ny * output_width + nx);
-                    }
-                }
+                result_mask[y * output_width + x] = true;
+            }
+            else
+            {
+                result_mask[y * output_width + x] = false;
             }
         }
         Serial.println("\n");
     }
-    int count_people = uf.count();
-    print("!!!!!!!!!!count_people = " + String(count_people));
-    return count_people;
+    return result_mask;
 }

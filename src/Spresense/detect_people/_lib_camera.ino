@@ -1,5 +1,5 @@
-#include <Camera.h>
-// #include <detect_people.ino>
+// #include <Camera.h>
+// #include "_lib_camera.h"
 void setup_camera()
 {
     CamErr err;
