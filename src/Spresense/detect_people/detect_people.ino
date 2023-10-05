@@ -118,9 +118,10 @@ void loop()
     int16_t *sbuf = convert_img(img);
     // disp_image(sbuf, 0, 0, target_w, target_h);
 
-    bool *result_mask = detect_people_(sbuf, 0.99);
+    bool *result_mask = detect_people_(sbuf, 0.6);
     disp_image_result(sbuf, 0, 0, target_w, target_h, result_mask);
     free(result_mask);
+    // free(sbuf);
 
     delay(0);
 }

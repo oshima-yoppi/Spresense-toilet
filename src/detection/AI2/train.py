@@ -68,8 +68,8 @@ positive_count = 0
 for i, idx in enumerate(tqdm(random_idx)):
     img, label = dataset[idx]
     if i < len(random_idx) * 0.9:
-        if np.any(label == 1):
-            positive_count += 1
+        # if np.sum(label) >= 6:
+        #     continue
         # else:
         #     continue
         img_trans = img
@@ -80,16 +80,6 @@ for i, idx in enumerate(tqdm(random_idx)):
         img_trans = func.augment_brightness(img_trans)
         x_train.append(img_trans)
         y_train.append(cv2.resize(np.fliplr(label), LABEL_SIZE))
-        # for trans in trans_lst:
-        #     img_trans = cv2.warpAffine(img, trans, INPUT_SIZE)
-        #     label_trans = cv2.warpAffine(label, trans, INPUT_SIZE)
-        #     img_trans = func.augment_brightness(img_trans)
-        #     x_train.append(img_trans)
-        #     y_train.append(cv2.resize(label, LABEL_SIZE))
-        #     img_trans = np.fliplr(img_trans)
-        #     img_trans = func.augment_brightness(img_trans)
-        #     x_train.append(img_trans)
-        #     y_train.append(cv2.resize(np.fliplr(label_trans), LABEL_SIZE))
 
     else:
         x_valid.append(img)
@@ -98,10 +88,6 @@ for i, idx in enumerate(tqdm(random_idx)):
 
 # print(f"x_train: {len(x_train)}, x_test: {len(x_test)}, x_valid: {len(x_valid)}")
 
-# # データの正規化を行う
-# print(x_train)
-# print(np.array(x_train))
-# print(np.array(x_train).shape, np.array(y_train).shape)
 x_train = np.array(x_train) / 255
 y_train = np.array(y_train)
 x_test = np.array(x_test) / 255
@@ -125,11 +111,6 @@ mobilenet.summary()
 complessed_mobilenet = Model(
     inputs=mobilenet.input, outputs=mobilenet.get_layer("block_6_expand_relu").output
 )
-# for layer in mobilenet.layers:
-#     print(layer.name)
-# complessed_mobilenet = Model(
-#     inputs=mobilenet.input, outputs=mobilenet.get_layer("re_lu_1").output
-# )
 for layer in complessed_mobilenet.layers:
     layer.trainable = False
 

@@ -17,7 +17,7 @@ FULL_MODEL_PATH = os.path.join(MODEL_DIR, "model.h5")
 TFLITE_MODEL_PATH = os.path.join(MODEL_DIR, "model.tflite")
 TFLITE_QUANT_MODEL_PATH = os.path.join(MODEL_DIR, "model_quant.tflite")
 HEADER_MODEL_PATH = os.path.join(MODEL_DIR, "spresense_model.h")
-HEADER_QUANT_MODEL_PATH = os.path.join(MODEL_DIR, "spresense_model_quant.h")
+HEADER_QUANT_MODEL_PATH = os.path.join(MODEL_DIR, "spresense_model_quant2.h")
 
 SPRESENSE_HEADER_QUANT_MODEL_PATH = os.path.join(
     SPRESENSE_MODEL_DIR, "spresense_model_quant.h"
