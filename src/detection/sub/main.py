@@ -5,62 +5,44 @@ import numpy as np
 from module import func
 from module.const import *
 
-basepath = "base.jpg"
-imgpath1 = os.path.join("1.jpg")
-imgpath2 = os.path.join("2.jpg")
 
+imgs_dir = "imgs/2/"
 
-base = cv2.imread(basepath)
+path_base_img = os.path.join(imgs_dir, "base.jpg")
+path_img_lst = [os.path.join(imgs_dir, "{}.jpg".format(i)) for i in range(1, 5)]
+
+base = cv2.imread(path_base_img)
 base = cv2.cvtColor(base, cv2.COLOR_BGR2GRAY)
-img1 = cv2.imread(imgpath1)
-img1 = cv2.cvtColor(img1, cv2.COLOR_BGR2GRAY)
-img2 = cv2.imread(imgpath2)
-img2 = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
+imgs = [cv2.imread(path) for path in path_img_lst]
+imgs = [cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) for img in imgs]
 
 base = cv2.resize(base, IMG_SIZE)
-img1 = cv2.resize(img1, IMG_SIZE)
-img2 = cv2.resize(img2, IMG_SIZE)
+imgs = [cv2.resize(img, IMG_SIZE) for img in imgs]
 
-
-dif1 = func.get_diff(base, img1)
-dif2 = func.get_diff(base, img2)
-
+diffs = [func.get_diff(base, img) for img in imgs]
 th = 60
-dif1_mask = func.get_diff_mask(dif1, th)
-dif2_mask = func.get_diff_mask(dif2, th)
+diff_masks = [func.get_diff_mask(diff, th) for diff in diffs]
 
-plt.subplot(1, 4, 1)
-plt.imshow(base)
-plt.subplot(1, 4, 2)
-plt.imshow(img2)
-plt.subplot(1, 4, 3)
-plt.imshow(dif2)
-plt.subplot(1, 4, 4)
-plt.imshow(dif2_mask)
-plt.show()
+plt.imshow(base, cmap="gray")
+# print(np.max(base))
+tapple = func.CircleMaching(radius=20)
+matching_lst = [tapple.get_maching(diff_mask) for diff_mask in diff_masks]
+mask_matching_lst = [tapple.get_mask(maching, th=0.5) for maching in matching_lst]
 
-
-matchinger = func.CircleMaching(radius=6)
-res1 = matchinger.get_maching(dif1_mask)
-res2 = matchinger.get_maching(dif2_mask)
-
-mask1 = matchinger.get_mask(res1, th=0.5)
-mask2 = matchinger.get_mask(res2, th=0.5)
-
-plt.subplot(2, 4, 1)
-plt.imshow(img1)
-plt.subplot(2, 4, 2)
-plt.imshow(dif1)
-plt.subplot(2, 4, 3)
-plt.imshow(res1)
-plt.subplot(2, 4, 4)
-plt.imshow(mask1)
-plt.subplot(2, 4, 5)
-plt.imshow(img2)
-plt.subplot(2, 4, 6)
-plt.imshow(dif2)
-plt.subplot(2, 4, 7)
-plt.imshow(res2)
-plt.subplot(2, 4, 8)
-plt.imshow(mask2)
+img_num = len(imgs)
+for i, img in enumerate(imgs):
+    plt.subplot(5, img_num, i + 1)
+    plt.imshow(img, cmap="gray")
+for i, diff in enumerate(diffs):
+    plt.subplot(5, img_num, img_num + i + 1)
+    plt.imshow(diff, cmap="gray")
+for i, diff_mask in enumerate(diff_masks):
+    plt.subplot(5, img_num, img_num * 2 + i + 1)
+    plt.imshow(diff_mask, cmap="gray")
+for i, matching in enumerate(matching_lst):
+    plt.subplot(5, img_num, img_num * 3 + i + 1)
+    plt.imshow(matching, cmap="gray")
+for i, mask_matching in enumerate(mask_matching_lst):
+    plt.subplot(5, img_num, img_num * 4 + i + 1)
+    plt.imshow(mask_matching, cmap="gray")
 plt.show()

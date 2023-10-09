@@ -6,11 +6,9 @@
 #include "tensorflow/lite/micro/system_setup.h"
 #include "tensorflow/lite/schema/schema_generated.h"
 // include "Adafruit_Thermal.h"
-// #include <data_inferencing.h>
-// static uint8_t *ei_camera_capture_out = NULL;
-// const char *classes[] = {"head"};
 // uint32_t color_codes[] = {ILI9341_ORANGE};
-#include "spresense_model_quant.h"
+// #include "spresense_model_quant.h"
+#include "impulse.h"
 tflite::ErrorReporter *error_reporter = nullptr;
 const tflite::Model *model = nullptr;
 tflite::MicroInterpreter *interpreter = nullptr;
@@ -18,7 +16,7 @@ TfLiteTensor *input = nullptr;
 TfLiteTensor *output = nullptr;
 int inference_count = 0;
 
-constexpr int kTensorArenaSize = (500) * 1024; // 250
+constexpr int kTensorArenaSize = (300) * 1024; // 250
 uint8_t tensor_arena[kTensorArenaSize];
 
 /* cropping and scaling parameters */
@@ -112,11 +110,10 @@ void loop()
     print("call takePicture");
     CamImage img = take_picture();
 
-    int16_t *sbuf = convert_img(img);
-    // int16_t *sbuf = convert_img(img);
-    // disp_image(sbuf, 0, 0, target_w, target_h);
-
-    bool *result_mask = detect_people_(sbuf, 0.7);
+    uint16_t *sbuf = convert_img(img);
+    // CamImage tf_input = convert2Tfinput(img);
+    // bool *result_mask = detect_people_(tf_input, 0.7);
+    bool *result_mask = detect_people(sbuf, 0.7);
     disp_image_result(sbuf, 0, 0, target_w, target_h, result_mask);
     free(result_mask);
     // free(sbuf);

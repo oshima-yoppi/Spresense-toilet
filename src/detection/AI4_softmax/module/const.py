@@ -9,8 +9,7 @@ SPLIT_NUM = 1
 
 RAW_DATA_DIR = "rawdata"  # 生データ
 DATA_DIR = "data"  # データセット。生データを変換したもの
-TEST_DIR = "test"  # テストデータ
-TEST_SAVE_DIR = "test_result_quant"  # テスト結果の保存先
+
 # 保存するモデルのパス
 MODEL_DIR = "model"
 SPRESENSE_MODEL_DIR = "../../Spresense/detect_people/"

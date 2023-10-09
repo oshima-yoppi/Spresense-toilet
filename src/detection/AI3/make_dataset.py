@@ -98,7 +98,15 @@ if __name__ == "__main__":
         label_path = os.path.join(train_dir, "labels", label_path)
 
         img = cv2.imread(img_path)
-        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        # print(img_gray.shape)
+
+        img = np.zeros((img_gray.shape[0], img_gray.shape[1], 3)).astype(np.uint8)
+        img[:, :, 0] = img_gray
+        img[:, :, 1] = img_gray
+        img[:, :, 2] = img_gray
+        # plt.imshow(img)
+        # plt.show()
 
         small_rate = 0.25
         small_height = int(img.shape[0] * small_rate)
