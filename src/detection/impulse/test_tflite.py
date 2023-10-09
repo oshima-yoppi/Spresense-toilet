@@ -26,15 +26,18 @@ class TFLitePredictor:
         self.output_details = self.interpreter.get_output_details()
 
     def __call__(self, input_data):
-        input_data = input_data.astype(np.float32)
+        input_data = input_data.astype(np.int8)
         self.interpreter.set_tensor(self.input_details[0]["index"], input_data)
         self.interpreter.invoke()
         output_data = self.interpreter.get_tensor(self.output_details[0]["index"])
+
+        output_data = output_data.astype(np.float32)
+
         return output_data
 
 
 # print('Quantized model accuracy: ',evaluate_model(interpreter_quant))
-interpreter = TFLitePredictor(TFLITE_MODEL_PATH)
+interpreter = TFLitePredictor("model/impulse.lite")
 
 
 imgs = os.listdir(TEST_DIR)
@@ -47,18 +50,26 @@ for i, filename in enumerate(tqdm(imgs)):
     splited_img_lst = func.split_img(img)
     for splited_img in splited_img_lst:
         splited_img = cv2.resize(splited_img, INPUT_SIZE)
-        splited_img = np.array([splited_img]) / 255
-        # print(splited_img.shape)
+        splited_img_ = splited_img
+        splited_img -= 127
+        # print(splited_img.dtype)
+        splited_img = np.array([splited_img]).astype(np.int8)
         splited_img = np.expand_dims(splited_img, axis=-1)
+        # print(splited_img.shape)
+        # print(splited_img.dtype)
         pred = interpreter(splited_img)
-        splited_img = func.draw_line(splited_img[0])
-        splited_img = (splited_img * 255).astype(np.uint8)
+        # print(splited_img_.shape)
+        splited_img = func.draw_line(splited_img_)
+        # splited_img = (splited_img * 255).astype(np.uint8)
+        # print(np.max(pred), np.min(pred))
+        # print(np.max(pred.astype(np.uint8)), np.min(pred.astype(np.uint8)))
         plt.subplot(1, 2, 1)
         plt.imshow(splited_img)
         plt.subplot(1, 2, 2)
         plt.imshow(pred[0, :, :, 1], vmin=0, vmax=1)
         save_path = os.path.join(SAVE_DIR, f"{count}.png")
         plt.savefig(save_path)
+        # plt.show()
         plt.close()
         count += 1
 

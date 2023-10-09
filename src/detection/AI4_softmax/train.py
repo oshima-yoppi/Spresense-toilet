@@ -68,19 +68,13 @@ for path in os.listdir(DATA_DIR):
         # plt.show()
 
     dataset.append((img, label_semaseg))
-random_idx = list(range(0, len(dataset)))
+# random_idx = list(range(0, len(dataset)))
 
 # データをランダムに取得するためのインデックス
-random.shuffle(random_idx)
+# random.shuffle(random_idx)
 # データ取得。データ数が少ないため、auguentationを行う。回転、反転、明るさ調整を行い、学習データに追加。
-positive_count = 0
-for i, idx in enumerate(tqdm(random_idx)):
-    img, label = dataset[idx]
-    if i < len(random_idx) * 0.9:
-        # if np.sum(label) >= 6:
-        #     continue
-        # else:
-        #     continue
+for i, (img, label) in enumerate(tqdm(dataset)):
+    if i < len(dataset) * 133 // 150:
         img_trans = img
         img_trans = func.augment_brightness(img_trans)
         x_train.append(img_trans)
@@ -93,7 +87,27 @@ for i, idx in enumerate(tqdm(random_idx)):
     else:
         x_valid.append(img)
         y_valid.append(cv2.resize(label, LABEL_SIZE))
-    # break
+# positive_count = 0
+# for i, idx in enumerate(tqdm(random_idx)):
+#     img, label = dataset[idx]
+#     if i < len(random_idx) * 0.9:
+#         # if np.sum(label) >= 6:
+#         #     continue
+#         # else:
+#         #     continue
+#         img_trans = img
+#         img_trans = func.augment_brightness(img_trans)
+#         x_train.append(img_trans)
+#         y_train.append(cv2.resize(label, LABEL_SIZE))
+#         img_trans = np.fliplr(img_trans)
+#         img_trans = func.augment_brightness(img_trans)
+#         x_train.append(img_trans)
+#         y_train.append(cv2.resize(np.fliplr(label), LABEL_SIZE))
+
+#     else:
+#         x_valid.append(img)
+#         y_valid.append(cv2.resize(label, LABEL_SIZE))
+# break
 
 # print(f"x_train: {len(x_train)}, x_test: {len(x_test)}, x_valid: {len(x_valid)}")
 
@@ -110,16 +124,9 @@ y_valid = np.array(y_valid)
 モデルの定義
 """
 
-mobilenet = MobileNetV2(
-    input_shape=(INPUT_SIZE[0], INPUT_SIZE[1], INPUT_CHANNEL),
-    include_top=False,
-    alpha=ALPHA,
-    weights="imagenet",
-)
-mobilenet.summary()
-complessed_mobilenet = Model(
-    inputs=mobilenet.input, outputs=mobilenet.get_layer("block_6_expand_relu").output
-)
+# mobilenet = Mobily
+
+complessed_mobilenet = keras.models.load_model("model/trained_model.h5")
 for layer in complessed_mobilenet.layers:
     layer.trainable = False
 

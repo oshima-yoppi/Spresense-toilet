@@ -169,3 +169,28 @@ bool *detect_people_(CamImage tfinput, float th_detect)
     }
     return result_mask;
 }
+
+// 人の数を数える関数。4方向で連結しているピクセルは一人としてカウントする。
+// void dfs(int x)
+// {
+
+// }
+// int count_people(bool *result_mask)
+// {
+//     int people_count = 0;
+//     bool *visited = new bool[OUTPUT_WIDTH * OUTPUT_HEIGHT]; // result mask をコピー
+//     for (int i = 0; i < OUTPUT_WIDTH * OUTPUT_HEIGHT; i++)
+//     {
+//         visited[i] = result_mask[i];
+//     }
+
+//     for (int i = 0; i < OUTPUT_WIDTH * OUTPUT_HEIGHT; i++)
+//     {
+//         if (visited[i])
+//         {
+//             people_count++;
+//             dfs(i)
+//         }
+//     }
+//     return people_count;
+// }
