@@ -77,31 +77,6 @@ var server = http.createServer(function (req, res) {
                               });
                             });
 
-                            
-
-                            if (Math.floor(parseInt(payloaddata)%10) === 0){
-                                id = 1;
-                            }else if (Math.floor(parseInt(payloaddata)%10) === 1){
-                                id = 2;
-                            }else if (Math.floor(parseInt(payloaddata)%10) === 2){
-                                id = 3;
-                            }else{
-                                id = 4;
-                            }
-
-                            if (Math.floor(parseInt(payloaddata)/10) === 0) {
-                                displayValue = id + '非常に空いています';
-                            } else if (Math.floor(parseInt(payloaddata)/10) === 1) {
-                                displayValue = id + '空いています';
-                            } else if (Math.floor(parseInt(payloaddata)/10) === 2) {
-                                displayValue = id + '混雑しています';
-                            } else if (Math.floor(parseInt(payloaddata)/10) === 3) {
-                                displayValue = id + '非常に混雑しています';
-                            } else {
-                                displayValue = a;
-                            }
-                            client.send(displayValue);
-
                             if (Math.floor(parseInt(value)%10) === 0){
                                 id = 1;
                             }else if (Math.floor(parseInt(value)%10) === 1){
