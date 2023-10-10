@@ -8,6 +8,7 @@ var data;
 var postData = {};
 let a = 'loading...';
 var displayValue = 'loading...';
+var payloaddata = 0;
 
 // const hostname = '10.204.47.155';
 const hostname = '172.17.254.13'
@@ -71,10 +72,35 @@ var server = http.createServer(function (req, res) {
                                   console.error(`エラーが発生しました: ${error.message}`);
                                   return;
                                 }
-                                var payloaddata = JSON.parse(stdout).payload;
-                                console.log(payloaddata[0].payload);
+                                payloaddata = JSON.parse(stdout).payload[0].payload;
+                                console.log(payloaddata);
                               });
                             });
+
+                            
+
+                            if (Math.floor(parseInt(payloaddata)%10) === 0){
+                                id = 1;
+                            }else if (Math.floor(parseInt(payloaddata)%10) === 1){
+                                id = 2;
+                            }else if (Math.floor(parseInt(payloaddata)%10) === 2){
+                                id = 3;
+                            }else{
+                                id = 4;
+                            }
+
+                            if (Math.floor(parseInt(payloaddata)/10) === 0) {
+                                displayValue = id + '非常に空いています';
+                            } else if (Math.floor(parseInt(payloaddata)/10) === 1) {
+                                displayValue = id + '空いています';
+                            } else if (Math.floor(parseInt(payloaddata)/10) === 2) {
+                                displayValue = id + '混雑しています';
+                            } else if (Math.floor(parseInt(payloaddata)/10) === 3) {
+                                displayValue = id + '非常に混雑しています';
+                            } else {
+                                displayValue = a;
+                            }
+                            client.send(displayValue);
 
                             if (Math.floor(parseInt(value)%10) === 0){
                                 id = 1;

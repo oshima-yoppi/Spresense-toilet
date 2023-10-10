@@ -120,7 +120,7 @@ void loop() {
 
 			result = theHttpGs2200.end();
 
-			delay(rand()%20000);
+			delay(rand()%10000);
       count = rand()%4*10+id;
 			// count=100;
 
