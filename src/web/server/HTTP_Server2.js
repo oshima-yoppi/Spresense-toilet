@@ -13,6 +13,13 @@ var displayValue = 'loading...';
 const hostname = '172.17.254.13'
 const PORT = 3000;
 
+const { exec } = require('child_process');
+var url = 'https://api.clip-viewer-lite.com/auth/token';
+const akey = 'oy7yTZo5f39KL0TWEYIhw6tR198DTvZRjI0zZjTi';
+const username = 'oosima@kimura-lab.net';
+const password = 'GL9D48xbXUK6UU8';
+const curlCommand = `curl -X POST -H "X-API-Key: ${akey}" -d "{\\"username\\": \\"${username}\\", \\"password\\": \\"${password}\\"}" "${url}"`;
+
 var server = http.createServer(function (req, res) {
     if (req.url === '/' && req.method === 'GET') {
         fs.readFile('index.html', 'utf8', function (err, content) {
@@ -48,7 +55,26 @@ var server = http.createServer(function (req, res) {
                     wss.clients.forEach(function (client) {
                         if (client.readyState === WebSocket.OPEN) {
                             var value = postData['data'];
-                            // console.log('GET Response :', value);
+                            
+                            exec(curlCommand, (error, stdout, stderr) => {
+                              if (error) {
+                                console.error(`エラーが発生しました: ${error.message}`);
+                                return;
+                              }
+                          
+                              const token = JSON.parse(stdout).token;
+                              var url = 'https://api.clip-viewer-lite.com/payload/latest/00010197a7';
+                              const curlCommand2 = `curl -X GET -H "X-API-Key: ${akey}" -H "Authorization: ${token}" "${url}"`;
+                          
+                              exec(curlCommand2, (error, stdout, stderr) => {
+                                if (error) {
+                                  console.error(`エラーが発生しました: ${error.message}`);
+                                  return;
+                                }
+                                var payloaddata = JSON.parse(stdout).payload;
+                                console.log(payloaddata[0].payload);
+                              });
+                            });
 
                             if (Math.floor(parseInt(value)%10) === 0){
                                 id = 1;

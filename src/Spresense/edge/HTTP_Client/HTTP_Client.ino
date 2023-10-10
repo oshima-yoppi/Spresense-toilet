@@ -120,41 +120,12 @@ void loop() {
 
 			result = theHttpGs2200.end();
 
-			delay(rand()%2000);
+			delay(rand()%20000);
       count = rand()%4*10+id;
 			// count=100;
 
 			// httpStat = GET;
 			break;
-
-    // サーバーにリクエストしてデータ取得	
-		// case GET:
-		// 	theHttpGs2200.config(HTTP_HEADER_TRANSFER_ENCODING, "identity");
-
-		// 	result = theHttpGs2200.get(HTTP_GET_PATH);
-		// 	if (true == result) {
-		// 		theHttpGs2200.read_data(Receive_Data, RECEIVE_PACKET_SIZE);
-		// 		parse_httpresponse((char *)(Receive_Data));
-		// 	} else {
-		// 		ConsoleLog( "?? Unexpected HTTP Response ??" );
-		// 	}
-
- 		// 	do {
-		// 		result = theHttpGs2200.receive(2000);
-		// 		if (result) {
-		// 			theHttpGs2200.read_data(Receive_Data, RECEIVE_PACKET_SIZE);
-		// 			ConsolePrintf("%s", (char *)(Receive_Data));
-		// 		} else {
-		// 			// AT+HTTPSEND command is done
-		// 			ConsolePrintf( "\r\n");
-		// 		}
-		// 	} while (result);
-
-		// 	result = theHttpGs2200.end();
-
-		// 	delay(500);
-		// 	httpStat = POST;
-		// 	break;
     
 		default:
 			break;
