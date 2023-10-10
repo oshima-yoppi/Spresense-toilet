@@ -71,7 +71,7 @@ uint8_t payload[16];
 // 最新のGGA情報
 eltres_board_gga_info last_gga_info;
 
-int num_people = 31;
+int num_people = 33;
 
 /**
  * @brief イベント通知受信コールバック
