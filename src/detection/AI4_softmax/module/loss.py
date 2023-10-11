@@ -3,7 +3,7 @@ from keras.layers import Conv2D, MaxPooling2D
 from keras import backend as K
 
 
-def cross_loss(targets, inputs, class_weights=tf.constant([1.0, 100.0])):
+def cross_loss(targets, inputs, class_weights=tf.constant([100.0, 1.0])):
     # クロスエントロピー損失を計算し、クラスごとに重みを適用
     # print(targets.sinputsoutput.shape)
     inputs = tf.cast(inputs, dtype=tf.float32)
@@ -35,7 +35,7 @@ def IoU(targets, inputs, smooth=1e-6):
     return iou
 
 
-def weighted_focal_Loss(targets, inputs, beta=0.6, smooth=1e-6):
+def weighted_focal_Loss(targets, inputs, beta=3, smooth=1e-6):
     # targets = targets.astye('float')
     # flatten label and prediction tensors
     # tf_show(inputs[0])
@@ -61,7 +61,9 @@ def DiceLoss(targets, inputs, smooth=1e-6):
     batch = len(inputs)
     targets = tf.cast(targets, dtype=tf.float32)
     # print(inputs.shape, targets.shape)
-    inputs = tf.expand_dims(inputs, axis=-1)
+    # inputs = tf.expand_dims(inputs, axis=-1)
+    inputs = inputs[:, :, :, 1]
+    targets = targets[:, :, :, 1]
     # print(inputs.shape, targets.shape)
     # inputs = MaxPooling2D(pool_size=(2, 2))(inputs)
     # inputs = K.softmax(inputs, axis=-1)
