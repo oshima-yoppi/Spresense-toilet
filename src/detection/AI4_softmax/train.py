@@ -48,7 +48,7 @@ ignore = False  # falseの方が精度が高い
 trans_lst = []
 center = (INPUT_SIZE[0] / 2, INPUT_SIZE[1] / 2)
 scale = 1.0
-for i in [theta for theta in [0, 180, 30]]:
+for i in [theta for theta in [0, 90, 30]]:
     trans_lst.append(cv2.getRotationMatrix2D(center, i, scale))
 
     # for dir in ["train", "valid"]:
@@ -68,8 +68,10 @@ for path in os.listdir(DATA_DIR):
         # plt.show()
 
     dataset.append((img, label_semaseg))
-# random_idx = list(range(0, len(dataset)))
-
+random_idx = list(range(0, len(dataset) * 133 // 150))
+random.shuffle(random_idx)
+random_idx = random_idx + list(range(len(dataset) * 133 // 150, len(dataset)))
+print(random_idx)
 # データをランダムに取得するためのインデックス
 # random.shuffle(random_idx)
 # データ取得。データ数が少ないため、auguentationを行う。回転、反転、明るさ調整を行い、学習データに追加。
@@ -177,7 +179,8 @@ print("Total RAM :", total_params * 4 / 1024 / 1024, "MB")  #
 """
 print(y_train.shape, y_valid.shape)
 custom_model.compile(
-    loss=loss.weighted_focal_Loss,
+    # loss=loss.weighted_focal_Loss,
+    loss=loss.DiceLoss,
     optimizer=Adam(learning_rate=0.001),
     metrics=[loss.IoU],
 )
