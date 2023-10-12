@@ -11,12 +11,12 @@
  *   また、ELTRESエラー時を除き、1秒毎にGGA情報をシリアルモニタへ出力します。
  *   ELTRESエラー時は異常終了状態でループします。
  *   LEDの動きについては補足事項を確認してください。
- * 
+ *
  * 動作環境
  *   Arduino IDEを利用するSpresense Arduino 開発環境(2.3.0)上で利用できます。
  *   以下のArduinoライブラリを利用します。
  *     ・ELTRESアドオンボード用ライブラリ(1.1.0)
- * 
+ *
  * 利用方法
  *   1. ELTRESアドオンボード用ライブラリをArduino IDEにインストールします。
  *   2. 本プログラムをArduino IDEで開き、Spresenseに書き込みます。
@@ -25,12 +25,12 @@
  *      Arduino IDEの上部メニューから「ツール」->「シリアルモニタ」を選択し、シリアルモニタを起動します。
  *      ・GPSペイロードに設定した値は"[setup_payload_gps]"から始まる出力で確認できます。
  *      ・GGA情報は"[gga]"から始まる出力で確認できます。
- * 
+ *
  * 注意事項
  *   本プログラムは、ELTRES送信間隔が1分であることを前提としてます。
  *   3分契約の場合、EltresAddonBoard.begin()の引数 ELTRES_BOARD_SEND_MODE_1MIN を
  *   ELTRES_BOARD_SEND_MODE_3MIN に変更してください。
- * 
+ *
  * 補足事項
  *   本プログラムは、下記のようにLEDを用いて状態を表現します。
  *     LED0：[プログラム状態] 起動中：点灯、正常・異常終了：消灯
@@ -52,11 +52,11 @@
 #define LED_ERR PIN_LED3
 
 // プログラム内部状態：初期状態
-#define PROGRAM_STS_INIT      (0)
+#define PROGRAM_STS_INIT (0)
 // プログラム内部状態：起動中
-#define PROGRAM_STS_RUNNING   (1)
+#define PROGRAM_STS_RUNNING (1)
 // プログラム内部状態：終了
-#define PROGRAM_STS_STOPPED   (3)
+#define PROGRAM_STS_STOPPED (3)
 
 // プログラム内部状態
 int program_sts = PROGRAM_STS_INIT;
@@ -77,8 +77,10 @@ int num_people = 23;
  * @brief イベント通知受信コールバック
  * @param event イベント種別
  */
-void eltres_event_cb(eltres_board_event event) {
-  switch (event) {
+void eltres_event_cb(eltres_board_event event)
+{
+  switch (event)
+  {
   case ELTRES_BOARD_EVT_GNSS_TMOUT:
     // GNSS電波受信タイムアウト
     Serial.println("gnss wait timeout error.");
@@ -121,10 +123,12 @@ void eltres_event_cb(eltres_board_event event) {
  * @brief GGA情報受信コールバック
  * @param gga_info GGA情報のポインタ
  */
-void gga_event_cb(const eltres_board_gga_info *gga_info) {
+void gga_event_cb(const eltres_board_gga_info *gga_info)
+{
   Serial.print("[gga]");
   last_gga_info = *gga_info;
-  if (gga_info->m_pos_status) {
+  if (gga_info->m_pos_status)
+  {
     // 測位状態
     // GGA情報をシリアルモニタへ出力
     Serial.print("utc: ");
@@ -146,7 +150,9 @@ void gga_event_cb(const eltres_board_gga_info *gga_info) {
     Serial.print(" m, geoid: ");
     Serial.print(gga_info->m_geoid);
     Serial.println(" m");
-  } else {
+  }
+  else
+  {
     // 非測位状態
     // "invalid data"をシリアルモニタへ出力
     Serial.println("invalid data.");
@@ -156,7 +162,8 @@ void gga_event_cb(const eltres_board_gga_info *gga_info) {
 /**
  * @brief setup()関数
  */
-void setup() {
+void setup()
+{
   // シリアルモニタ出力設定
   Serial.begin(115200);
 
@@ -171,8 +178,9 @@ void setup() {
   digitalWrite(LED_ERR, LOW);
 
   // ELTRES起動処理
-  eltres_board_result ret = EltresAddonBoard.begin(ELTRES_BOARD_SEND_MODE_1MIN,eltres_event_cb, gga_event_cb);
-  if (ret != ELTRES_BOARD_RESULT_OK) {
+  eltres_board_result ret = EltresAddonBoard.begin(ELTRES_BOARD_SEND_MODE_1MIN, eltres_event_cb, gga_event_cb);
+  if (ret != ELTRES_BOARD_RESULT_OK)
+  {
     // ELTRESエラー発生
     digitalWrite(LED_RUN, LOW);
     digitalWrite(LED_ERR, HIGH);
@@ -180,7 +188,9 @@ void setup() {
     Serial.print("cannot start eltres board (");
     Serial.print(ret);
     Serial.println(").");
-  } else {
+  }
+  else
+  {
     // 正常
     program_sts = PROGRAM_STS_RUNNING;
   }
@@ -189,47 +199,61 @@ void setup() {
 /**
  * @brief loop()関数
  */
-void loop() {
+void loop()
+{
+  Serial.println("1");
 
-  switch (program_sts) {
-    case PROGRAM_STS_RUNNING:
-      // プログラム内部状態：起動中
-      if (gnss_recevie_timeout) {
-        // GNSS電波受信タイムアウト（GNSS受信エラー）時の点滅処理
-        uint64_t now_time = millis();
-        if ((now_time - last_change_blink_time) >= 1000) {
-          last_change_blink_time = now_time;
-          bool set_value = digitalRead(LED_ERR);
-          bool next_value = (set_value == LOW) ? HIGH : LOW;
-          digitalWrite(LED_ERR, next_value);
-        }
-      } else {
-        digitalWrite(LED_ERR, LOW);
+  switch (program_sts)
+  {
+  case PROGRAM_STS_RUNNING:
+    // プログラム内部状態：起動中
+    if (gnss_recevie_timeout)
+    {
+      Serial.println("2");
+      // GNSS電波受信タイムアウト（GNSS受信エラー）時の点滅処理
+      uint64_t now_time = millis();
+      if ((now_time - last_change_blink_time) >= 1000)
+      {
+        last_change_blink_time = now_time;
+        bool set_value = digitalRead(LED_ERR);
+        bool next_value = (set_value == LOW) ? HIGH : LOW;
+        digitalWrite(LED_ERR, next_value);
       }
+    }
+    else
+    {
+      Serial.println("3");
+      digitalWrite(LED_ERR, LOW);
+    }
 
-      if (event_send_ready) {
-        // 送信直前通知時の処理
-        event_send_ready = false;
-        setup_payload_gps(num_people);
-        // 送信ペイロードの設定
-        EltresAddonBoard.set_payload(payload);
-      }
-      break;
-     
-    case PROGRAM_STS_STOPPED:
-      // プログラム内部状態：終了
-      break;
+    if (event_send_ready)
+    {
+      Serial.println("4");
+      // 送信直前通知時の処理
+      event_send_ready = false;
+      setup_payload_gps(num_people);
+      // 送信ペイロードの設定
+      EltresAddonBoard.set_payload(payload);
+    }
+    break;
+
+  case PROGRAM_STS_STOPPED:
+    // プログラム内部状態：終了
+    break;
   }
   // 次のループ処理まで100ミリ秒待機
+  Serial.println("-----");
+
   delay(100);
 }
 
 /**
  * @brief GPSペイロード設定
  */
-void setup_payload_gps(int num_people) {
-  String lat_string = String((char*)last_gga_info.m_lat);
-  String lon_string = String((char*)last_gga_info.m_lon);
+void setup_payload_gps(int num_people)
+{
+  String lat_string = String((char *)last_gga_info.m_lat);
+  String lon_string = String((char *)last_gga_info.m_lon);
   int index;
   uint32_t gnss_time;
   uint32_t utc_time;
