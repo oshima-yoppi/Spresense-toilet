@@ -63,8 +63,8 @@ var server = http.createServer(function (req, res) {
                             //     });
 
                             var value = postData['data'];                
-                            displayValue = check_data_and_id(value);
-                            client.send(displayValue);
+                            // displayValue = check_data_and_id(value);
+                            client.send(value);
                         }
                     });
                 }
