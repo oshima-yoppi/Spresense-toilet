@@ -1250,19 +1250,37 @@ ul.menu a {
 /*　※注意！　下の閉じカッコ　}　はこのブロックに必要なので、削除しないで下さい。　*/
 
 }
-/*セルフ*/
-.level{
-	width:"20%";
-	height:"10%";
-}
 
-td{
-	padding: 10px 5px;		
+/*---------------------セルフ------------------------------*/
+.label{
 	word-break: break-all;	
+	width: 20%; /* 幅を120pxに固定 */
+    height: 50%; /* 高さを40pxに固定 */
 }
 
-.red{
-	padding: 10px 5px;		
-	word-break: break-all;
+td{	
+	word-break: break-all;	
+	width: 40%; /* 幅を120pxに固定 */
+    height: 50%; /* 高さを40pxに固定 */
+}
+
+.level0{
+	background-color: #ffffff;
+	background-image:url(level1.png);             /* 画像のURLを指定       */
+	background-repeat:  no-repeat;                /* 画像の繰り返しを指定  */              
+    width:10px;                                   /* 横幅のサイズを指定    */
+    height:10px;                                 /* 縦幅のサイズを指定    */
+}
+
+.level1{
+	background-color: #ffefec;
+}
+
+.level2{
+	background-color: #ffd0c3;
+}
+
+.level3{
 	color: red;	
+	background-color: #ffa994;
 }
