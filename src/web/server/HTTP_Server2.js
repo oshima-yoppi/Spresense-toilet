@@ -4,16 +4,10 @@ var querystring = require('querystring');
 var url = require('url');
 var WebSocket = require('ws');
 const getdata_fromclip = require('./getdata_fromclip');
-const check_data_and_id = require('./check_data_and_id');
-
 
 var data;
 var postData = {};
-let a = 'loading...';
 var displayValue = 'loading...';
-var payloaddata = 0;
-
-// const hostname = '10.204.47.155';
 const hostname = '172.17.254.13'
 const PORT = 3000;
 
@@ -51,20 +45,16 @@ var server = http.createServer(function (req, res) {
                     // Broadcast the updated data to all connected clients
                     wss.clients.forEach(function (client) {
                         if (client.readyState === WebSocket.OPEN) {
+                            getdata_fromclip()
+                                .then((payloaddata) => {
+                                    client.send(payloaddata);
+                                })
+                                .catch((error) => {
+                                    console.error('Error in processData chain:', error);
+                                });
 
-                            // getdata_fromclip()
-                            //     .then((payloaddata) => {
-                            //         // console.log('payloaddata:', payloaddata);
-                            //         const displayValue = check_data_and_id(payloaddata);
-                            //         client.send(displayValue);
-                            //     })
-                            //     .catch((error) => {
-                            //         console.error('Error in processData chain:', error);
-                            //     });
-
-                            var value = postData['data'];                
-                            displayValue = check_data_and_id(value);
-                            client.send(displayValue);
+                            var value = postData['data'];
+                            client.send(value);
                         }
                     });
                 }
@@ -81,7 +71,7 @@ var wss = new WebSocket.Server({ server });
 
 wss.on('connection', function (ws) {
     // Send initial data to the connected client
-    ws.send(a);
+    ws.send('loading...');
 });
 
 server.listen(PORT, () => {
