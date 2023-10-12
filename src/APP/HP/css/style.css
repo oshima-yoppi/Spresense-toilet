@@ -1266,10 +1266,12 @@ td{
 
 .level0{
 	background-color: #ffffff;
-	background-image:url(level1.png);             /* 画像のURLを指定       */
-	background-repeat:  no-repeat;                /* 画像の繰り返しを指定  */              
-    width:10px;                                   /* 横幅のサイズを指定    */
-    height:10px;                                 /* 縦幅のサイズを指定    */
+	/*
+	background-image:url(level1.png);             
+	background-repeat:  no-repeat;                           
+    background-size: contain; 
+	 */
+	
 }
 
 .level1{
