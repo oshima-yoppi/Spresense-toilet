@@ -201,7 +201,6 @@ void setup()
  */
 void loop()
 {
-  Serial.println("1");
 
   switch (program_sts)
   {
@@ -209,7 +208,6 @@ void loop()
     // プログラム内部状態：起動中
     if (gnss_recevie_timeout)
     {
-      Serial.println("2");
       // GNSS電波受信タイムアウト（GNSS受信エラー）時の点滅処理
       uint64_t now_time = millis();
       if ((now_time - last_change_blink_time) >= 1000)
@@ -222,13 +220,11 @@ void loop()
     }
     else
     {
-      Serial.println("3");
       digitalWrite(LED_ERR, LOW);
     }
 
     if (event_send_ready)
     {
-      Serial.println("4");
       // 送信直前通知時の処理
       event_send_ready = false;
       setup_payload_gps(num_people);
@@ -242,8 +238,6 @@ void loop()
     break;
   }
   // 次のループ処理まで100ミリ秒待機
-  Serial.println("-----");
-
   delay(100);
 }
 
