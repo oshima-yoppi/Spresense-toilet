@@ -41,8 +41,10 @@
         socket.addEventListener('message', (event) => {
             console.log('サーバーからのメッセージ:', event.data);
 
-            let id   = event.data.slice(0, 1);
-            let data = event.data.slice(1);
+            // let id   = event.data.slice(0, 1);
+            let id = 1;
+            // let data = event.data.slice(1);
+            let data = event.data;
             console.log('id:', id);
             console.log('data:', data);
             
