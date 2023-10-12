@@ -3,6 +3,9 @@ var fs = require('fs');
 var querystring = require('querystring');
 var url = require('url');
 var WebSocket = require('ws');
+const getdata_fromclip = require('./getdata_fromclip');
+const check_data_and_id = require('./check_data_and_id');
+
 
 var data;
 var postData = {};
@@ -13,13 +16,6 @@ var payloaddata = 0;
 // const hostname = '10.204.47.155';
 const hostname = '172.17.254.13'
 const PORT = 3000;
-
-const { exec } = require('child_process');
-var url = 'https://api.clip-viewer-lite.com/auth/token';
-const akey = 'oy7yTZo5f39KL0TWEYIhw6tR198DTvZRjI0zZjTi';
-const username = 'oosima@kimura-lab.net';
-const password = 'GL9D48xbXUK6UU8';
-const curlCommand = `curl -X POST -H "X-API-Key: ${akey}" -d "{\\"username\\": \\"${username}\\", \\"password\\": \\"${password}\\"}" "${url}"`;
 
 var server = http.createServer(function (req, res) {
     if (req.url === '/' && req.method === 'GET') {
@@ -55,53 +51,20 @@ var server = http.createServer(function (req, res) {
                     // Broadcast the updated data to all connected clients
                     wss.clients.forEach(function (client) {
                         if (client.readyState === WebSocket.OPEN) {
-                            var value = postData['data'];
-                            
-                            exec(curlCommand, (error, stdout, stderr) => {
-                              if (error) {
-                                console.error(`エラーが発生しました: ${error.message}`);
-                                return;
-                              }
-                          
-                              const token = JSON.parse(stdout).token;
-                              var url = 'https://api.clip-viewer-lite.com/payload/latest/00010197a7';
-                              const curlCommand2 = `curl -X GET -H "X-API-Key: ${akey}" -H "Authorization: ${token}" "${url}"`;
-                          
-                              exec(curlCommand2, (error, stdout, stderr) => {
-                                if (error) {
-                                  console.error(`エラーが発生しました: ${error.message}`);
-                                  return;
-                                }
-                                payloaddata = JSON.parse(stdout).payload[0].payload;
-                                console.log(payloaddata);
-                              });
-                            });
 
-                            if (Math.floor(parseInt(value)%10) === 0){
-                                id = 1;
-                            }else if (Math.floor(parseInt(value)%10) === 1){
-                                id = 2;
-                            }else if (Math.floor(parseInt(value)%10) === 2){
-                                id = 3;
-                            }else{
-                                id = 4;
-                            }
+                            getdata_fromclip()
+                                .then((payloaddata) => {
+                                    console.log('payloaddata:', payloaddata);
+                                    const displayValue = check_data_and_id(payloaddata);
+                                    client.send(displayValue);
+                                })
+                                .catch((error) => {
+                                    console.error('Error in processData chain:', error);
+                                });
 
-                            if (Math.floor(parseInt(value)/10) === 0) {
-                                displayValue = id + '非常に空いています';
-                            } else if (Math.floor(parseInt(value)/10) === 1) {
-                                displayValue = id + '空いています';
-                            } else if (Math.floor(parseInt(value)/10) === 2) {
-                                displayValue = id + '混雑しています';
-                            } else if (Math.floor(parseInt(value)/10) === 3) {
-                                displayValue = id + '非常に混雑しています';
-                            } else {
-                                displayValue = a;
-                            }
+                            var value = postData['data'];                
+                            displayValue = check_data_and_id(value);
                             client.send(displayValue);
-
-                            
-                            
                         }
                     });
                 }
