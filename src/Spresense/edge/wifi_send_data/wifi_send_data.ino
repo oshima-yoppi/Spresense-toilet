@@ -2,35 +2,36 @@
  *  HTTPClient.ino - GainSpan WiFi Module Control Program
  *  Copyright 2019 Norikazu Goto
  *
- *  This work is free software; you can redistribute it and/or modify it under the terms 
- *  of the GNU Lesser General Public License as published by the Free Software Foundation; 
+ *  This work is free software; you can redistribute it and/or modify it under the terms
+ *  of the GNU Lesser General Public License as published by the Free Software Foundation;
  *  either version 2.1 of the License, or (at your option) any later version.
  *
- *  This work is distributed in the hope that it will be useful, but without any warranty; 
- *  without even the implied warranty of merchantability or fitness for a particular 
+ *  This work is distributed in the hope that it will be useful, but without any warranty;
+ *  without even the implied warranty of merchantability or fitness for a particular
  *  purpose. See the GNU Lesser General Public License for more details.
  *
- *  You should have received a copy of the GNU Lesser General Public License along with 
- *  this work; if not, write to the Free Software Foundation, 
+ *  You should have received a copy of the GNU Lesser General Public License along with
+ *  this work; if not, write to the Free Software Foundation,
  *  Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
-*/
+ */
 
 #include <HttpGs2200.h>
 #include <TelitWiFi.h>
 #include "config.h"
 
-#define  CONSOLE_BAUDRATE  115200
+#define CONSOLE_BAUDRATE 115200
 
-typedef enum{
-	POST=0,
+typedef enum
+{
+	POST = 0,
 	GET
 } DEMO_STATUS_E;
 
 DEMO_STATUS_E httpStat;
 char sendData[100];
 
-int id=2;
-int num=10;
+int id = 2;
+int num = 10;
 
 const uint16_t RECEIVE_PACKET_SIZE = 1500;
 uint8_t Receive_Data[RECEIVE_PACKET_SIZE] = {0};
@@ -43,17 +44,19 @@ HTTPGS2200_HostParams hostParams;
 void parse_httpresponse(char *message)
 {
 	char *p;
-	
-	if ((p=strstr(message, "200 OK\r\n")) != NULL) {
-		ConsolePrintf("Response : %s\r\n", p+8);
+
+	if ((p = strstr(message, "200 OK\r\n")) != NULL)
+	{
+		ConsolePrintf("Response : %s\r\n", p + 8);
 	}
 }
 
-void setup() {
+void setup()
+{
 
 	/* initialize digital pin LED_BUILTIN as an output. */
 	pinMode(LED0, OUTPUT);
-	digitalWrite(LED0, LOW);   // turn the LED off (LOW is the voltage level)
+	digitalWrite(LED0, LOW);		// turn the LED off (LOW is the voltage level)
 	Serial.begin(CONSOLE_BAUDRATE); // talk to PC
 
 	/* Initialize SPI access of GS2200 */
@@ -62,15 +65,19 @@ void setup() {
 	/* Initialize AT Command Library Buffer */
 	gsparams.mode = ATCMD_MODE_STATION;
 	gsparams.psave = ATCMD_PSAVE_DEFAULT;
-	if (gs2200.begin(gsparams)) {
+	if (gs2200.begin(gsparams))
+	{
 		ConsoleLog("GS2200 Initilization Fails");
-		while (1);
+		while (1)
+			;
 	}
 
 	/* GS2200 Association to AP */
-	if (gs2200.activate_station(AP_SSID, PASSPHRASE)) {
+	if (gs2200.activate_station(AP_SSID, PASSPHRASE))
+	{
 		ConsoleLog("Association Fails");
-		while (1);
+		while (1)
+			;
 	}
 
 	hostParams.host = (char *)HTTP_SRVR_IP;
@@ -86,47 +93,54 @@ void setup() {
 	theHttpGs2200.config(HTTP_HEADER_HOST, HTTP_SRVR_IP);
 
 	digitalWrite(LED0, HIGH); // turn on LED
-
 }
 
 // the loop function runs over and over again forever
-void loop() {
+void loop()
+{
 	httpStat = POST;
 	bool result = false;
 	static int count = 0;
 
-	while (1) {
-		switch (httpStat) {
+	while (1)
+	{
+		switch (httpStat)
+		{
 		case POST:
 			theHttpGs2200.config(HTTP_HEADER_TRANSFER_ENCODING, "chunked");
-			//create post data.
+			// create post data.
 			snprintf(sendData, sizeof(sendData), "data=%d", count);
 			result = theHttpGs2200.post(HTTP_POST_PATH, sendData);
-			if (false == result) {
+			if (false == result)
+			{
 				break;
 			}
 
-			do {
+			do
+			{
 				result = theHttpGs2200.receive(5000);
-				if (result) {
+				if (result)
+				{
 					theHttpGs2200.read_data(Receive_Data, RECEIVE_PACKET_SIZE);
 					ConsolePrintf("%s", (char *)(Receive_Data));
-				} else {
+				}
+				else
+				{
 					// AT+HTTPSEND command is done
-					ConsolePrintf( "\r\n");
+					ConsolePrintf("\r\n");
 				}
 			} while (result);
 
 			result = theHttpGs2200.end();
 
-			delay(rand()%10000);
-      count = rand()%4*10+id;
+			delay(rand() % 10000);
+			count = rand() % 4 * 10 + id;
 			// count = num*10+id;
 			// count=100;
 
 			// httpStat = GET;
 			break;
-    
+
 		default:
 			break;
 		}
