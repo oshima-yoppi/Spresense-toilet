@@ -762,6 +762,7 @@ ul.menu a::before {
 }
 
 
+
 /*よく頂く質問
 ---------------------------------------------------------------------------*/
 .faq {
@@ -1248,4 +1249,20 @@ ul.menu a {
 
 /*　※注意！　下の閉じカッコ　}　はこのブロックに必要なので、削除しないで下さい。　*/
 
+}
+/*セルフ*/
+.level{
+	width:"20%";
+	height:"10%";
+}
+
+td{
+	padding: 10px 5px;		
+	word-break: break-all;	
+}
+
+.red{
+	padding: 10px 5px;		
+	word-break: break-all;
+	color: red;	
 }
