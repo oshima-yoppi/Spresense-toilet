@@ -13,7 +13,7 @@ const PORT = 3000;
 
 var server = http.createServer(function (req, res) {
     if (req.url === '/' && req.method === 'GET') {
-        fs.readFile('index.html', 'utf8', function (err, content) {
+        fs.readFile('./APP/HP/list.html', 'utf8', function (err, content) {
             if (err) {
                 res.statusCode = 500;
                 res.end('Internal Server Error');
