@@ -762,6 +762,7 @@ ul.menu a::before {
 }
 
 
+
 /*よく頂く質問
 ---------------------------------------------------------------------------*/
 .faq {
@@ -1248,4 +1249,40 @@ ul.menu a {
 
 /*　※注意！　下の閉じカッコ　}　はこのブロックに必要なので、削除しないで下さい。　*/
 
+}
+
+/*---------------------セルフ------------------------------*/
+.label{
+	word-break: break-all;	
+	width: 20%; /* 幅を120pxに固定 */
+    height: 50%; /* 高さを40pxに固定 */
+}
+
+td{	
+	word-break: break-all;	
+	width: 40%; /* 幅を120pxに固定 */
+    height: 50%; /* 高さを40pxに固定 */
+}
+
+.level0{
+	background-color: #ffffff;
+	/*
+	background-image:url(level1.png);             
+	background-repeat:  no-repeat;                           
+    background-size: contain; 
+	 */
+	
+}
+
+.level1{
+	background-color: #ffefec;
+}
+
+.level2{
+	background-color: #ffd0c3;
+}
+
+.level3{
+	color: red;	
+	background-color: #ffa994;
 }
