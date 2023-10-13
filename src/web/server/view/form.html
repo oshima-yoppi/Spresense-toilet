@@ -5,12 +5,13 @@
 <title>求人サイト向け 無料ホームページテンプレート tp_job4</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="ここにサイト説明を入れます">
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="public/css/style.css">
 </head>
 
 <body>
 
 <div id="container">
+
 <header>
 	<h1 id="logo"><a href="index.html"><img src="images/logo.png" alt="JOB INFO"></a></h1>
 	<!--メインメニュー-->
@@ -30,47 +31,45 @@
 	</ul>
 	</nav>
 </header>
-
 <main>
 
 <section>
 
-<h2>確認画面</h2>
+<h2>お問い合わせフォーム</h2>
 
 <!-- フォームの情報はここからです -->
 <form name="form1" enctype="multipart/form-data" method="post" action="<?php echo $_SERVER["REQUEST_URI"];?>">
-<input type="hidden" name="mode" value="confirm">
+<input type="hidden" name="mode" value="form">
 <table class="ta1">
-<!--<tr><td colspan="2" class="auto"><strong>確認画面</strong></td></tr>-->
 <!-- 入力／確認 -->
 <!--<tr><th class="tamidashi" colspan="2">お問い合わせフォーム</th></tr>-->
 <tr>
-<th width="150">お名前</th>
+<th width="150">お名前<span style="color:red">※</span></th>
 <td>
-<input type="hidden" name="item1" value="<?php echo $form["item1"];?>">
-<?php echo $form["item1"];?>
+<input name="item1" value="<?php echo $form["item1"];?>" type="text" size="40" maxlength="500" class="ws">
+<?php if ($msg["item1"]) echo '<div style="color:red">' . $msg["item1"] . '</div>'; ?>
 </td>
 </tr>
 <tr>
-<th width="150">メールアドレス</th>
+<th width="150">メールアドレス<span style="color:red">※</span></th>
 <td>
-<input type="hidden" name="item2" value="<?php echo $form["item2"];?>">
-<?php echo $form["item2"];?>
+<input name="item2" value="<?php echo $form["item2"];?>" type="text" size="40" maxlength="500" class="ws">
+<?php if ($msg["item2"]) echo '<div style="color:red">' . $msg["item2"] . '</div>'; ?>
 </td>
 </tr>
 <tr>
-<th>お問い合わせ内容</th>
+<th>お問い合わせ内容<span style="color:red">※</span></th>
 <td>
-<input type="hidden" name="item3" value="<?php echo $form["item3"]; ?>">
-<?php echo nl2br($form["item3"]);?>
+<textarea name="item3" cols="40" rows="10" class="wl"><?php echo $form["item3"]; ?></textarea>
+<?php if ($msg["item3"]) echo '<div style="color:red">' . $msg["item3"] . '</div>'; ?>
 </td>
 </tr>
 </table>
 
 <p class="btn">
-<input type="submit" value="送信する">
+<input type="submit" value="内容を確認する">
 &nbsp;
-<input type="button" value="戻る" onClick="document.form1.mode.value='reinput';document.form1.submit()">
+<input type="reset" value="リセット">
 </p>
 
 </form>

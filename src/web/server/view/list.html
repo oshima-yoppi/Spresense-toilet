@@ -5,7 +5,7 @@
 <title>求人サイト向け 無料ホームページテンプレート tp_job4</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="ここにサイト説明を入れます">
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="public/css/style.css">
 </head>
 
 <body>
@@ -164,41 +164,39 @@
 </div>
 -->
 
-
-
 <section>
 <h2>混雑具合</h2>
 <body>
- <table border="2" width="60%" height="80%" >
+ <table border="2" width="50%" height="70%" >
     <tr align="center">
-      <th class="label">階数</th>
+      <th>階数</th>
       <th>女子</th>
 	  <th>男子</th>
     </tr>
     <tr align="center">
-      <td class="label">1階</td>
-      <td class="level0"><img src="" width="20%" height="10%">（待ち時間：3分）</td>
-	  <td class="level1"><img src="images/level1.png" width="20%" height="10%">（待ち時間：1分）</td>
+      <td>1階</td>
+      <td>👤👤👤（待ち時間：3分）</td>
+	  <td>👤👤👤（待ち時間：2分）</td>
     </tr>
     <tr align="center">
-      <td class="label">2階</td>
-      <td class="level1"><img src="images/level1.png" width="20%" height="10%">（待ち時間：3分）</td>
-	  <td class="level0"><img src="images/level0.png" width="20%" height="10%">（待ち時間：0分）</td>
+      <td>2階</td>
+      <td>👤👤👤（待ち時間：5分以上）</td>
+	  <td>（空）</td>
     </tr>
     <tr align="center">
-      <td class="label">3階</td>
-      <td class="level2"><img src="images/level2.png" width="20%" height="10%">（待ち時間：3分）</td>
-	  <td class="level1"><img src="images/level1.png" width="20%" height="10%">（待ち時間：1分）</td>
+      <td>3階</td>
+      <td>👤👤👤（待ち時間：2分）</td>
+	  <td>（空）</td>
     </tr>
     <tr align="center">
-      <td class="label">4階</td>
-      <td class="level3"><img src="images/level3.png" width="20%" height="10%">（待ち時間：5分）</td>
-	  <td class="level1"><img src="images/level1.png" width="20%" height="10%">（待ち時間：2分）</td>
+      <td>4階</td>
+      <td>👤👤👤（待ち時間：3分）</td>
+	  <td>（空）</td>
     </tr>
     <tr align="center">
-      <td class="label">5階</td>
-      <td class="level0"><img src="images/level0.png" width="20%" height="10%">（待ち時間：0分）</td>
-	  <td class="level0"><img src="images/level0.png" width="20%" height="10%">（待ち時間：0分）</td>
+      <td>5階</td>
+      <td>👤👤👤（待ち時間：3分）</td>
+	  <td>（空）</td>
     </tr>
   </table>
 </body>
@@ -212,14 +210,14 @@
 	<h4>
 	<a>7号館1階トイレ</a>
 	<span class="icon waku">🚽×４</span>
-	<span class="icon waku"><img src="images/level1.png" width="40px"></span>	
+	<span class="icon option2">混雑具合を示す</span>	
 
 	</h4>
 		<dl class="line">
 		<dt>想定待ち時間</dt>
 		<dd>0分</dd>
 		<dt>混雑状況</dt>
-		<dd>すいている</dd>
+		<dd><span id="data_placeholder_1">loading...</span></dd>
 		<dt>トイレの個数</dt>
 		<dd>4つ</dd>
 		<dt>使用可能時間</dt>
@@ -234,7 +232,7 @@
 	<h4>
 	<a>7号館2階トイレ</a>
 	<span class="icon waku">🚽×４</span>
-	<span class="icon waku"><img src="images/level0.png" width="40px"></span>	
+	<span class="icon option2">混雑具合を示す</span>	
 
 	</h4>
 		<dl class="line">
@@ -256,7 +254,7 @@
 	<h4>
 	<a>7号館3階トイレ</a>
 	<span class="icon waku">🚽×４</span>
-	<span class="icon waku"><img src="images/level1.png" width="40px"></span>	
+	<span class="icon option2">混雑具合を示す</span>	
 
 	</h4>
 		<dl class="line">
@@ -278,7 +276,7 @@
 	<h4>
 	<a>7号館4階トイレ</a>
 	<span class="icon waku">🚽×４</span>
-	<span class="icon waku"><img src="images/level1.png" width="40px"></span>	
+	<span class="icon option2">混雑具合を示す</span>	
 
 	</h4>
 		<dl class="line">
@@ -300,7 +298,7 @@
 	<h4>
 	<a>7号館5階トイレ</a>
 	<span class="icon waku">🚽×４</span>
-	<span class="icon waku"><img src="images/level0.png" width="40px"></span>	
+	<span class="icon option2">混雑具合を示す</span>	
 
 	</h4>
 		<dl class="line">
@@ -483,6 +481,41 @@
 
 <!--ページの上部へ戻るボタン-->
 <div class="pagetop"><a href="#">↑</a></div>
+
+<script>
+	const socket = new WebSocket('ws://172.17.254.13:3000');
+
+	function updateData(index, data) {
+		if (index != 0){
+		document.getElementById(`data_placeholder_${index}`).innerText = data;
+		}else{
+			// document.getElementById(`data_placeholder_1`).innerText = 'loading...';
+			// document.getElementById(`data_placeholder_2`).innerText = 'loading...';
+			// document.getElementById(`data_placeholder_3`).innerText = 'loading...';
+		}
+	}
+
+	// 接続が開かれた時の処理
+	socket.addEventListener('open', (event) => {
+		console.log('WebSocketに接続しました');
+	});
+
+	// メッセージを受信した時の処理
+	socket.addEventListener('message', (event) => {
+		console.log('サーバーからのメッセージ:', event.data);
+
+		let id   = Math.floor(event.data/100);
+		let data = event.data%100;
+		
+		// ここでデータを更新
+		updateData(id, data);
+	});
+
+	// 接続が閉じられた時の処理
+	socket.addEventListener('close', (event) => {
+		console.log('WebSocketの接続が閉じられました');
+	});
+</script>
 
 </body>
 </html>

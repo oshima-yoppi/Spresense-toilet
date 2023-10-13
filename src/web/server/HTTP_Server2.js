@@ -13,7 +13,7 @@ const PORT = 3000;
 
 var server = http.createServer(function (req, res) {
     if (req.url === '/' && req.method === 'GET') {
-        fs.readFile('./APP/HP/list.html', 'utf8', function (err, content) {
+        fs.readFile('./html/list.html', 'utf8', function (err, content) {
             if (err) {
                 res.statusCode = 500;
                 res.end('Internal Server Error');
@@ -22,7 +22,7 @@ var server = http.createServer(function (req, res) {
 
                 if ('data' in postData && postData['data'].trim() !== '') {
                     console.log('GET Response :', displayValue);
-                    content = content.replace('<span id="data_placeholder"></span>', displayValue);
+                    // content = content.replace('<span id="data_placeholder"></span>', displayValue);
                 } else {
                     content = content.replace('<span id="data_placeholder"></span>', ' loading...');
                 }
