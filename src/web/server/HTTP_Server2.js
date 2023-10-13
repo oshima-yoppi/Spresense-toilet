@@ -52,19 +52,19 @@ var server = http.createServer(function (req, res) {
                     wss.clients.forEach(function (client) {
                         if (client.readyState === WebSocket.OPEN) {
 
-                            getdata_fromclip()
-                                .then((payloaddata) => {
-                                    console.log('payloaddata:', payloaddata);
-                                    const displayValue = check_data_and_id(payloaddata);
-                                    client.send(displayValue);
-                                })
-                                .catch((error) => {
-                                    console.error('Error in processData chain:', error);
-                                });
+                            // getdata_fromclip()
+                            //     .then((payloaddata) => {
+                            //         // console.log('payloaddata:', payloaddata);
+                            //         const displayValue = check_data_and_id(payloaddata);
+                            //         client.send(displayValue);
+                            //     })
+                            //     .catch((error) => {
+                            //         console.error('Error in processData chain:', error);
+                            //     });
 
                             var value = postData['data'];                
-                            displayValue = check_data_and_id(value);
-                            client.send(displayValue);
+                            // displayValue = check_data_and_id(value);
+                            client.send(value);
                         }
                     });
                 }

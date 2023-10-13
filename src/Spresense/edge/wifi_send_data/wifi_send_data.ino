@@ -133,8 +133,13 @@ void loop()
 
 			result = theHttpGs2200.end();
 
+<<<<<<< HEAD
 			delay(rand() % 10000);
 			count = rand() % 4 * 10 + id;
+=======
+			delay(rand()%10000);
+      		count = rand()%4*10+id;
+>>>>>>> 431a9446fe521cb8133c043bade8ca990936f965
 			// count = num*10+id;
 			// count=100;
 
