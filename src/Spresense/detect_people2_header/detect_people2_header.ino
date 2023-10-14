@@ -1,4 +1,6 @@
 #include <Camera.h>
+#include <SDHCI.h>
+#include <File.h>
 // c:\Users\oosim\Documents\Arduino
 #include "tensorflow/lite/micro/all_ops_resolver.h"
 #include "tensorflow/lite/micro/micro_error_reporter.h"
@@ -13,6 +15,7 @@
 #include "_lib_display.h"
 #include "_lib_camera.h"
 #include "_lib_detection.h"
+#include "_lib_file.h"
 #include "impulse.h"
 tflite::ErrorReporter *error_reporter = nullptr;
 const tflite::Model *model = nullptr;
@@ -24,6 +27,7 @@ int inference_count = 0;
 constexpr int kTensorArenaSize = (300) * 1024; // 250
 uint8_t tensor_arena[kTensorArenaSize];
 
+int SPRESENSE_ID;
 /* cropping and scaling parameters */
 const int offset_x = 32;
 const int offset_y = 12;
@@ -108,11 +112,13 @@ void setup()
     digitalWrite(LED0, HIGH);
 
     setup_camera();
+    SPRESENSE_ID = read_spresense_id("/communication/spresense_id.txt");
 }
 
 void loop()
 {
     print("call takePicture");
+    print(String(SPRESENSE_ID));
     CamImage img = take_picture();
 
     uint16_t *sbuf = convert_img(img);
@@ -121,7 +127,6 @@ void loop()
     bool *result_mask = detect_people(sbuf, 0.7);
     disp_image_result(sbuf, 0, 0, target_w, target_h, result_mask);
     free(result_mask);
-    // free(sbuf);
 
     delay(0);
 }

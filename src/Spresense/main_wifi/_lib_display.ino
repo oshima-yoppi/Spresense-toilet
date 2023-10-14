@@ -1,5 +1,4 @@
-#include "Adafruit_GFX.h"
-#include "Adafruit_ILI9341.h"
+
 // #include "_lib_display.h"
 #define TFT_RST 8
 #define TFT_DC 9

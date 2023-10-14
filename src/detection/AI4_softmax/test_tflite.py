@@ -47,15 +47,21 @@ for i, filename in enumerate(tqdm(imgs)):
     splited_img_lst = func.split_img(img)
     for splited_img in splited_img_lst:
         splited_img = cv2.resize(splited_img, INPUT_SIZE)
-        splited_img = np.array([splited_img]) / 255
+        splited_img = np.array([splited_img])
         # print(splited_img.shape)
         splited_img = np.expand_dims(splited_img, axis=-1)
+        splited_img -= 128
+
         pred = interpreter(splited_img)
+        print(np.max(pred), np.min(pred))
+        # pred += 128
+        # pred /= 255
         splited_img = func.draw_line(splited_img[0])
         splited_img = (splited_img * 255).astype(np.uint8)
         plt.subplot(1, 2, 1)
         plt.imshow(splited_img)
         plt.subplot(1, 2, 2)
+        print(np.max(pred[0, :, :, 1]), np.min(pred[0, :, :, 1]))
         plt.imshow(pred[0, :, :, 1], vmin=0, vmax=1)
         save_path = os.path.join(SAVE_DIR, f"{count}.png")
         plt.savefig(save_path)
