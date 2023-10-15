@@ -3,7 +3,7 @@ var fs = require('fs');
 var querystring = require('querystring');
 var url = require('url');
 var WebSocket = require('ws');
-const getdata_fromclip = require('./getdata_fromclip');
+const getdata_fromclip = require('../getdata_fromclip');
 
 var data;
 var postData = {};

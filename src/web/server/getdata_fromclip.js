@@ -1,6 +1,5 @@
 const util = require('util');
 const { exec } = require('child_process');
-
 const promisifiedExec = util.promisify(exec);
 
 const getToken = async () => {
@@ -29,7 +28,7 @@ const getDataFromClip = async () => {
 
     return stdout;
   } catch (error) {
-    console.error(error); // エラーの内容を確認する
+    console.error(error);
     throw error;
   }
 };
@@ -46,7 +45,7 @@ const processData = async () => {
       payloaddata = 0;
     }
 
-    return payloaddata;  // Promiseが解決する値を返す
+    return payloaddata;
   } catch (error) {
     console.error('Error in processData:', error);
     throw error;

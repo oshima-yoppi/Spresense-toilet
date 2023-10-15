@@ -1,25 +1,14 @@
 var data;
 var postData = {};
-var displayValue = 'loading...';
 const hostname = '172.17.254.13'
 const port = 3000;
 
 var querystring = require('querystring');
 const http = require("http");
-const fs = require("fs");
 var WebSocket = require('ws');
 const getdata_fromclip = require('./getdata_fromclip');
+const readFile = require('./readFile');
 
-function readFile(file, response) {
-    fs.readFile(`./${file}`, (errors, data) => {
-        if (errors) {
-            console.log("Error reading the file...");
-        }
-        response.end(data);
-    });
-}
-
-// app.use(express.static('public'));
 
 const server = http.createServer((request, response) => {
     if (request.url === "/" && request.method === "GET") {
@@ -119,7 +108,6 @@ const server = http.createServer((request, response) => {
 var wss = new WebSocket.Server({ server });
 
 wss.on('connection', function (ws) {
-    // Send initial data to the connected client
     ws.send('loading...');
 });
 
