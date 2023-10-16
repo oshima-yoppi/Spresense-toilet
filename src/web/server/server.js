@@ -90,13 +90,13 @@ const server = http.createServer((request, response) => {
                     wss.clients.forEach(function (client) {
                         if (client.readyState === WebSocket.OPEN) {
                             //eltresからデータ取得、米アウト消して
-                            // getdata_fromclip()
-                            //     .then((payloaddata) => {
-                            //         client.send(payloaddata);
-                            //     })
-                            //     .catch((error) => {
-                            //         console.error('Error in processData chain:', error);
-                            //     });
+                            getdata_fromclip()
+                                .then((payloaddata) => {
+                                    client.send(payloaddata);
+                                })
+                                .catch((error) => {
+                                    console.error('Error in processData chain:', error);
+                                });
 
                             var value = postData['data'];
                             client.send(value);

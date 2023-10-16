@@ -39,8 +39,10 @@ const processData = async () => {
     const parseData = JSON.parse(payloaddata);
 
     if (parseData.result === 'success') {
-      payloaddata = parseData.payload[0].payload.slice(0, 2);
-      payloaddata = parseInt(payloaddata, 16);
+      id = parseData.payload[0].payload.slice(0, 2);
+      data = parseData.payload[0].payload.slice(2, 4);
+      payloaddata = id*100+parseInt(data, 16);
+      console.log('payloaddata:', payloaddata);
     } else {
       payloaddata = 0;
     }
