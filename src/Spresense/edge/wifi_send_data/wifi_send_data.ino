@@ -63,22 +63,22 @@ void setup()
 	Init_GS2200_SPI_type(iS110B_TypeC);
 
 	/* Initialize AT Command Library Buffer */
+	/*初期化が成功するまでループする*/
 	gsparams.mode = ATCMD_MODE_STATION;
 	gsparams.psave = ATCMD_PSAVE_DEFAULT;
-	if (gs2200.begin(gsparams))
-	{
+	while (gs2200.begin(gsparams)){
 		ConsoleLog("GS2200 Initilization Fails");
-		while (1)
-			;
+		delay(1000);
 	}
+	ConsoleLog("GS2200 Initilization Success");
 
 	/* GS2200 Association to AP */
-	if (gs2200.activate_station(AP_SSID, PASSPHRASE))
-	{
+	/*接続が成功するまでループする*/
+	while (gs2200.activate_station(AP_SSID, PASSPHRASE)){
 		ConsoleLog("Association Fails");
-		while (1)
-			;
-	}
+		delay(1000);
+	};
+	ConsoleLog("Association Success");
 
 	hostParams.host = (char *)HTTP_SRVR_IP;
 	hostParams.port = (char *)HTTP_PORT;
@@ -134,9 +134,7 @@ void loop()
 			result = theHttpGs2200.end();
 
 			delay(rand()%10000);
-      		count = rand()%4*10+id;
-			// count = num*10+id;
-			// count=100;
+      count = rand()%4*10+id*100;
 
 			// httpStat = GET;
 			break;
