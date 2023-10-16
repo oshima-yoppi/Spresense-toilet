@@ -20,15 +20,14 @@
 /*-------------------------------------------------------------------------*
  * Configration
  *-------------------------------------------------------------------------*/
-// #define  AP_SSID        "KimuraLab_StudentRoom"
-// #define  PASSPHRASE     "since20070403"
+#define  AP_SSID        "KimuraLab_StudentRoom"
+#define  PASSPHRASE     "since20070403"
 
-#define  AP_SSID        "neo_pixel"
-#define  PASSPHRASE     "neoneo1123"
+// #define  AP_SSID        "neo_pixel"
+// #define  PASSPHRASE     "neoneo1123"
 
-
-// #define  HTTP_SRVR_IP  "172.17.254.13"
-#define  HTTP_SRVR_IP  "192.168.162.128"
+#define  HTTP_SRVR_IP  "172.17.254.13"
+// #define  HTTP_SRVR_IP  "192.168.162.128"
 
 #define  HTTP_PORT     "3000"
 #define  HTTP_GET_PATH "/"
