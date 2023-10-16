@@ -162,7 +162,7 @@ void gga_event_cb(const eltres_board_gga_info *gga_info)
 /**
  * @brief setup()関数
  */
-void setup()
+void eltres_setup()
 {
   // シリアルモニタ出力設定
   Serial.begin(115200);
@@ -199,7 +199,7 @@ void setup()
 /**
  * @brief loop()関数
  */
-void loop()
+void send_data_eltres()
 {
 
   switch (program_sts)
@@ -227,7 +227,7 @@ void loop()
     {
       // 送信直前通知時の処理
       event_send_ready = false;
-      setup_payload_gps(num_people);
+      setup_payload(num_people);
       // 送信ペイロードの設定
       EltresAddonBoard.set_payload(payload);
     }
@@ -244,8 +244,9 @@ void loop()
 /**
  * @brief GPSペイロード設定
  */
-void setup_payload_gps(int num_people)
+void setup_payload(int num_people)
 {
+  int id = 3;
   String lat_string = String((char *)last_gga_info.m_lat);
   String lon_string = String((char *)last_gga_info.m_lon);
   int index;
@@ -256,21 +257,18 @@ void setup_payload_gps(int num_people)
   EltresAddonBoard.get_gnss_time(&gnss_time);
   // UTC時刻を計算（閏秒補正）
   utc_time = gnss_time - 18;
-
-  // 設定情報をシリアルモニタへ出力
-  Serial.print("[setup_payload_gps]");
-  Serial.print("lat:");
-  Serial.print(lat_string);
-  Serial.print(",lon:");
-  Serial.print(lon_string);
-  Serial.print(",utc:");
-  Serial.print(utc_time);
-  Serial.print(",pos:");
-  Serial.print(last_gga_info.m_pos_status);
-  Serial.println();
-
   // ペイロード領域初期化
   memset(payload, 0x00, sizeof(payload));
   // ペイロード種別[GPSペイロード]設定
-  payload[0] = num_people;
+  payload[0] = id *100 + num_people;
+}
+
+void setup()
+{
+  eltres_setup();
+}
+
+void loop()
+{
+  send_data_eltres();
 }
