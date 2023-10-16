@@ -8,6 +8,19 @@ function updateData(index, data) {
     }
 }
 
+function CongestionJudgment(data){
+    if (data == 0){
+        return "非常に空いています";
+    } else if (data <= 3) {
+        return "空いています"; 
+    } else if (data <= 5) {
+        return "混雑しています";
+    } else {
+        return "非常に混雑しています";
+    }
+
+}
+
 // 接続が開かれた時の処理
 socket.addEventListener('open', (event) => {
     console.log('WebSocketに接続しました');
@@ -26,7 +39,7 @@ socket.addEventListener('message', (event) => {
         id = 0;
         data = 0;
     }
-
+    data = CongestionJudgment(data);
     // ここでデータを更新
     updateData(id, data);
 });

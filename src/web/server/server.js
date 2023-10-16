@@ -68,11 +68,11 @@ const server = http.createServer((request, response) => {
             "Content-Type": "text/css"
         });
         readFile("view/js/vegas.js", response);
-    } else if (request.url === "/js/updata.js" && request.method === "GET") {
+    } else if (request.url === "/js/update.js" && request.method === "GET") {
         response.writeHead(200, {
             "Content-Type": "text/css"
         });
-        readFile("view/js/updata.js", response);
+        readFile("view/js/update.js", response);
 
     } else if (request.url === '/postData' && request.method === 'POST') {
         data = '';
