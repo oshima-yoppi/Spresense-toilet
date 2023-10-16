@@ -260,7 +260,8 @@ void setup_payload(int num_people)
   // ペイロード領域初期化
   memset(payload, 0x00, sizeof(payload));
   // ペイロード種別[GPSペイロード]設定
-  payload[0] = id *100 + num_people;
+  payload[0] = id;
+  payload[1] = num_people;
 }
 
 void setup()
