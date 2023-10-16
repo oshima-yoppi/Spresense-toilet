@@ -2,9 +2,10 @@ const socket = new WebSocket('ws://172.17.254.13:3000');
 let id = 0;
 let data = 0;
 
-function updateData(index, data) {
+function updateData(index, data, time) {
     if (index != 0){
     document.getElementById(`data_placeholder_${index}`).innerText = data;
+    document.getElementById(`time_placeholder_${index}`).innerText = time;
     }
 }
 
@@ -18,6 +19,16 @@ function CongestionJudgment(data){
     } else {
         return "非常に混雑しています";
     }
+}
+
+function WaitingtimeCalculation(data){
+    ramda = 0.2;
+    mu = 0.2;
+    s = 4;
+    rho = ramda/(mu*s);
+    w = (1/mu)*(rho/(1-rho))*data;
+
+    return w;
 
 }
 
@@ -39,9 +50,12 @@ socket.addEventListener('message', (event) => {
         id = 0;
         data = 0;
     }
+    w = Math.floor(WaitingtimeCalculation(data));
     data = CongestionJudgment(data);
+    
+    console.log(w);
     // ここでデータを更新
-    updateData(id, data);
+    updateData(id, data, w);
 });
 
 // 接続が閉じられた時の処理

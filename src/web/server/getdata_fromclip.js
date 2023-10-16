@@ -41,8 +41,8 @@ const processData = async () => {
     if (parseData.result === 'success') {
       id = parseData.payload[0].payload.slice(0, 2);
       data = parseData.payload[0].payload.slice(2, 4);
-      payloaddata = id*100+parseInt(data, 16);
-      
+      payloaddata = parseInt(id, 16)*100+parseInt(data, 16);
+
     } else {
       payloaddata = 0;
     }
