@@ -42,7 +42,7 @@ const processData = async () => {
       id = parseData.payload[0].payload.slice(0, 2);
       data = parseData.payload[0].payload.slice(2, 4);
       payloaddata = id*100+parseInt(data, 16);
-      console.log('payloaddata:', payloaddata);
+      
     } else {
       payloaddata = 0;
     }
