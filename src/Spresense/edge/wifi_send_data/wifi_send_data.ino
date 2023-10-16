@@ -18,6 +18,7 @@
 #include <HttpGs2200.h>
 #include <TelitWiFi.h>
 #include "config.h"
+#include "_lib_wifi.h"
 
 #define CONSOLE_BAUDRATE 115200
 
@@ -51,7 +52,7 @@ void parse_httpresponse(char *message)
 	}
 }
 
-void setup()
+void setup_wifi()
 {
 
 	/* initialize digital pin LED_BUILTIN as an output. */
@@ -96,7 +97,7 @@ void setup()
 }
 
 // the loop function runs over and over again forever
-void loop()
+void send_data_wifi()
 {
 	httpStat = POST;
 	bool result = false;
@@ -133,7 +134,7 @@ void loop()
 
 			result = theHttpGs2200.end();
 
-			delay(rand()%10000);
+			delay(1000);
       count = id*100 + rand()%10;
 
 			// httpStat = GET;
@@ -143,4 +144,14 @@ void loop()
 			break;
 		}
 	}
+}
+
+void setup()
+{
+	setup_wifi();
+}
+
+void loop()
+{
+	send_data_wifi();
 }
