@@ -68,6 +68,11 @@ const server = http.createServer((request, response) => {
             "Content-Type": "text/css"
         });
         readFile("view/js/vegas.js", response);
+    } else if (request.url === "/js/updata.js" && request.method === "GET") {
+        response.writeHead(200, {
+            "Content-Type": "text/css"
+        });
+        readFile("view/js/updata.js", response);
 
     } else if (request.url === '/postData' && request.method === 'POST') {
         data = '';
@@ -83,13 +88,14 @@ const server = http.createServer((request, response) => {
                     response.end(postData[key]);
                     wss.clients.forEach(function (client) {
                         if (client.readyState === WebSocket.OPEN) {
-                            getdata_fromclip()
-                                .then((payloaddata) => {
-                                    client.send(payloaddata);
-                                })
-                                .catch((error) => {
-                                    console.error('Error in processData chain:', error);
-                                });
+                            //eltresからデータ取得、米アウト消して
+                            // getdata_fromclip()
+                            //     .then((payloaddata) => {
+                            //         client.send(payloaddata);
+                            //     })
+                            //     .catch((error) => {
+                            //         console.error('Error in processData chain:', error);
+                            //     });
 
                             var value = postData['data'];
                             client.send(value);

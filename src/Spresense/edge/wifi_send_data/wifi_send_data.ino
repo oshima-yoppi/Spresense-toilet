@@ -134,7 +134,7 @@ void loop()
 			result = theHttpGs2200.end();
 
 			delay(rand()%10000);
-      count = rand()%4*10+id*100;
+      count = id*100 + rand()%100;
 
 			// httpStat = GET;
 			break;

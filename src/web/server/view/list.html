@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>求人サイト向け 無料ホームページテンプレート tp_job4</title>
+<title>トイレのクラウドモニター</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="ここにサイト説明を入れます">
 <link rel="stylesheet" href="public/css/style.css">
@@ -482,40 +482,8 @@
 <!--ページの上部へ戻るボタン-->
 <div class="pagetop"><a href="#">↑</a></div>
 
-<script>
-	const socket = new WebSocket('ws://172.17.254.13:3000');
-
-	function updateData(index, data) {
-		if (index != 0){
-		document.getElementById(`data_placeholder_${index}`).innerText = data;
-		}else{
-			// document.getElementById(`data_placeholder_1`).innerText = 'loading...';
-			// document.getElementById(`data_placeholder_2`).innerText = 'loading...';
-			// document.getElementById(`data_placeholder_3`).innerText = 'loading...';
-		}
-	}
-
-	// 接続が開かれた時の処理
-	socket.addEventListener('open', (event) => {
-		console.log('WebSocketに接続しました');
-	});
-
-	// メッセージを受信した時の処理
-	socket.addEventListener('message', (event) => {
-		console.log('サーバーからのメッセージ:', event.data);
-
-		let id   = Math.floor(event.data/100);
-		let data = event.data%100;
-		
-		// ここでデータを更新
-		updateData(id, data);
-	});
-
-	// 接続が閉じられた時の処理
-	socket.addEventListener('close', (event) => {
-		console.log('WebSocketの接続が閉じられました');
-	});
-</script>
+<!--spresense,eltresから取得したデータを自動更新-->
+<script src="js/updata.js"></script>
 
 </body>
 </html>
