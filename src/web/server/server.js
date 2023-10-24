@@ -40,6 +40,10 @@ const server = http.createServer((request, response) => {
         response.writeHead(200, {"Content-Type": "text/html"});
         readFile("view/contact.html", response);
 
+    } else if (request.url === "/privacy_policy.html" && request.method === "GET") {
+        response.writeHead(200, {"Content-Type": "text/html"});
+        readFile("view/privacy_policy.html", response);
+
     } else if (request.url === "/public/images/building7.png" && request.method === "GET") {
         response.writeHead(200, {
             "Content-Type": "image/png"
