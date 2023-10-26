@@ -139,17 +139,15 @@ void setup()
     setup_camera();
     // setup_eltres();
     setup_wifi();
-    SPRESENSE_ID = read_spresense_id("/communication/spresense_id.txt");
+    // SPRESENSE_ID = read_spresense_id("/communication/spresense_id.txt");
+    SPRESENSE_ID = 1;
 }
 
 void loop()
 {
     print("call takePicture");
     CamImage img = take_picture();
-
     uint16_t *sbuf = convert_img(img);
-    // CamImage tf_input = convert2Tfinput(img);
-    // bool *result_mask = detect_people_(tf_input, 0.7);
     bool *result_mask = detect_people(sbuf, 0.7);
     disp_image_result(sbuf, 0, 0, target_w, target_h, result_mask);
     int num_people = count_people(result_mask);
