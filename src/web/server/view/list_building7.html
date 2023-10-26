@@ -18,10 +18,10 @@
 	<ul>
 	<li><a>トイレ一覧<span>Recruit</span></a>
 		<ul>
-		<li><a href="list.html">東京理科大学7号館</a></li>
-		<li><a href="list.html">Coming Soon...</a></li>
-		<li><a href="list.html">Coming Soon...</a></li>
-		<li><a href="list.html">Coming Soon...</a></li>
+		<li><a href="list_building7.html">東京理科大学7号館</a></li>
+		<li><a href="list_building16.html">東京理科大学16号館</a></li>
+		<li><a href="preparing.html">Coming Soon...</a></li>
+		<li><a href="preparing.html">Coming Soon...</a></li>
 		</ul>
 	</li>
 	<li><a href="info.html">利用方法<span>Information</span></a></li>
@@ -36,11 +36,11 @@
 
 <section>
 <h2>マップ</h2>
-<figure><img src="public/images/building7.png" alt="" width="720" height="422"></figure>
+<figure><img src="public/images/building7.png" style="display: block; margin: auto;" alt="" width="720" height="422"></figure>
 </section>
 
 <!-- <section>
-<h2>混雑具合</h2>
+<h2>混雑状況</h2>
 <body>
  <table border="2" width="50%" height="70%" >
     <tr align="center">
@@ -81,16 +81,23 @@
 </section> -->
 
 <section>
-<h2>個室トイレ（男性）の混雑具合</h2>
+<h2>男性トイレの混雑状況</h2>
 <div class="list2">
 	<figure><img src="images/sample1.jpg" alt=""></figure>
 	<div>
 	<h4>
 	<a>7号館1階トイレ</a>
 	<span class="icon waku">🚽×４</span>
-	<span class="icon option2">混雑具合を示す</span>	
+	<span class="icon option2">混雑状況を示す</span>	
 
 	</h4>
+	<style>
+		/* 指定されたdl要素に対してスタイルを適用 */
+		dl.line {
+			line-height: 3; /* 行間の高さを大きくする */
+			font-size: 16px; /* フォントサイズを大きくする */
+		}
+	</style>
 		<dl class="line">
 		<dt>想定待ち時間</dt>
 		<dd><span id="time_placeholder_1">loading...</span></dd>
@@ -110,7 +117,7 @@
 	<h4>
 	<a>7号館2階トイレ</a>
 	<span class="icon waku">🚽×４</span>
-	<span class="icon option2">混雑具合を示す</span>	
+	<span class="icon option2">混雑状況を示す</span>	
 
 	</h4>
 		<dl class="line">
@@ -118,72 +125,6 @@
 		<dd><span id="time_placeholder_2">loading...</span></dd>
 		<dt>混雑状況</dt>
 		<dd><span id="congestion_placeholder_2">loading...</span></dd>
-		<dt>トイレの個数</dt>
-		<dd>4つ</dd>
-		<dt>使用可能時間</dt>
-		<dd>9:00~21:00</dd>
-		</dl>
-	</div>
-</div>
-
-<div class="list2">
-	<figure><img src="images/sample1.jpg" alt=""></figure>
-	<div>
-	<h4>
-	<a>7号館3階トイレ</a>
-	<span class="icon waku">🚽×４</span>
-	<span class="icon option2">混雑具合を示す</span>	
-
-	</h4>
-		<dl class="line">
-		<dt>想定待ち時間</dt>
-		<dd><span id="time_placeholder_3">loading...</span></dd>
-		<dt>混雑状況</dt>
-		<dd><span id="congestion_placeholder_3">loading...</span></dd>
-		<dt>トイレの個数</dt>
-		<dd>4つ</dd>
-		<dt>使用可能時間</dt>
-		<dd>9:00~21:00</dd>
-		</dl>
-	</div>
-</div>
-
-<div class="list2">
-	<figure><img src="images/sample1.jpg" alt=""></figure>
-	<div>
-	<h4>
-	<a>7号館4階トイレ</a>
-	<span class="icon waku">🚽×４</span>
-	<span class="icon option2">混雑具合を示す</span>	
-
-	</h4>
-		<dl class="line">
-		<dt>想定待ち時間</dt>
-		<dd><span id="time_placeholder_4">loading...</span></dd>
-		<dt>混雑状況</dt>
-		<dd><span id="congestion_placeholder_4">loading...</span></dd>
-		<dt>トイレの個数</dt>
-		<dd>4つ</dd>
-		<dt>使用可能時間</dt>
-		<dd>9:00~21:00</dd>
-		</dl>
-	</div>
-</div>
-
-<div class="list2">
-	<figure><img src="images/sample1.jpg" alt=""></figure>
-	<div>
-	<h4>
-	<a>7号館5階トイレ</a>
-	<span class="icon waku">🚽×４</span>
-	<span class="icon option2">混雑具合を示す</span>	
-
-	</h4>
-		<dl class="line">
-		<dt>想定待ち時間</dt>
-		<dd><span id="time_placeholder_5">loading...</span></dd>
-		<dt>混雑状況</dt>
-		<dd><span id="congestion_placeholder_5">loading...</span></dd>
 		<dt>トイレの個数</dt>
 		<dd>4つ</dd>
 		<dt>使用可能時間</dt>
@@ -206,25 +147,25 @@
 </ul>
 <ul>
 <li class="title">トイレ一覧</li>
-<li><a href="list.html">東京理科大学7号館</a></li>
-<li><a href="list.html">Coming Soon...</a></li>
-<li><a href="list.html">Coming Soon...</a></li>
-<li><a href="list.html">Coming Soon...</a></li>
+<li><a href="list_building7.html">東京理科大学7号館</a></li>
+<li><a href="list_building16.html">東京理科大学16号館</a></li>
+<li><a href="preparing.html">Coming Soon...</a></li>
+<li><a href="preparing.html">Coming Soon...</a></li>
 </ul>
 <ul>
 <li class="title">プライバシーポリシー</li>
 <li><a href="privacy_policy.html">個人情報の取り扱い</a></li>
+<!-- <li><a href="#">サンプルメニュー</a></li>
 <li><a href="#">サンプルメニュー</a></li>
-<li><a href="#">サンプルメニュー</a></li>
-<li><a href="#">サンプルメニュー</a></li>
+<li><a href="#">サンプルメニュー</a></li> -->
 </ul>
-<ul>
+<!-- <ul>
 <li class="title">メニュー見出し</li>
 <li><a href="#">サンプルメニューサンプルメニュー</a></li>
 <li><a href="#">サンプルメニュー</a></li>
 <li><a href="#">サンプルメニュー</a></li>
 <li><a href="#">サンプルメニュー</a></li>
-</ul>
+</ul> -->
 </div>
 <!--/#footermenu-->
 
