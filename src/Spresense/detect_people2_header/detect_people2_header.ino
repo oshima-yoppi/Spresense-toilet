@@ -116,27 +116,31 @@ void setup()
     SPRESENSE_ID = 1;
 }
 
+bool *detect_all()
+{
+    CamImage img = take_picture();
+
+    uint16_t *sbuf = convert_img(img);
+    bool *result_mask = detect_people(sbuf, 0.7);
+    return result_mask;
+}
+
 void loop()
 {
     print("call takePicture");
     print(String(SPRESENSE_ID));
 
-    CamImage img = take_picture();
-
-    uint16_t *sbuf = convert_img(img);
-    bool *result_mask = detect_people(sbuf, 0.7);
+    bool *result_mask = detect_all();
     delay(1000);
-    CamImage img2 = take_picture();
-    uint16_t *sbuf2 = convert_img(img2);
-    bool *result_mask2 = detect_people(sbuf2, 0.7);
+    bool *result_mask2 = detect_all();
 
     // and 演算
     bool *result_and = detection_and(result_mask, result_mask2);
 
+    CamImage img = take_picture();
+    uint16_t *sbuf = convert_img(img);
+
     disp_image_result(sbuf, 0, 0, target_w, target_h, result_and);
     free(result_mask);
     free(result_mask2);
-    // CamImage img1 = take_picture();
-    // delay(10000);
-    // CamImage img2 = take_picture();
 }
