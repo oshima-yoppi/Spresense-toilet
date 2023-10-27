@@ -1,4 +1,5 @@
-const socket = new WebSocket('ws://172.17.254.13:3000');
+const socket = new WebSocket('ws://172.17.254.13:3000'); //kimura-lab
+// const socket = new WebSocket('ws://192.168162.128:3000'); //スマホ
 let id = 0;
 let data = 0;
 
@@ -19,13 +20,13 @@ function updateData(index, congestion, time, data) {
 
 function CongestionJudgment(data){
     if (data == 0){
-        return "非常に空いています";
+        return "非常に空いている";
     } else if (data <= 3) {
-        return "空いています"; 
+        return "空いている"; 
     } else if (data <= 5) {
-        return "混雑しています";
+        return "混雑している";
     } else {
-        return "非常に混雑しています";
+        return "非常に混雑している";
     }
 }
 
