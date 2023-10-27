@@ -31,19 +31,7 @@ const server = http.createServer((request, response) => {
     } else if (request.url === "/list_building16.html" && request.method === "GET") {
         response.writeHead(200, {"Content-Type": "text/html"});
         readFile("view/list_building16.html", response);
-        
-        wss.clients.forEach(function (client) {
-            if (client.readyState === WebSocket.OPEN) {
-                getdata_fromclip()
-                    .then((payloaddata) => {
-                        client.send(payloaddata);
-                    })
-                    .catch((error) => {
-                        console.error('Error in processData chain:', error);
-                    });
-            }
-        });
-        
+
     } else if (request.url === "/info.html" && request.method === "GET") {
         response.writeHead(200, {"Content-Type": "text/html"});
         readFile("view/info.html", response);
@@ -131,13 +119,14 @@ const server = http.createServer((request, response) => {
                     response.end(postData[key]);
                     wss.clients.forEach(function (client) {
                         if (client.readyState === WebSocket.OPEN) {
-                            // getdata_fromclip()
-                            //     .then((payloaddata) => {
-                            //         client.send(payloaddata);
-                            //     })
-                            //     .catch((error) => {
-                            //         console.error('Error in processData chain:', error);
-                            //     });
+                            //eltresからデータ取得、米アウト消して
+                            getdata_fromclip()
+                                .then((payloaddata) => {
+                                    client.send(payloaddata);
+                                })
+                                .catch((error) => {
+                                    console.error('Error in processData chain:', error);
+                                });
 
                             var value = postData['data'];
                             client.send(value);
