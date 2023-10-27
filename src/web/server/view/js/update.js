@@ -5,6 +5,7 @@ let data = 0;
 
 function updateData(index, congestion, time, data) {
     if (index != 0){
+    console.log(congestion)
     document.getElementById(`congestion_placeholder_${index}`).innerText = congestion;
     document.getElementById(`time_placeholder_${index}`).innerText = time+"分";
     // document.getElementById(`table_time_placeholder_${index}`).innerText = time+"分";
