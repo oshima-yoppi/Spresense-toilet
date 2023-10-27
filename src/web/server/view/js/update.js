@@ -15,7 +15,7 @@ function updateData(index, congestion, time, data) {
     // for (let i = 0; i < data; i++) {
     //     emojicontainer.innerHTML += emoji;
     // }
-    // }
+    }
 }
 
 function CongestionJudgment(data){
