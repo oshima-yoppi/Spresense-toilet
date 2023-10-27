@@ -27,7 +27,7 @@ uint8_t payload[16];
 // 最新のGGA情報
 eltres_board_gga_info last_gga_info;
 
-int num_people = 23;
+// int num_people = 23;
 
 /**
  * @brief イベント通知受信コールバック
@@ -149,7 +149,7 @@ void setup_eltres()
 /**
  * @brief GPSペイロード設定
  */
-void send_data_eltres(int _num_people)
+void send_data_eltres(int num_people)
 {
     switch (program_sts)
     {
@@ -189,6 +189,7 @@ void send_data_eltres(int _num_people)
 }
 void send_data(int num_people)
 {
+    int spresense_id = 3;
     String lat_string = String((char *)last_gga_info.m_lat);
     String lon_string = String((char *)last_gga_info.m_lon);
     int index;
@@ -215,5 +216,6 @@ void send_data(int num_people)
     // ペイロード領域初期化
     memset(payload, 0x00, sizeof(payload));
     // ペイロード種別[GPSペイロード]設定
-    payload[0] = num_people;
+    payload[0] = spresense_id;
+    payload[1] = num_people;
 }
