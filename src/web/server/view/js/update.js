@@ -5,7 +5,7 @@ let data = 0;
 
 function updateData(index, congestion, time, data) {
     if (index != 0){
-    console.log(congestion)
+    console.log(index,congestion,time)
     document.getElementById(`congestion_placeholder_${index}`).innerText = congestion;
     document.getElementById(`time_placeholder_${index}`).innerText = time+"分";
     // document.getElementById(`table_time_placeholder_${index}`).innerText = time+"分";
@@ -62,7 +62,7 @@ socket.addEventListener('message', (event) => {
     time = Math.floor(WaitingtimeCalculation(data));
     congestion = CongestionJudgment(data);
     
-    console.log(w);
+    // console.log(w);
     // ここでデータを更新
     updateData(id, congestion, time, data);
 });
