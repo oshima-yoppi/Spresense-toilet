@@ -60,7 +60,8 @@ const int height = 120;
 const int target_w = 96;
 const int target_h = 96;
 const int pixfmt = CAM_IMAGE_PIX_FMT_YUV422;
-const int SEND_WAIT_TIME = 20000; //[ms]
+// const int SEND_WAIT_TIME = 20000; //[ms]
+const int SEND_WAIT_TIME = 0; //[ms]
 // const int pixfmt = CAM_IMAGE_PIX_FMT_RGB565;
 #define OUTPUT_WIDTH 12
 #define OUTPUT_HEIGHT 12
