@@ -1,7 +1,7 @@
 var data;
 var postData = {};
-const hostname = '172.17.254.13';
-// const hostname = '192.168.162.128'
+// const hostname = '172.17.254.13';
+const hostname = '192.168.27.164'
 const port = 3000;
 
 var querystring = require('querystring');
@@ -24,9 +24,13 @@ const server = http.createServer((request, response) => {
         response.writeHead(200, {"Content-Type": "text/html"});
         readFile("view/list_base.html", response);
 
-    } else if (request.url === "/list.html" && request.method === "GET") {
+    } else if (request.url === "/list_building7.html" && request.method === "GET") {
         response.writeHead(200, {"Content-Type": "text/html"});
-        readFile("view/list.html", response);
+        readFile("view/list_building7.html", response);
+
+    } else if (request.url === "/list_building16.html" && request.method === "GET") {
+        response.writeHead(200, {"Content-Type": "text/html"});
+        readFile("view/list_building16.html", response);
 
     } else if (request.url === "/info.html" && request.method === "GET") {
         response.writeHead(200, {"Content-Type": "text/html"});
@@ -44,11 +48,27 @@ const server = http.createServer((request, response) => {
         response.writeHead(200, {"Content-Type": "text/html"});
         readFile("view/privacy_policy.html", response);
 
+    } else if (request.url === "/preparing.html" && request.method === "GET") {
+        response.writeHead(200, {"Content-Type": "text/html"});
+        readFile("view/preparing.html", response);
+
     } else if (request.url === "/public/images/building7.png" && request.method === "GET") {
         response.writeHead(200, {
             "Content-Type": "image/png"
         });
         readFile("public/images/building7.png", response);
+
+    } else if (request.url === "/public/images/building16.png" && request.method === "GET") {
+        response.writeHead(200, {
+            "Content-Type": "image/png"
+        });
+        readFile("public/images/building16.png", response);
+
+    } else if (request.url === "/public/images/happy.png" && request.method === "GET") {
+        response.writeHead(200, {
+            "Content-Type": "image/png"
+        });
+        readFile("public/images/happy.png", response);
 
     } else if (request.url === "/public/images/arrow1.gif" && request.method === "GET") {
         response.writeHead(200, {

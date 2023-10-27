@@ -14,10 +14,9 @@
 
 <header>
 	<h1 id="logo"><a href="index.html"><img src="images/logo.png" alt="JOB INFO"></a></h1>
-	<!--メインメニュー-->
 	<nav id="menubar">
 	<ul>
-	<li><a href="">トイレ一覧<span>Recruit</span></a>
+	<li><a>トイレ一覧<span>Recruit</span></a>
 		<ul>
 		<li><a href="list_building7.html">東京理科大学7号館</a></li>
 		<li><a href="list_building16.html">東京理科大学16号館</a></li>
@@ -34,32 +33,43 @@
 
 <main>
 
+
 <section>
-
-<h2>利用方法</h2>
-<p>
-<h3>エリアの選択</h3>
-<ul>
-<li>画面上部、または下部のトイレ一覧から該当するエリアを選択してください。</li>
-</ul>
-
-<h3>混雑状況の確認</h3>
-<ul>
-<li>ページ遷移後、表示されているトイレの混雑状況および想定待ち時間を確認してください。
-	<br>　混雑状況は、非常に空いている、空いている、混雑している、非常に混雑しているの4段階で表示されます。
-	<br>　想定待ち時間は目安です。利用までの待ち時間を保証するものではありません。
-</li>
-</ul>
-
-<h3>最適なトイレの選択と利用</h3>
-<ul>
-<li>混雑状況と待ち時間から、空いているトイレをご自身で選択いただき、
-	マップの案内に従ってご利用ください。
-</li>
-</ul>
-</p>
+<h2>マップ</h2>
+<figure><img src="public/images/building16.png" style="display: block; margin: auto;" alt="" width="720" height="422"></figure>
 </section>
 
+<section>
+<h2>男性トイレの混雑状況</h2>
+<div class="list2">
+	<figure><img src="images/sample1.jpg" alt=""></figure>
+	<div>
+	<h4>
+	<a>7号館1階トイレ</a>
+	<span class="icon waku">🚽×４</span>
+	<span class="icon option2">混雑状況を示す</span>
+	</h4>
+	<style>
+		/* 指定されたdl要素に対してスタイルを適用 */
+		dl.line {
+			line-height: 3; /* 行間の高さを大きくする */
+			font-size: 16px; /* フォントサイズを大きくする */
+		}
+	</style>
+		<dl class="line">
+		<dt>想定待ち時間</dt>
+		<dd><span id="time_placeholder_1">loading...</span></dd>
+		<dt>混雑状況</dt>
+		<dd><span id="congestion_placeholder_1">loading...</span></dd>
+		<dt>トイレの個数</dt>
+		<dd>4つ</dd>
+		<dt>使用可能時間</dt>
+		<dd>9:00~21:00</dd>
+		</dl>
+	</div>
+</div>
+
+</section>
 </main>
 
 <div id="footermenu">
@@ -97,6 +107,10 @@
 <!--jQueryの読み込み-->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
+<!--ピックアップスライドショー（slick）-->
+<script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+<script src="js/slick.js"></script>
+
 <!--job4用のスクリプト-->
 <script src="js/main.js"></script>
 
@@ -105,6 +119,25 @@
 
 <!--ページの上部へ戻るボタン-->
 <div class="pagetop"><a href="#">↑</a></div>
+
+<!--spresense,eltresから取得したデータを自動更新-->
+<script src="js/update.js"></script>
+
+<script>
+	// 人数をサーバーから取得（仮定）
+	const numberOfPeople = 10;
+	
+	// 絵文字を生成
+	const emoji = "👥";
+	
+	// 絵文字を表示する要素を取得
+	const emojiContainer = document.getElementById("emojiContainer");
+	
+	// 人数に応じて絵文字を挿入
+	for (let i = 0; i < numberOfPeople; i++) {
+		emojiContainer.innerHTML += emoji;
+	}
+</script>
 
 </body>
 </html>

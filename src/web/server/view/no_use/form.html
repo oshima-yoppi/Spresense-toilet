@@ -20,7 +20,7 @@
 	<li><a href="">トイレ一覧<span>Recruit</span></a>
 		<ul>
 		<li><a href="list.html">東京理科大学7号館</a></li>
-		<li><a href="list.html">Coming Soon...</a></li>
+		<li><a href="list.html">東京理科大学16号館</a></li>
 		<li><a href="list.html">Coming Soon...</a></li>
 		<li><a href="list.html">Coming Soon...</a></li>
 		</ul>
@@ -31,79 +31,51 @@
 	</ul>
 	</nav>
 </header>
-
 <main>
 
-<article>
+<section>
 
-<h2>WEBデザイナー募集！未経験歓迎！</h2>
+<h2>お問い合わせフォーム</h2>
 
-<p>
-<span class="icon waku">正社員</span>
-<span class="icon waku">アルバイト</span>
-<span class="icon newicon">NEW</span>
-<span class="icon upicon">UP</span>
-<span class="icon option1">人気</span>
-<span class="icon option2">急募</span>
-<span class="icon option3">終了</span>
+<!-- フォームの情報はここからです -->
+<form name="form1" enctype="multipart/form-data" method="post" action="<?php echo $_SERVER["REQUEST_URI"];?>">
+<input type="hidden" name="mode" value="form">
+<table class="ta1">
+<!-- 入力／確認 -->
+<!--<tr><th class="tamidashi" colspan="2">お問い合わせフォーム</th></tr>-->
+<tr>
+<th width="150">お名前<span style="color:red">※</span></th>
+<td>
+<input name="item1" value="<?php echo $form["item1"];?>" type="text" size="40" maxlength="500" class="ws">
+<?php if ($msg["item1"]) echo '<div style="color:red">' . $msg["item1"] . '</div>'; ?>
+</td>
+</tr>
+<tr>
+<th width="150">メールアドレス<span style="color:red">※</span></th>
+<td>
+<input name="item2" value="<?php echo $form["item2"];?>" type="text" size="40" maxlength="500" class="ws">
+<?php if ($msg["item2"]) echo '<div style="color:red">' . $msg["item2"] . '</div>'; ?>
+</td>
+</tr>
+<tr>
+<th>お問い合わせ内容<span style="color:red">※</span></th>
+<td>
+<textarea name="item3" cols="40" rows="10" class="wl"><?php echo $form["item3"]; ?></textarea>
+<?php if ($msg["item3"]) echo '<div style="color:red">' . $msg["item3"] . '</div>'; ?>
+</td>
+</tr>
+</table>
+
+<p class="btn">
+<input type="submit" value="内容を確認する">
+&nbsp;
+<input type="reset" value="リセット">
 </p>
 
-<table class="ta1">
-<caption>求人内容</caption>
-<tr>
-<th>企業名</th>
-<td>サンプルカンパニー</td>
-</tr>
-<tr>
-<th>給与｜時給</th>
-<td>時給1,500円〜2,000円<br>
-交通費別途支給</td>
-</tr>
-<tr>
-<th>勤務地</th>
-<td>勤務地や交通情報などここに書きます。</td>
-</tr>
-<tr>
-<th>勤務時間</th>
-<td>勤務時間をここに書きます。</td>
-</tr>
-</table>
+</form>
+<!-- フォームの情報はここまでです -->
 
-<table class="ta1">
-<caption>企業情報</caption>
-<tr>
-<th>企業名</th>
-<td>サンプルカンパニー</td>
-</tr>
-<tr>
-<th>事業内容</th>
-<td>サンプルテキスト。</td>
-</tr>
-<tr>
-<th>従業員数</th>
-<td>サンプルテキスト。</td>
-</tr>
-<tr>
-<th>設立</th>
-<td>サンプルテキスト。</td>
-</tr>
-<tr>
-<th>資本金</th>
-<td>サンプルテキスト。</td>
-</tr>
-<tr>
-<th>会社url</th>
-<td>サンプルテキスト。</td>
-</tr>
-</table>
-
-<p class="c">※求人用の応募フォームは<a href="https://template-party.com/job_db/">求人向け高機能版CMS</a>に備わった機能です。<br>
-CMSを使わない場合は通常のフォームへリンクを繋げて下さい。</p>
-<p class="btn"><a href="#">こちらの求人に応募する</a></p>
-
-<p><a href="javascript:history.back()">&lt;&lt; 前のページに戻る</a></p>
-
-</article>
+</section>
 
 </main>
 
@@ -120,13 +92,13 @@ CMSを使わない場合は通常のフォームへリンクを繋げて下さ�
 <ul>
 <li class="title">トイレ一覧</li>
 <li><a href="list.html">東京理科大学7号館</a></li>
-<li><a href="list.html">Coming Soon...</a></li>
+<li><a href="list.html">東京理科大学16号館</a></li>
 <li><a href="list.html">Coming Soon...</a></li>
 <li><a href="list.html">Coming Soon...</a></li>
 </ul>
 <ul>
-	<li class="title">プライバシーポリシー</li>
-	<li><a href="privacy_policy.html">個人情報の取り扱い</a></li>
+<li class="title">プライバシーポリシー</li>
+<li><a href="privacy_policy.html">個人情報の取り扱い</a></li>
 <li><a href="#">サンプルメニュー</a></li>
 <li><a href="#">サンプルメニュー</a></li>
 <li><a href="#">サンプルメニュー</a></li>
