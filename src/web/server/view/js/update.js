@@ -1,5 +1,5 @@
 // const socket = new WebSocket('ws://172.17.254.13:3000'); //kimura-lab
-const socket = new WebSocket('ws://192.168.162.128:3000'); //スマホ
+const socket = new WebSocket('ws://192.168.27.164:3000'); //スマホ
 let id = 0;
 let data = 0;
 

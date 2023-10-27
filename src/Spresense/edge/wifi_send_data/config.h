@@ -27,7 +27,7 @@
 #define  PASSPHRASE     "neoneo1123"
 
 // #define  HTTP_SRVR_IP  "172.17.254.13"
-#define  HTTP_SRVR_IP  "192.168.162.128"
+#define  HTTP_SRVR_IP  "192.168.27.164"
 
 #define  HTTP_PORT     "3000"
 #define  HTTP_GET_PATH "/"
