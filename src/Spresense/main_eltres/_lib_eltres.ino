@@ -27,7 +27,7 @@ uint8_t payload[16];
 // 最新のGGA情報
 eltres_board_gga_info last_gga_info;
 
-int num_people = 23;
+// int num_people = 23;
 
 /**
  * @brief イベント通知受信コールバック
@@ -149,7 +149,7 @@ void setup_eltres()
 /**
  * @brief GPSペイロード設定
  */
-void send_data_eltres(int _num_people)
+void send_data_eltres(int num_people)
 {
     switch (program_sts)
     {
