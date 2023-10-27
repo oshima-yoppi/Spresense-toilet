@@ -9,13 +9,13 @@ function updateData(index, congestion, time, data) {
     document.getElementById(`time_placeholder_${index}`).innerText = time+"分";
     // document.getElementById(`table_time_placeholder_${index}`).innerText = time+"分";
 
-    const emoji = "👤";
-    const emojicontainer = document.getElementById(`people_placeholder_${index}`);
-    emojicontainer.innerHTML = "";
-    for (let i = 0; i < data; i++) {
-        emojicontainer.innerHTML += emoji;
-    }
-    }
+    // const emoji = "👤";
+    // const emojicontainer = document.getElementById(`people_placeholder_${index}`);
+    // emojicontainer.innerHTML = "";
+    // for (let i = 0; i < data; i++) {
+    //     emojicontainer.innerHTML += emoji;
+    // }
+    // }
 }
 
 function CongestionJudgment(data){
