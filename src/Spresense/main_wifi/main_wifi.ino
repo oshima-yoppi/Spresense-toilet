@@ -60,6 +60,7 @@ const int height = 120;
 const int target_w = 96;
 const int target_h = 96;
 const int pixfmt = CAM_IMAGE_PIX_FMT_YUV422;
+const int SEND_WAIT_TIME = 20000; //[ms]
 // const int pixfmt = CAM_IMAGE_PIX_FMT_RGB565;
 #define OUTPUT_WIDTH 12
 #define OUTPUT_HEIGHT 12
@@ -142,18 +143,35 @@ void setup()
     // SPRESENSE_ID = read_spresense_id("/communication/spresense_id.txt");
     SPRESENSE_ID = 1;
 }
+bool *detect_all()
+{
+    CamImage img = take_picture();
+
+    uint16_t *sbuf = convert_img(img);
+    bool *result_mask = detect_people(sbuf, 0.7);
+    return result_mask;
+}
 
 void loop()
 {
+
     print("call takePicture");
+    bool *result_mask = detect_all();
+    delay(1000);
+    bool *result_mask2 = detect_all();
+
+    // and 演算
+    bool *result_and = detection_and(result_mask, result_mask2);
+    int num_people = count_people(result_and);
+
     CamImage img = take_picture();
     uint16_t *sbuf = convert_img(img);
-    bool *result_mask = detect_people(sbuf, 0.7);
-    disp_image_result(sbuf, 0, 0, target_w, target_h, result_mask);
-    int num_people = count_people(result_mask);
+
+    disp_image_result(sbuf, 0, 0, target_w, target_h, result_and);
     free(result_mask);
+    free(result_mask2);
 
     /////通信開始！！！！！
     send_data_wifi(num_people, SPRESENSE_ID);
-    delay(0);
+    delay(SEND_WAIT_TIME);
 }

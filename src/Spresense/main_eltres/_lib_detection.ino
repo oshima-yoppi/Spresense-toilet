@@ -182,27 +182,16 @@ int count_people(bool *result_mask)
     }
     return people_count;
 }
-// 人の数を数える関数。4方向で連結しているピクセルは一人としてカウントする。
-// void dfs(int x)
-// {
-
-// }
-// int count_people(bool *result_mask)
-// {
-//     int people_count = 0;
-//     bool *visited = new bool[OUTPUT_WIDTH * OUTPUT_HEIGHT]; // result mask をコピー
-//     for (int i = 0; i < OUTPUT_WIDTH * OUTPUT_HEIGHT; i++)
-//     {
-//         visited[i] = result_mask[i];
-//     }
-
-//     for (int i = 0; i < OUTPUT_WIDTH * OUTPUT_HEIGHT; i++)
-//     {
-//         if (visited[i])
-//         {
-//             people_count++;
-//             dfs(i)
-//         }
-//     }
-//     return people_count;
-// }
+bool *detection_and(bool *result1, bool *result2)
+{
+    bool *result_mask = new bool[OUTPUT_WIDTH * OUTPUT_HEIGHT];
+    for (int i = 0; i < OUTPUT_WIDTH * OUTPUT_HEIGHT; i++)
+    {
+        result_mask[i] = result1[i] && result2[i];
+        if (result_mask[i] == true)
+        {
+            Serial.println("true");
+        }
+    }
+    return result_mask;
+}

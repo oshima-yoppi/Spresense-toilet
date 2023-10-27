@@ -36,6 +36,7 @@ const int height = 120;
 const int target_w = 96;
 const int target_h = 96;
 const int pixfmt = CAM_IMAGE_PIX_FMT_YUV422;
+const int SEND_TIME = 20000; //[ms]
 // const int pixfmt = CAM_IMAGE_PIX_FMT_RGB565;
 #define OUTPUT_WIDTH 12
 #define OUTPUT_HEIGHT 12
@@ -128,8 +129,6 @@ bool *detect_all()
 void loop()
 {
     print("call takePicture");
-    print(String(SPRESENSE_ID));
-
     bool *result_mask = detect_all();
     delay(1000);
     bool *result_mask2 = detect_all();
@@ -143,4 +142,6 @@ void loop()
     disp_image_result(sbuf, 0, 0, target_w, target_h, result_and);
     free(result_mask);
     free(result_mask2);
+
+    // CamImage img2 = take_picture();
 }
