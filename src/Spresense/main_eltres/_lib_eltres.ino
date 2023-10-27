@@ -189,6 +189,7 @@ void send_data_eltres(int num_people)
 }
 void send_data(int num_people)
 {
+    int spresense_id = 3;
     String lat_string = String((char *)last_gga_info.m_lat);
     String lon_string = String((char *)last_gga_info.m_lon);
     int index;
@@ -215,5 +216,6 @@ void send_data(int num_people)
     // ペイロード領域初期化
     memset(payload, 0x00, sizeof(payload));
     // ペイロード種別[GPSペイロード]設定
-    payload[0] = num_people;
+    payload[0] = spresense_id;
+    payload[1] = num_people;
 }
