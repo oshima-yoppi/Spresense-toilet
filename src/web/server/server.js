@@ -120,13 +120,13 @@ const server = http.createServer((request, response) => {
                     wss.clients.forEach(function (client) {
                         if (client.readyState === WebSocket.OPEN) {
                             //eltresからデータ取得、米アウト消して
-                            getdata_fromclip()
-                                .then((payloaddata) => {
-                                    client.send(payloaddata);
-                                })
-                                .catch((error) => {
-                                    console.error('Error in processData chain:', error);
-                                });
+                            // getdata_fromclip()
+                            //     .then((payloaddata) => {
+                            //         client.send(payloaddata);
+                            //     })
+                            //     .catch((error) => {
+                            //         console.error('Error in processData chain:', error);
+                            //     });
 
                             var value = postData['data'];
                             client.send(value);
@@ -135,8 +135,8 @@ const server = http.createServer((request, response) => {
                 }
             }
         });
-        
-    }else {
+
+    } else {
         response.statusCode = 404;
         response.end('NotFound');
     }
@@ -144,8 +144,32 @@ const server = http.createServer((request, response) => {
 
 var wss = new WebSocket.Server({ server });
 
-wss.on('connection', function (ws) {
-    ws.send('loading...');
+// wss.on('connection', function (ws) {
+//     ws.send('loading...');
+// });
+
+wss.on('connection', (socket) => {
+    console.log('クライアントが接続しました');
+
+    const sendInterval = setInterval(() => {
+        if (socket.readyState === WebSocket.OPEN) {
+            getdata_fromclip()
+                .then((payloaddata) => {
+                    socket.send(payloaddata);
+                })
+                .catch((error) => {
+                    console.error('Error in processData chain:', error);
+                });
+            socket.send('サーバーからの定期的なメッセージ');
+        }
+    }, 2000);
+
+
+    // クライアントが切断したときの処理
+    socket.on('close', () => {
+        console.log('クライアントが切断しました');
+        clearInterval(sendInterval);
+    });
 });
 
 server.listen(port, () => {
