@@ -144,25 +144,32 @@ void setup()
     // SPRESENSE_ID = read_spresense_id("/communication/spresense_id.txt");
     SPRESENSE_ID = 1;
 }
-bool *detect_all()
-{
-    CamImage img = take_picture();
+// bool *detect_all(CamImage img)
+// {
+//     img = take_picture();
 
-    uint16_t *sbuf = convert_img(img);
-    bool *result_mask = detect_people(sbuf, 0.7);
-    return result_mask;
-}
+//     uint16_t *sbuf = convert_img(img);
+//     bool *result_mask = detect_people(sbuf, 0.7);
+//     return result_mask;
+// }
 
 void loop()
 {
 
     print("call takePicture");
-    bool *result_mask = detect_all();
+    CamImge img;
+    img = take_picture();
+    uint16_t *sbuf1 = convert_img(img);
+    bool *result_mask1 = detect_people(sbuf1, 0.7);
+    img = CamImage();
+
     delay(1000);
-    bool *result_mask2 = detect_all();
+    img = take_picture();
+    uint16_t *sbuf2 = convert_img(img);
+    bool *result_mask2 = detect_people(sbuf2, 0.7);
 
     // and 演算
-    bool *result_and = detection_and(result_mask, result_mask2);
+    bool *result_and = detection_and(result_mask1, result_mask2);
     int num_people = count_people(result_and);
 
     CamImage img = take_picture();
