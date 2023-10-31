@@ -123,6 +123,5 @@ void loop()
     int num_people = count_people(result_mask);
     free(result_mask);
     send_data_eltres(num_people);
-
-    delay(0);
+    delay(30 * 1000);
 }
