@@ -13,44 +13,82 @@ const readFile = require('./readFile');
 
 const server = http.createServer((request, response) => {
     if (request.url === "/" && request.method === "GET") {
-        response.writeHead(200, {"Content-Type": "text/html"});
+        response.writeHead(200, {
+            "Content-Type": "text/html"
+        });
         readFile("view/index.html", response);
 
     } else if (request.url === "/index.html" && request.method === "GET") {
-        response.writeHead(200, {"Content-Type": "text/html"});
+        response.writeHead(200, {
+            "Content-Type": "text/html"
+        });
         readFile("view/index.html", response);
 
     } else if (request.url === "/list_base.html" && request.method === "GET") {
-        response.writeHead(200, {"Content-Type": "text/html"});
+        response.writeHead(200, {
+            "Content-Type": "text/html"
+        });
         readFile("view/list_base.html", response);
 
     } else if (request.url === "/list_building7.html" && request.method === "GET") {
-        response.writeHead(200, {"Content-Type": "text/html"});
+        response.writeHead(200, {
+            "Content-Type": "text/html"
+        });
         readFile("view/list_building7.html", response);
+       
+    } else if (request.url === "/list_building12.html" && request.method === "GET") {
+        response.writeHead(200, {
+            "Content-Type": "text/html"
+        });
+        readFile("view/list_building12.html", response);
 
     } else if (request.url === "/list_building16.html" && request.method === "GET") {
-        response.writeHead(200, {"Content-Type": "text/html"});
+        response.writeHead(200, {
+            "Content-Type": "text/html"
+        });
         readFile("view/list_building16.html", response);
 
     } else if (request.url === "/info.html" && request.method === "GET") {
-        response.writeHead(200, {"Content-Type": "text/html"});
+        response.writeHead(200, {
+            "Content-Type": "text/html"
+        });
         readFile("view/info.html", response);
 
     } else if (request.url === "/faq.html" && request.method === "GET") {
-        response.writeHead(200, {"Content-Type": "text/html"});
+        response.writeHead(200, {
+            "Content-Type": "text/html"
+        });
         readFile("view/faq.html", response);
 
     } else if (request.url === "/contact.html" && request.method === "GET") {
-        response.writeHead(200, {"Content-Type": "text/html"});
+        response.writeHead(200, {
+            "Content-Type": "text/html"
+        });
         readFile("view/contact.html", response);
 
     } else if (request.url === "/privacy_policy.html" && request.method === "GET") {
-        response.writeHead(200, {"Content-Type": "text/html"});
+        response.writeHead(200, {
+            "Content-Type": "text/html"
+        });
         readFile("view/privacy_policy.html", response);
 
     } else if (request.url === "/preparing.html" && request.method === "GET") {
-        response.writeHead(200, {"Content-Type": "text/html"});
+        response.writeHead(200, {
+            "Content-Type": "text/html"
+        });
         readFile("view/preparing.html", response);
+
+    } else if (request.url === "/public/images/logo.png" && request.method === "GET") {
+        response.writeHead(200, {
+            "Content-Type": "image/png"
+        });
+        readFile("public/images/logo.png", response);
+
+    } else if (request.url === "/public/images/toile.png" && request.method === "GET") {
+        response.writeHead(200, {
+            "Content-Type": "image/png"
+        });
+        readFile("public/images/toile.png", response);
 
     } else if (request.url === "/public/images/building7.png" && request.method === "GET") {
         response.writeHead(200, {
@@ -72,7 +110,7 @@ const server = http.createServer((request, response) => {
 
     } else if (request.url === "/public/images/arrow1.gif" && request.method === "GET") {
         response.writeHead(200, {
-            "Content-Type": "image/png"
+            "Content-Type": "image/gif"
         });
         readFile("public/images/arrow1.gif", response);
 
