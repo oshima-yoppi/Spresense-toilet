@@ -177,3 +177,33 @@ void loop()
     send_data_wifi(num_people, SPRESENSE_ID);
     delay(SEND_WAIT_TIME);
 }
+
+// void loop()
+// {
+
+//     print("call takePicture");
+//     CamImage img;
+//     img = theCamera.takePicture();
+//     uint16_t *sbuf1 = convert_img(img);
+//     bool *result_mask1 = detect_people(sbuf1, 0.7);
+//     img = CamImage();
+//     delay(1000);
+
+//     img = theCamera.takePicture();
+//     uint16_t *sbuf2 = convert_img(img);
+//     bool *result_mask2 = detect_people(sbuf2, 0.7);
+//     // and 演算
+//     bool *result_and = detection_and(result_mask1, result_mask2);
+//     int num_people = count_people(result_and);
+
+//     // CamImage img = take_picture();
+//     // uint16_t *sbuf = convert_img(img);
+
+//     disp_image_result(sbuf2, 0, 0, target_w, target_h, result_and);
+//     free(result_mask1);
+//     free(result_mask2);
+
+//     /////通信開始！！！！！
+//     send_data_wifi(num_people, SPRESENSE_ID);
+//     delay(SEND_WAIT_TIME);
+// }
