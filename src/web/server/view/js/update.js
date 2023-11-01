@@ -7,7 +7,7 @@ function updateData(index, congestion, time, data) {
     if (index != 0){
     console.log(index,congestion,time)
     document.getElementById(`congestion_placeholder_${index}`).innerText = congestion;
-    document.getElementById(`time_placeholder_${index}`).innerText = time+"分";
+    document.getElementById(`time_placeholder_${index}`).innerText = data+"人";
     // document.getElementById(`table_time_placeholder_${index}`).innerText = time+"分";
 
     // const emoji = "👤";
