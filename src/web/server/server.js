@@ -209,6 +209,7 @@ wss.on('connection', (socket) => {
             getdata_fromclip()
                 .then((payloaddata) => {
                     socket.send(payloaddata);
+                    console.log("eltres",payloaddata)
                 })
                 .catch((error) => {
                     console.error('Error in processData chain:', error);

@@ -42,9 +42,11 @@ const processData = async () => {
       id = parseData.payload[0].payload.slice(0, 2);
       data = parseData.payload[0].payload.slice(2, 4);
       payloaddata = parseInt(id, 16)*100+parseInt(data, 16);
+      console.log(payloaddata)
 
     } else {
       payloaddata = 0;
+      console.log(payloaddata)
     }
 
     return payloaddata;
@@ -53,5 +55,7 @@ const processData = async () => {
     throw error;
   }
 };
+
+processData()
 
 module.exports = processData;
