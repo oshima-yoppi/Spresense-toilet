@@ -84,17 +84,41 @@ const server = http.createServer((request, response) => {
         });
         readFile("public/images/logo.png", response);
 
-    } else if (request.url === "/public/images/toile.png" && request.method === "GET") {
+    } else if (request.url === "/public/images/toile1.png" && request.method === "GET") {
         response.writeHead(200, {
             "Content-Type": "image/png"
         });
-        readFile("public/images/toile.png", response);
+        readFile("public/images/toile1.png", response);
+
+    } else if (request.url === "/public/images/toile2.png" && request.method === "GET") {
+        response.writeHead(200, {
+            "Content-Type": "image/png"
+        });
+        readFile("public/images/toile2.png", response);
+
+    } else if (request.url === "/public/images/toile3.png" && request.method === "GET") {
+        response.writeHead(200, {
+            "Content-Type": "image/png"
+        });
+        readFile("public/images/toile3.png", response);
+
+    } else if (request.url === "/public/images/toile4.png" && request.method === "GET") {
+        response.writeHead(200, {
+            "Content-Type": "image/png"
+        });
+        readFile("public/images/toile4.png", response);
 
     } else if (request.url === "/public/images/building7.png" && request.method === "GET") {
         response.writeHead(200, {
             "Content-Type": "image/png"
         });
         readFile("public/images/building7.png", response);
+
+    } else if (request.url === "/public/images/building12.png" && request.method === "GET") {
+        response.writeHead(200, {
+            "Content-Type": "image/png"
+        });
+        readFile("public/images/building12.png", response);
 
     } else if (request.url === "/public/images/building16.png" && request.method === "GET") {
         response.writeHead(200, {
@@ -157,15 +181,6 @@ const server = http.createServer((request, response) => {
                     response.end(postData[key]);
                     wss.clients.forEach(function (client) {
                         if (client.readyState === WebSocket.OPEN) {
-                            //eltresからデータ取得、米アウト消して
-                            // getdata_fromclip()
-                            //     .then((payloaddata) => {
-                            //         client.send(payloaddata);
-                            //     })
-                            //     .catch((error) => {
-                            //         console.error('Error in processData chain:', error);
-                            //     });
-
                             var value = postData['data'];
                             client.send(value);
                         }
@@ -187,7 +202,7 @@ var wss = new WebSocket.Server({ server });
 // });
 
 wss.on('connection', (socket) => {
-    console.log('クライアントが接続しました');
+    // console.log('クライアントが接続しました');
 
     const sendInterval = setInterval(() => {
         if (socket.readyState === WebSocket.OPEN) {
@@ -198,14 +213,13 @@ wss.on('connection', (socket) => {
                 .catch((error) => {
                     console.error('Error in processData chain:', error);
                 });
-            socket.send('サーバーからの定期的なメッセージ');
         }
     }, 2000);
 
 
     // クライアントが切断したときの処理
     socket.on('close', () => {
-        console.log('クライアントが切断しました');
+        // console.log('クライアントが切断しました');
         clearInterval(sendInterval);
     });
 });
