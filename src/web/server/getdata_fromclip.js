@@ -11,6 +11,7 @@ const getToken = async () => {
   const curlCommand = `curl -X POST -H "X-API-Key: ${key}" -d "{\\"username\\": \\"${username}\\", \\"password\\": \\"${password}\\"}" "${url}"`;
 
   const { stdout, stderr } = await promisifiedExec(curlCommand);
+  console.log(stdout)
 
   const token = JSON.parse(stdout).token;
   console.log(token);
