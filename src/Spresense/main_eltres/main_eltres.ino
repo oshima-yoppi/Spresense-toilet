@@ -39,7 +39,7 @@ const int SEND_WAIT_TIME = 0; //[ms]
 // const int OUTPUT_HEIGHT = 12;
 bool result = false;
 int output_width, output_height; // 出力されるセグメンテーションサイズ
-
+int last_time;
 void setup()
 {
     Serial.begin(115200);
@@ -110,6 +110,7 @@ void setup()
 
     setup_camera();
     setup_eltres();
+    last_time = millis();
 }
 bool *detect_all()
 {
@@ -130,7 +131,8 @@ void loop()
 
     // and 演算
     bool *result_and = detection_and(result_mask1, result_mask2);
-    int num_people = count_people(result_and);
+    // int num_people = count_people(result_and);
+    int num_people = countDFS(result_and);
 
     CamImage img = take_picture();
     uint16_t *sbuf = convert_img(img);
@@ -138,7 +140,6 @@ void loop()
     disp_image_result(sbuf, 0, 0, target_w, target_h, result_and);
     free(result_mask1);
     free(result_mask2);
-
     send_data_eltres(num_people);
-    delay(SEND_WAIT_TIME);
+    // delay(SEND_WAIT_TIME);
 }

@@ -68,6 +68,7 @@ const int SEND_WAIT_TIME = 50 * 1000; //[ms]
 // const int OUTPUT_HEIGHT = 12;
 bool result_wifi = false;
 int output_width, output_height; // 出力されるセグメンテーションサイズ
+int last_time;
 
 void setup()
 {
@@ -143,6 +144,7 @@ void setup()
     setup_wifi();
     // SPRESENSE_ID = read_spresense_id("/communication/spresense_id.txt");
     SPRESENSE_ID = 1;
+    last_time = millis();
 }
 bool *detect_all()
 {
@@ -158,10 +160,7 @@ void loop()
 {
 
     print("call takePicture");
-    int start_time = millis();
     bool *result_mask1 = detect_all();
-    int end_time = millis();
-    Serial.println("detect_all() time: " + String(end_time - start_time) + "ms");
     delay(1000);
     bool *result_mask2 = detect_all();
 
@@ -178,8 +177,14 @@ void loop()
     free(result_mask2);
 
     /////通信開始！！！！！
-    send_data_wifi(num_people, SPRESENSE_ID);
-    delay(SEND_WAIT_TIME);
+
+    if (millis() - last_time > SEND_WAIT_TIME)
+    {
+        send_data_wifi(num_people, SPRESENSE_ID);
+        last_time = millis();
+    }
+    // send_data_wifi(num_people, SPRESENSE_ID);
+    // delay(SEND_WAIT_TIME);
 }
 
 // void loop()
