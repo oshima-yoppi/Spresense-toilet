@@ -6,5 +6,5 @@ src/AI/gomi
 *.jpg
 *.xml
 *.txt
-*.png
+src/detection/*.png
 *.jpeg
