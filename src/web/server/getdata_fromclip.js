@@ -11,8 +11,10 @@ const getToken = async () => {
   const curlCommand = `curl -X POST -H "X-API-Key: ${key}" -d "{\\"username\\": \\"${username}\\", \\"password\\": \\"${password}\\"}" "${url}"`;
 
   const { stdout, stderr } = await promisifiedExec(curlCommand);
+  console.log(stdout)
 
   const token = JSON.parse(stdout).token;
+  console.log(token);
   return token;
 };
 
@@ -25,8 +27,9 @@ const getDataFromClip = async () => {
     const curlCommand = `curl -X GET -H "X-API-Key: ${key}" -H "Authorization: ${token}" "${url}"`;
 
     const { stdout, stderr } = await promisifiedExec(curlCommand);
-
+    console.log(stdout);
     return stdout;
+    
   } catch (error) {
     console.error(error);
     throw error;
