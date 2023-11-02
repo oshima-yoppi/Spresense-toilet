@@ -38,8 +38,6 @@ const int target_h = 96;
 const int pixfmt = CAM_IMAGE_PIX_FMT_YUV422;
 const int SEND_TIME = 20000; //[ms]
 // const int pixfmt = CAM_IMAGE_PIX_FMT_RGB565;
-#define OUTPUT_WIDTH 12
-#define OUTPUT_HEIGHT 12
 // const int OUTPUT_HEIGHT = 12;
 bool result = false;
 int output_width, output_height; // 出力されるセグメンテーションサイズ
@@ -146,6 +144,9 @@ void setup()
 //     // CamImage img2 = take_picture();
 // }
 
+// 単なる人検知。
+// 上下左右の隣接するマスをチェックするための配列
+
 void loop()
 {
     print("call takePicture");
@@ -157,27 +158,45 @@ void loop()
     uint16_t *sbuf1 = convert_img(img);
     bool *result_mask1 = detect_people(sbuf1, 0.7);
 
-    img = CamImage();
-    img = theCamera.takePicture();
-    if (!img.isAvailable())
-    {
-        print("img1___ is not available");
-    }
-    uint16_t *sbuf2 = convert_img(img);
-    bool *result_mask2 = detect_people(sbuf2, 0.7);
-
-    // and 演算
-    bool *result_and = detection_and(result_mask1, result_mask2);
-
-    // CamImage img = take_picture();
-    // uint16_t *sbuf = convert_img(img);
-
-    disp_image_result(sbuf2, 0, 0, target_w, target_h, result_and);
+    disp_image_result(sbuf1, 0, 0, target_w, target_h, result_mask1);
+    int dfs_count = countDFS(result_mask1);
+    print("dfs_count: " + String(dfs_count) + "\n");
     free(result_mask1);
-    free(result_mask2);
-
-    // CamImage img2 = take_picture();
 }
+
+// 人検知。動いている人を省く。
+// void loop()
+// {
+//     print("call takePicture");
+//     CamImage img = theCamera.takePicture();
+//     if (!img.isAvailable())
+//     {
+//         print("img1_ is not available");
+//     }
+//     uint16_t *sbuf1 = convert_img(img);
+//     bool *result_mask1 = detect_people(sbuf1, 0.7);
+
+//     img = CamImage();
+//     img = theCamera.takePicture();
+//     if (!img.isAvailable())
+//     {
+//         print("img1___ is not available");
+//     }
+//     uint16_t *sbuf2 = convert_img(img);
+//     bool *result_mask2 = detect_people(sbuf2, 0.7);
+
+//     // and 演算
+//     bool *result_and = detection_and(result_mask1, result_mask2);
+
+//     // CamImage img = take_picture();
+//     // uint16_t *sbuf = convert_img(img);
+
+//     disp_image_result(sbuf2, 0, 0, target_w, target_h, result_and);
+//     free(result_mask1);
+//     free(result_mask2);
+
+//     // CamImage img2 = take_picture();
+// }
 // void loop()
 // {
 //     print("call takePicture");
