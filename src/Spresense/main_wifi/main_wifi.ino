@@ -63,8 +63,8 @@ const int pixfmt = CAM_IMAGE_PIX_FMT_YUV422;
 // const int SEND_WAIT_TIME = 20000; //[ms]
 const int SEND_WAIT_TIME = 50 * 1000; //[ms]
 // const int pixfmt = CAM_IMAGE_PIX_FMT_RGB565;
-#define OUTPUT_WIDTH 12
-#define OUTPUT_HEIGHT 12
+// #define OUTPUT_WIDTH 12
+// #define OUTPUT_HEIGHT 12
 // const int OUTPUT_HEIGHT = 12;
 bool result_wifi = false;
 int output_width, output_height; // 出力されるセグメンテーションサイズ
@@ -167,7 +167,8 @@ void loop()
 
     // and 演算
     bool *result_and = detection_and(result_mask1, result_mask2);
-    int num_people = count_people(result_and);
+    // int num_people = count_people(result_and);
+    int num_people = countDFS(result_and);
 
     CamImage img = take_picture();
     uint16_t *sbuf = convert_img(img);

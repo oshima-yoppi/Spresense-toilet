@@ -1,5 +1,8 @@
-#include <Camera.h>
+// #include <Camera.h>
 // #include "_lib_detection.h"
+
+#define OUTPUT_WIDTH 12
+#define OUTPUT_HEIGHT 12
 void print(String str)
 {
     Serial.println(str);
@@ -170,19 +173,6 @@ bool *detect_people_(CamImage tfinput, float th_detect)
     return result_mask;
 }
 
-int count_people(bool *result_mask)
-{
-    int people_count = 0;
-    for (int i = 0; i < OUTPUT_WIDTH * OUTPUT_HEIGHT; i++)
-    {
-        if (result_mask[i])
-        {
-            people_count++;
-        }
-    }
-    return people_count;
-}
-
 bool *detection_and(bool *result1, bool *result2)
 {
     bool *result_mask = new bool[OUTPUT_WIDTH * OUTPUT_HEIGHT];
@@ -195,4 +185,47 @@ bool *detection_and(bool *result1, bool *result2)
         }
     }
     return result_mask;
+}
+
+const int dx[] = {-1, 1, 0, 0};
+const int dy[] = {0, 0, -1, 1};
+// 与えられた座標が有効かどうかを確認する関数
+bool isValid(int x, int y)
+{
+    return x >= 0 && x < OUTPUT_WIDTH && y >= 0 && y < OUTPUT_HEIGHT;
+}
+void countIslands(int idx, bool *map, bool *visited)
+{
+    visited[idx] = true;
+
+    int x = idx % OUTPUT_WIDTH;
+    int y = idx / OUTPUT_WIDTH;
+
+    for (int i = 0; i < 4; ++i)
+    {
+        int newX = x + dx[i];
+        int newY = y + dy[i];
+        int newIdx = newY * OUTPUT_WIDTH + newX;
+
+        if (isValid(newX, newY) && map[newIdx] && !visited[newIdx])
+        {
+            countIslands(newIdx, map, visited);
+        }
+    }
+}
+// 繋がっているところをdfs使ってカウントする関数
+int countDFS(bool *map)
+{
+    int count = 0;
+    bool visited[OUTPUT_WIDTH * OUTPUT_HEIGHT] = {false};
+    for (int i = 0; i < OUTPUT_WIDTH * OUTPUT_HEIGHT; ++i)
+    {
+        if (map[i] && !visited[i])
+        {
+            countIslands(i, map, visited);
+            count++;
+        }
+    }
+
+    return count;
 }
