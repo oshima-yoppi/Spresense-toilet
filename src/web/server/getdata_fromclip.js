@@ -59,6 +59,4 @@ const processData = async () => {
   }
 };
 
-processData()
-
 module.exports = processData;

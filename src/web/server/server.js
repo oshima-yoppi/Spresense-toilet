@@ -215,7 +215,7 @@ wss.on('connection', (socket) => {
                     console.error('Error in processData chain:', error);
                 });
         }
-    }, 50000);
+    }, 60 * 1000);
 
 
     // クライアントが切断したときの処理
