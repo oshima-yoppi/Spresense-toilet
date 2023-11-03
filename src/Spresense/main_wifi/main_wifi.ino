@@ -65,7 +65,9 @@ const int SEND_WAIT_TIME = 50 * 1000; //[ms]
 // const int pixfmt = CAM_IMAGE_PIX_FMT_RGB565;
 // #define OUTPUT_WIDTH 12
 // #define OUTPUT_HEIGHT 12
-// const int OUTPUT_HEIGHT = 12;
+// const int OUTPUT_HEIGHT = 12;0
+const int max_people = 7;
+int count_log[max_people] = {0, 0, 0, 0, 0, 0, 0};
 bool result_wifi = false;
 int output_width, output_height; // 出力されるセグメンテーションサイズ
 int last_time;
@@ -168,6 +170,7 @@ void loop()
     bool *result_and = detection_and(result_mask1, result_mask2);
     // int num_people = count_people(result_and);
     int num_people = countDFS(result_and);
+    count_log[num_people]++;
 
     CamImage img = take_picture();
     uint16_t *sbuf = convert_img(img);
@@ -180,8 +183,25 @@ void loop()
 
     if (millis() - last_time > SEND_WAIT_TIME)
     {
-        send_data_wifi(num_people, SPRESENSE_ID);
+
+        // 最頻値を見つける
+        int modeValue = 0;
+        int maxCount = 0;
+        for (int i = 0; i < max_people; i++)
+        {
+            if (count_log[i] > maxCount)
+            {
+                maxCount = count_log[i];
+                modeValue = i;
+            }
+        }
+        send_data_wifi(modeValue, SPRESENSE_ID);
         last_time = millis();
+        // 送信後にログをリセット
+        for (int i = 0; i < max_people; i++)
+        {
+            count_log[i] = 0;
+        }
     }
     // send_data_wifi(num_people, SPRESENSE_ID);
     // delay(SEND_WAIT_TIME);

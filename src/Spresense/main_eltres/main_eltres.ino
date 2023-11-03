@@ -37,7 +37,7 @@ const int SEND_WAIT_TIME = 0; //[ms]
 #define OUTPUT_WIDTH 12
 #define OUTPUT_HEIGHT 12
 // const int OUTPUT_HEIGHT = 12;
-int max_people = 7;
+const int max_people = 7;
 int count_log[max_people] = {0, 0, 0, 0, 0, 0, 0};
 bool result = false;
 int output_width, output_height; // 出力されるセグメンテーションサイズ
@@ -164,6 +164,6 @@ void loop()
             count_log[i] = 0;
         }
         last_time = millis();
-        }
+    }
     // delay(SEND_WAIT_TIME);
 }
