@@ -1,7 +1,7 @@
 var data;
 var postData = {};
-const hostname = '172.17.254.13';
-// const hostname = '192.168.201.164'
+// const hostname = '172.17.254.13';
+const hostname = '192.168.201.164'
 const port = 3000;
 
 var querystring = require('querystring');
