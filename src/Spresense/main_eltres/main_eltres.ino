@@ -118,7 +118,7 @@ bool *detect_all()
     CamImage img = take_picture();
 
     uint16_t *sbuf = convert_img(img);
-    bool *result_mask = detect_people(sbuf, 0.7);
+    bool *result_mask = detect_people(sbuf, 0.5);
     return result_mask;
 }
 void loop()
