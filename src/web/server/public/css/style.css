@@ -126,7 +126,7 @@ header #logo {
 
 /*×印が出ている状態の設定。*/
 #menubar_hdr.ham {
-	background: #ff0000 url(../images/ham.png) no-repeat center bottom/50px;	/*背景色、背景画像の読み込み、画像の下半分（×マーク）を表示。幅は50px。*/
+	background: #ff8400 url(../images/ham.png) no-repeat center bottom/50px;	/*背景色、背景画像の読み込み、画像の下半分（×マーク）を表示。幅は50px。*/
 }
 
 

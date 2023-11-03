@@ -1,7 +1,7 @@
 var data;
 var postData = {};
-// const hostname = '172.17.254.13';
-const hostname = '192.168.201.164'
+const hostname = '172.17.254.13';
+// const hostname = '192.168.201.164'
 const port = 3000;
 
 var querystring = require('querystring');
@@ -77,6 +77,12 @@ const server = http.createServer((request, response) => {
             "Content-Type": "text/html"
         });
         readFile("view/preparing.html", response);
+
+    } else if (request.url === "/public/images/ham.png" && request.method === "GET") {
+        response.writeHead(200, {
+            "Content-Type": "image/png"
+        });
+        readFile("public/images/ham.png", response);
 
     } else if (request.url === "/public/images/logo.png" && request.method === "GET") {
         response.writeHead(200, {
