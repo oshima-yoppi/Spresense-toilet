@@ -7,7 +7,7 @@ const port = 3000;
 var querystring = require('querystring');
 const http = require("http");
 var WebSocket = require('ws');
-const getdata_fromclip = require('./getdata_fromclip');
+// const getdata_fromclip = require('./getdata_fromclip');
 const readFile = require('./readFile');
 
 
@@ -206,14 +206,14 @@ wss.on('connection', (socket) => {
 
     const sendInterval = setInterval(() => {
         if (socket.readyState === WebSocket.OPEN) {
-            getdata_fromclip()
-                .then((payloaddata) => {
-                    socket.send(payloaddata);
-                    console.log("eltres",payloaddata)
-                })
-                .catch((error) => {
-                    console.error('Error in processData chain:', error);
-                });
+            // getdata_fromclip()
+            //     .then((payloaddata) => {
+            //         socket.send(payloaddata);
+            //         console.log("eltres",payloaddata)
+            //     })
+            //     .catch((error) => {
+            //         console.error('Error in processData chain:', error);
+            //     });
         }
     }, 60 * 1000);
 
