@@ -37,6 +37,8 @@ const int SEND_WAIT_TIME = 0; //[ms]
 #define OUTPUT_WIDTH 12
 #define OUTPUT_HEIGHT 12
 // const int OUTPUT_HEIGHT = 12;
+int max_people = 7;
+int count_log[max_people] = {0, 0, 0, 0, 0, 0, 0};
 bool result = false;
 int output_width, output_height; // 出力されるセグメンテーションサイズ
 int last_time;
@@ -133,6 +135,7 @@ void loop()
     bool *result_and = detection_and(result_mask1, result_mask2);
     // int num_people = count_people(result_and);
     int num_people = countDFS(result_and);
+    count_log[num_people]++;
 
     CamImage img = take_picture();
     uint16_t *sbuf = convert_img(img);
@@ -140,6 +143,27 @@ void loop()
     disp_image_result(sbuf, 0, 0, target_w, target_h, result_and);
     free(result_mask1);
     free(result_mask2);
-    send_data_eltres(num_people);
+    if (millis() - last_time > SEND_WAIT_TIME)
+    {
+        // 最頻値を見つける
+        int modeValue = 0;
+        int maxCount = 0;
+        for (int i = 0; i < max_people; i++)
+        {
+            if (count_log[i] > maxCount)
+            {
+                maxCount = count_log[i];
+                modeValue = i;
+            }
+        }
+        send_data_eltres(modeValue);
+
+        // 送信後にログをリセット
+        for (int i = 0; i < max_people; i++)
+        {
+            count_log[i] = 0;
+        }
+        last_time = millis();
+        }
     // delay(SEND_WAIT_TIME);
 }
