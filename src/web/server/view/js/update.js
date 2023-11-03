@@ -21,11 +21,9 @@ function updateData(index, congestion, time, data) {
 
 function CongestionJudgment(data){
     if (data == 0){
-        return "非常に空いている";
-    } else if (data <= 3) {
-        return "空いている"; 
-    } else if (data <= 5) {
-        return "混雑している";
+        return "空いている";
+    } else if (data <= 2) {
+        return "混雑している"; 
     } else {
         return "非常に混雑している";
     }
