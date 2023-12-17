@@ -1,6 +1,5 @@
 
 
-// ピックアップ求人情報の横スライドショー
 $('.pickup').slick({
 	autoplay: true,
 	dots: false,			//丸いページナビボタンを非表示
