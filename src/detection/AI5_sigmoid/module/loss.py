@@ -3,13 +3,14 @@ from keras.layers import Conv2D, MaxPooling2D
 from keras import backend as K
 
 
-def cross_loss(targets, inputs, class_weights=tf.constant([100.0, 1.0])):
+def cross_loss(targets, inputs, class_weights=tf.constant([1.0, 100.0])):
     # クロスエントロピー損失を計算し、クラスごとに重みを適用
     # print(targets.sinputsoutput.shape)
     inputs = tf.cast(inputs, dtype=tf.float32)
     targets = tf.cast(targets, dtype=tf.float32)
-    targets = targets[:, :, :, 1]
-    inputs = inputs[:, :, :, 1]
+    print(inputs.shape, targets.shape)
+    # targets = targets[:, :, :, 1]
+    # inputs = inputs[:, :, :, 1]
     inputs = K.flatten(inputs)
     targets = K.flatten(targets)
 
@@ -24,8 +25,8 @@ def IoU(targets, inputs, smooth=1e-6):
     targets = tf.cast(targets, dtype=tf.float32)
     inputs = tf.cast(inputs, dtype=tf.float32)
 
-    targets = targets[:, :, :, 1]
-    inputs = inputs[:, :, :, 1]
+    # targets = targets[:, :, :, 1]
+    # inputs = inputs[:, :, :, 1]
     inputs = K.flatten(inputs)
     targets = K.flatten(targets)
     intersection = tf.reduce_sum(inputs * targets)

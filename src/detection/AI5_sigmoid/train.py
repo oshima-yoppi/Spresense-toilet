@@ -66,17 +66,16 @@ for path in os.listdir(DATA_DIR):
     with h5py.File(path, "r") as f:
         img = f["img"][:]
         label = f["label"][:]
-        label_semaseg = np.zeros((label.shape[0], label.shape[1], 2))
-        label_semaseg[:, :, 1] = label[:, :]
-        label_semaseg[:, :, 0] = 1 - label[:, :]
+        # label_semaseg = np.zeros((label.shape[0], label.shape[1], 1))
+        # label_semaseg[:, :, 1] = label[:, :]
+        # label_semaseg[:, :, 0] = 1 - label[:, :]
         # plt.subplot(1, 2, 1)
         # plt.imshow(img)
         # plt.subplot(1, 2, 2)
         # plt.imshow(label)
         # plt.show()
 
-    dataset.append((img, label_semaseg))
-    # dataset.append((img, label))
+    dataset.append((img, label))
     # plt.subplot(1, 2, 1)
     # plt.imshow(img)
     # plt.subplot(1, 2, 2)
@@ -90,6 +89,8 @@ random_idx = random_idx + list(range(len(dataset) * 133 // 150, len(dataset)))
 # データをランダムに取得するためのインデックス
 # random.shuffle(random_idx)
 # データ取得。データ数が少ないため、auguentationを行う。回転、反転、明るさ調整を行い、学習データに追加。
+all_num = 0
+positive_count = 0
 for i, (img, label) in enumerate(tqdm(dataset)):
     if i < len(dataset) * 133 // 150:
         img_trans = img
@@ -97,6 +98,8 @@ for i, (img, label) in enumerate(tqdm(dataset)):
 
         x_train.append(img_trans)
         y_train.append(cv2.resize(label, LABEL_SIZE))
+        all_num += LABEL_SIZE[0] * LABEL_SIZE[1]
+        positive_count += np.sum(label)
         # print(label.shape, cv2.resize(label, LABEL_SIZE).shape)
         # img_trans = np.fliplr(img_trans)
         # img_trans = func.augment_brightness(img_trans)
@@ -106,6 +109,8 @@ for i, (img, label) in enumerate(tqdm(dataset)):
     else:
         x_valid.append(img)
         y_valid.append(cv2.resize(label, LABEL_SIZE))
+print(f"all_num: {all_num}, positive_count: {positive_count}")
+print(all_num / positive_count)
 # positive_count = 0
 # for i, idx in enumerate(tqdm(random_idx)):
 #     img, label = dataset[idx]
@@ -182,12 +187,12 @@ custom_model = tf.keras.models.Sequential(
         ),
         BatchNormalization(),
         Conv2D(
-            filters=2,
+            filters=1,
             kernel_size=1,
             strides=1,
             padding="same",
-            activation="softmax",
-            bias_initializer=tf.keras.initializers.Constant(value=0.0),
+            activation="sigmoid",
+            bias_initializer=tf.keras.initializers.Constant(value=0),
         ),
     ]
 )
@@ -207,14 +212,14 @@ print(y_train.shape, y_valid.shape)
 custom_model.compile(
     loss=loss.cross_loss,
     # loss=loss.DiceLoss,
-    optimizer=Adam(learning_rate=0.001),
+    optimizer=Adam(learning_rate=0.0005),
     metrics=[loss.IoU],
 )
 custom_model.fit(
     x_train,
     y_train,
-    batch_size=32,
-    epochs=200,
+    batch_size=18,
+    epochs=100,
     validation_data=(x_valid, y_valid),
 )
 
@@ -242,11 +247,11 @@ for i, img in enumerate(tqdm(os.listdir(test_img_dir))):
     img = np.array([img]) / 255
     pred = custom_model.predict(img)[0]
     # pred = np.argmax(pred, axis=2) #
-    pred = pred[:, :, 1]
+    pred = pred[:, :, 0]
     # pred = np.array(pred * 255, dtype=np.uint8)
     # cv2.imwrite(os.path.join(test_dir, "result.png"), pred)
     plt.subplot(1, 2, 1)
-    plt.imshow(img[0])
+    plt.imshow(img[0], cmap="gray")
     plt.subplot(1, 2, 2)
     plt.imshow(pred, vmin=0, vmax=1)
     # plt.show()

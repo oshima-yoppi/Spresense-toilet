@@ -72,7 +72,7 @@ bool *detect_people(uint16_t *buf, float th_detect)
         }
         // print("\n改行されたよ");
     }
-    // print("-----------");
+    print("-----------");
 
     bool result = false;
     // disp_image(sbuf, 0, 0, target_w, target_h, result);
@@ -99,7 +99,7 @@ bool *detect_people(uint16_t *buf, float th_detect)
             // int value = output->data.f[y * output_width + x];
             // value += 128;
             // value /= 255.0;
-            // Serial.print(String(value) + ", ");
+            Serial.print(String(value) + ", ");
             if (value >= th_detect)
             {
                 result_mask[y * output_width + x] = true;
@@ -110,7 +110,7 @@ bool *detect_people(uint16_t *buf, float th_detect)
             }
             idx += 2;
         }
-        // Serial.println("\n");
+        Serial.println("\n");
     }
     return result_mask;
 }
