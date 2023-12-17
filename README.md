@@ -31,6 +31,7 @@ conda env create -f conda.yml
 
 - `env`：anacondaの環境ファイルがまとまっています。
 -  `src`：ソースコードがまとまっています。
+- 'CAD'：CADデータがまとまっています。
 -  `.vscode`：vscodeの設定がまとまってます。
 <!--  
 # Usage
