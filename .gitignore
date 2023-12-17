@@ -1,6 +1,8 @@
-src/AI/rawdata
-src/AI/data
-src/AI/gomi
+src/detection/checkdata
+src/detection/data
+src/detection/rawdata
+src/detection/impulse_dataset
+src/detection/model
 .vscode/*
 *.h5
 *.jpg
